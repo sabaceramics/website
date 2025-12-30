@@ -61,6 +61,7 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 #contacts { padding: 60px 5%; text-align: center; background-color: #e9e1d3; border-top: 1px solid #000; margin-top: 50px; }
 .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
 .social-links img { width: 30px; transition: 0.4s; }
-.social-links a:hover img { transform: scale(1.3); }
+.social-links a:hover img { transform: scale(1.3); filter: invert(12%) sepia(21%) saturate(5412%) hue-rotate(346deg) brightness(92%) contrast(95%); }
+
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
