@@ -78,16 +78,43 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
     .product-grid { grid-template-columns: 1fr; gap: 15px; padding: 0 10px; }
     .product-card img { height: 300px; }
 
-    .product-container { flex-direction: column; padding: 20px 5%; }
-    .product-info-text { position: static; padding-top: 20px; }
-    .product-media { min-width: 100%; }
-
-   /* Riduzione foto principale nella pagina prodotto (Versione Forzata) */
-    .product-media #main-photo { 
-        width: 80% !important; 
-        max-width: 400px !important;
-        margin: 0 auto !important; 
-        display: block !important;
-        height: auto !important;
+    /* --- Correzione Definitiva Foto e Larghezza Mobile --- */
+    .product-container { 
+        flex-direction: column; 
+        padding: 20px 5%; 
+        width: 100% !important; 
+        overflow-x: hidden; 
     }
+
+    .product-media { 
+        min-width: 100% !important; 
+        width: 100% !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    .slider-wrapper { 
+        width: 85% !important; 
+        max-width: 350px !important; 
+        margin: 0 auto !important; 
+    }
+
+    #main-photo { 
+        width: 100% !important; 
+        height: auto !important;
+        display: block;
+    }
+
+    .thumbnail-container {
+        width: 85% !important;
+        justify-content: center;
+    }
+
+    .product-info-text { 
+        position: static; 
+        padding-top: 20px; 
+        width: 100%;
+    }
+}
 
