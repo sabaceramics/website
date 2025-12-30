@@ -82,10 +82,12 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
     .product-info-text { position: static; padding-top: 20px; }
     .product-media { min-width: 100%; }
 
-    /* Riduzione foto principale nella pagina prodotto solo per mobile */
-    #main-photo { 
-        max-width: 85%; /* La foto userà l'85% dello schermo invece del 100% */
-        margin: 0 auto; /* La centra perfettamente */
-        height: auto;
+   /* Riduzione foto principale nella pagina prodotto (Versione Forzata) */
+    .product-media #main-photo { 
+        width: 80% !important; 
+        max-width: 400px !important;
+        margin: 0 auto !important; 
+        display: block !important;
+        height: auto !important;
     }
-}
+
