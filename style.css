@@ -25,8 +25,7 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 
 /* --- 5. CATALOGO --- */
 .catalog-filters { display: flex; justify-content: center; gap: 12px; margin-bottom: 35px; flex-wrap: wrap; }
-.filter-btn { background-color: #f9f7f2; color: #3e1b08; border: none; padding: 8px 18px; text-transform: uppercase; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.4s ease; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-
+.filter-btn { background-color: #f9f7f2; color: #3e1b08; border: none; padding: 8px 18px; text-transform: uppercase; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: 0.4s ease; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 .filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
 .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 .product-card { background: white; padding: 10px; border: 1px solid #e0ddd5; transition: transform 0.3s ease; overflow: hidden; }
@@ -62,6 +61,7 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
