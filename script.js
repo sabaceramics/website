@@ -1,18 +1,9 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
-// Funzione aggiunta per pulire il titolo e creare lo slug SEO
+// Funzione per creare lo slug (necessaria per l'URL SEO)
 function generateSlug(text) {
     if (!text) return 'product';
-    return text
-        .toString()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
+    return text.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
 }
 
 async function init() {
@@ -53,9 +44,9 @@ function renderHomeGrid(data) {
         card.className = 'product-card';
         card.setAttribute('data-categories', cats.join(' '));
 
-        // --- UNICA MODIFICA: LOGICA URL CON SKU E SLUG ---
+        // --- UNICA MODIFICA: CREAZIONE URL SEO ---
         const slug = generateSlug(item.TITOLO);
-        const sku = item.SKU ? item.SKU.trim() : 'ceramic';
+        const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
         const seoUrl = `product.html?sku=${sku}&name=${slug}&id=${index}`;
 
         card.innerHTML = `
@@ -109,7 +100,7 @@ function renderProductDetail(data) {
             <p class="sku">SKU: ${item.SKU || 'N/A'}</p>
             <p class="price">${item.PREZZO} ${item.CURRENCY_CODE}</p>
             <div class="description">${item.DESCRIZIONE.replace(/\n/g, '<br>')}</div>
-            <a href="https://wa.me/393294020926?text=I'm interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
+            <a href="https://wa.me/393294020926?text=Interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
                class="buy-button" target="_blank">Inquire on WhatsApp</a>
         </div>
 
@@ -149,10 +140,10 @@ function renderProductDetail(data) {
 
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
-        if (lb && lb.style.display === \"flex\") {
-            if (e.key === \"ArrowLeft\") changeSlide(-1);
-            if (e.key === \"ArrowRight\") changeSlide(1);
-            if (e.key === \"Escape\") closeLightbox();
+        if (lb && lb.style.display === "flex") {
+            if (e.key === "ArrowLeft") changeSlide(-1);
+            if (e.key === "ArrowRight") changeSlide(1);
+            if (e.key === "Escape") closeLightbox();
         }
     };
 }
