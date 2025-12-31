@@ -1,87 +1,16 @@
-const CSV_FILE = 'EtsyListingsDownload.csv';
-
-// --- GENERAZIONE SLUG (come primo script) ---
-function generateSlug(text) {
-    if (!text) return 'product';
-    return text.toString()
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s+/g, '-')
-        .replace(/[^\w\-]+/g, '')
-        .replace(/\-\-+/g, '-')
-        .replace(/^-+/, '')
-        .replace(/-+$/, '');
-}
-
-// --- INIZIALIZZAZIONE ---
-async function init() {
-    try {
-        const response = await fetch(CSV_FILE);
-        if (!response.ok) throw new Error("File CSV non trovato");
-        const csvText = await response.text();
-        Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            delimiter: ";",
-            complete: function(results) {
-                if (window.location.pathname.includes('/product/')) {
-                    renderProductDetail(results.data);
-                } else {
-                    renderHomeGrid(results.data);
-                }
-            }
-        });
-    } catch (e) { console.error("Errore:", e); }
-}
-
-// --- RENDER HOME GRID ---
-function renderHomeGrid(data) {
-    const grid = document.getElementById('product-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    data.forEach((item, index) => {
-        if (!item.TITOLO || !item.IMMAGINE1) return;
-
-        // --- LOGICA CATEGORIE (come secondo script) ---
-        const descLower = (item.DESCRIZIONE || "").toLowerCase();
-        let cats = [];
-        if (descLower.includes('raku')) cats.push('raku');
-        if (descLower.includes('saggar')) cats.push('saggar');
-        if (descLower.includes('kintsugi')) cats.push('kintsugi');
-        if (descLower.includes('lamp') || descLower.includes('lantern')) cats.push('lamps');
-        if (descLower.includes('plate')) cats.push('plates');
-        if (descLower.includes('vase')) cats.push('vases');
-        if (cats.length === 0) cats.push('other');
-
-        const card = document.createElement('a');
-
-        // --- URL PRODOTTO (modificato per URL "belli") ---
-        const slug = generateSlug(item.TITOLO);
-        const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
-        card.href = `/product/${sku}/${slug}`;
-
-        card.className = `product-card ${cats.join(' ')}`;
-        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
-        grid.appendChild(card);
-    });
-}
-
-// --- RENDER DETTAGLIO PRODOTTO ---
 function renderProductDetail(data) {
+    // --- Lettura SKU dall'URL tipo /product/19/slug ---
     let sku = null;
-    const pathParts = window.location.pathname.split('/');
+    const pathParts = window.location.pathname.split('/'); // ['', 'product', '19', 'slug']
     if (pathParts.length >= 3 && pathParts[1] === 'product') {
-        sku = pathParts[2];
+        sku = pathParts[2]; // prende '19'
     }
-    const item = data.find(d => d.SKU === sku);
+
+    const item = data.find(d => d.SKU === sku); // trova il prodotto corretto
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
-}
 
-
-    // --- PULIZIA DESCRIZIONE (come secondo script) ---
+    // --- PULIZIA DESCRIZIONE ---
     let cleanDesc = (item.DESCRIZIONE || "")
         .replace(/&rsquo;/g, "'")
         .replace(/&quot;/g, '"')
@@ -100,7 +29,7 @@ function renderProductDetail(data) {
         thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
     });
 
-    // --- HTML DETTAGLIO PRODOTTO (wrapper e classi come secondo script) ---
+    // --- HTML DETTAGLIO PRODOTTO ---
     container.innerHTML = `
         <div class="product-media">
             <div class="slider-wrapper" onclick="openLightbox()">
@@ -125,7 +54,6 @@ function renderProductDetail(data) {
 
     // --- GALLERY / LIGHTBOX ---
     let currentIdx = 0;
-
     window.updateGallery = function(index) {
         currentIdx = index;
         const mainImg = document.getElementById('main-photo');
@@ -154,7 +82,6 @@ function renderProductDetail(data) {
         if(lightbox) lightbox.style.display = "none";
     };
 
-    // --- GESTIONE TASTIERA (Frecce e ESC) ---
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
         if (lb && lb.style.display === "flex") {
@@ -164,19 +91,3 @@ function renderProductDetail(data) {
         }
     };
 }
-
-// --- FILTRAGGIO PRODOTTI (come secondo script) ---
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('filter-btn')) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        const cat = e.target.getAttribute('data-category').toLowerCase();
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
-        });
-    }
-});
-
-// --- AVVIO SCRIPT ---
-init();
-
