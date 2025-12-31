@@ -1,5 +1,20 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
+// Funzione aggiunta per pulire il titolo e creare lo slug SEO
+function generateSlug(text) {
+    if (!text) return 'product';
+    return text
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, '-')
+        .replace(/[^\w\-]+/g, '')
+        .replace(/\-\-+/g, '-')
+        .replace(/^-+/, '')
+        .replace(/-+$/, '');
+}
+
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
@@ -25,24 +40,33 @@ function renderHomeGrid(data) {
     data.forEach((item, index) => {
         if (!item.TITOLO || !item.IMMAGINE1) return;
         
-        // --- LOGICA DI FILTRAGGIO BASATA SULLA DESCRIZIONE ---
         const descLower = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
-        
-        // Uso le radici delle parole per includere automaticamente i plurali
         if (descLower.includes('raku')) cats.push('raku');
         if (descLower.includes('saggar')) cats.push('saggar');
         if (descLower.includes('kintsugi')) cats.push('kintsugi');
         if (descLower.includes('lamp') || descLower.includes('lantern')) cats.push('lamps');
-        if (descLower.includes('plate')) cats.push('plates');
-        if (descLower.includes('vase')) cats.push('vases');
-        
-        if (cats.length === 0) cats.push('other');
-        
-        const card = document.createElement('a');
-        card.href = `product.html?id=${index}`;
-        card.className = `product-card ${cats.join(' ')}`;
-        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
+        if (descLower.includes('plate') || descLower.includes('piatto')) cats.push('plates');
+        if (descLower.includes('vase') || descLower.includes('vaso')) cats.push('vases');
+
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.setAttribute('data-categories', cats.join(' '));
+
+        // --- UNICA MODIFICA: LOGICA URL CON SKU E SLUG ---
+        const slug = generateSlug(item.TITOLO);
+        const sku = item.SKU ? item.SKU.trim() : 'ceramic';
+        const seoUrl = `product.html?sku=${sku}&name=${slug}&id=${index}`;
+
+        card.innerHTML = `
+            <a href="${seoUrl}" class="product-link">
+                <img src="${item.IMMAGINE1}" alt="${item.TITOLO}" loading="lazy">
+                <div class="product-info">
+                    <h3>${item.TITOLO}</h3>
+                    <p class="price">${item.PREZZO} ${item.CURRENCY_CODE}</p>
+                </div>
+            </a>
+        `;
         grid.appendChild(card);
     });
 }
@@ -52,51 +76,56 @@ function renderProductDetail(data) {
     const id = params.get('id');
     const item = data[id];
     const container = document.getElementById('product-detail-content');
-    if (!item || !container) return;
 
-    let cleanDesc = item.DESCRIZIONE.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-    let images = [];
-    for (let i = 1; i <= 10; i++) {
-        const url = item[`IMMAGINE${i}`];
-        if (url && url.trim() !== "") images.push(url.trim());
+    if (!item || !container) {
+        if(container) container.innerHTML = "<p>Product not found.</p>";
+        return;
     }
 
-    let thumbnailsHtml = '';
-    images.forEach((url, i) => {
-        thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
-    });
+    let images = [];
+    for (let i = 1; i <= 10; i++) {
+        if (item[`IMMAGINE${i}`]) images.push(item[`IMMAGINE${i}`]);
+    }
+
+    let currentIdx = 0;
 
     container.innerHTML = `
         <div class="product-media">
-            <div class="slider-wrapper" onclick="openLightbox()">
-                <button class="slider-arrow prev" onclick="changeSlide(-1); event.stopPropagation();">&#10094;</button>
-                <img src="${images[0]}" id="main-photo" alt="${item.TITOLO}">
-                <button class="slider-arrow next" onclick="changeSlide(1); event.stopPropagation();">&#10095;</button>
+            <div class="main-image-container">
+                <img id="main-img" src="${images[0]}" alt="${item.TITOLO}" onclick="openLightbox()">
+                ${images.length > 1 ? `
+                    <button class="nav-btn prev" onclick="changeSlide(-1)">&#10094;</button>
+                    <button class="nav-btn next" onclick="changeSlide(1)">&#10095;</button>
+                ` : ''}
             </div>
-            <div class="thumbnail-container">${thumbnailsHtml}</div>
-        </div>
-        <div class="product-info-text">
-            <h1 class="section-title" style="text-align:left; margin-top:0;">${item.TITOLO}</h1>
-            <p class="product-description">${cleanDesc}</p>
-            <div class="contact-btn-wrapper">
-                <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
+            <div class="thumbnail-grid">
+                ${images.map((img, i) => `
+                    <img src="${img}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})" alt="thumbnail">
+                `).join('')}
             </div>
         </div>
+        <div class="product-details">
+            <h1>${item.TITOLO}</h1>
+            <p class="sku">SKU: ${item.SKU || 'N/A'}</p>
+            <p class="price">${item.PREZZO} ${item.CURRENCY_CODE}</p>
+            <div class="description">${item.DESCRIZIONE.replace(/\n/g, '<br>')}</div>
+            <a href="https://wa.me/393294020926?text=I'm interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
+               class="buy-button" target="_blank">Inquire on WhatsApp</a>
+        </div>
+
         <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-            <img class="lightbox-content" id="lightbox-img">
+            <span class="close-lightbox">&times;</span>
+            <img id="lightbox-img" src="" alt="Full view">
         </div>
     `;
 
-    let currentIdx = 0;
-    
-    window.updateGallery = function(index) {
-        currentIdx = index;
-        const mainImg = document.getElementById('main-photo');
-        const lbImg = document.getElementById('lightbox-img');
+    window.updateGallery = function(idx) {
+        currentIdx = idx;
+        const mainImg = document.getElementById('main-img');
         if(mainImg) mainImg.src = images[currentIdx];
-        if(lbImg) lbImg.src = images[currentIdx];
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+        document.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === idx);
+        });
     };
 
     window.changeSlide = function(dir) {
@@ -118,13 +147,12 @@ function renderProductDetail(data) {
         if(lightbox) lightbox.style.display = "none";
     };
 
-    // Gestione tastiera per scorrimento (Frecce e ESC)
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
-        if (lb && lb.style.display === "flex") {
-            if (e.key === "ArrowLeft") changeSlide(-1);
-            if (e.key === "ArrowRight") changeSlide(1);
-            if (e.key === "Escape") closeLightbox();
+        if (lb && lb.style.display === \"flex\") {
+            if (e.key === \"ArrowLeft\") changeSlide(-1);
+            if (e.key === \"ArrowRight\") changeSlide(1);
+            if (e.key === \"Escape\") closeLightbox();
         }
     };
 }
@@ -135,7 +163,12 @@ document.addEventListener('click', function(e) {
         e.target.classList.add('active');
         const cat = e.target.getAttribute('data-category').toLowerCase();
         document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
+            if (cat === 'all') {
+                card.style.display = 'block';
+            } else {
+                const itemCats = card.getAttribute('data-categories').split(' ');
+                card.style.display = itemCats.includes(cat) ? 'block' : 'none';
+            }
         });
     }
 });
