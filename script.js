@@ -1,6 +1,5 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
-// FUNZIONE AGGIUNTA PER GENERARE L'URL PULITO
 function generateSlug(text) {
     if (!text) return 'product';
     return text.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
@@ -30,8 +29,6 @@ function renderHomeGrid(data) {
     grid.innerHTML = '';
     data.forEach((item, index) => {
         if (!item.TITOLO || !item.IMMAGINE1) return;
-        
-        // --- TUA LOGICA ORIGINALE DI FILTRAGGIO ---
         const descLower = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
         if (descLower.includes('raku')) cats.push('raku');
@@ -43,12 +40,9 @@ function renderHomeGrid(data) {
         if (cats.length === 0) cats.push('other');
         
         const card = document.createElement('a');
-        
-        // --- MODIFICA RICHIESTA: URL CON SKU E TITOLO ---
         const slug = generateSlug(item.TITOLO);
         const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
         card.href = `product.html?sku=${sku}&name=${slug}&id=${index}`;
-        
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
@@ -62,7 +56,6 @@ function renderProductDetail(data) {
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
 
-    let cleanDesc = item.DESCRIZIONE.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
@@ -71,6 +64,7 @@ function renderProductDetail(data) {
 
     let currentIdx = 0;
 
+    // Struttura HTML che rispetta esattamente il tuo style.css
     container.innerHTML = `
         <div class="product-media">
             <div class="main-image-container">
@@ -88,9 +82,8 @@ function renderProductDetail(data) {
         </div>
         <div class="product-details">
             <h1>${item.TITOLO}</h1>
-            <div class="description">${cleanDesc.replace(/\n/g, '<br>')}</div>
-            <a href="https://wa.me/393294020926?text=I'm interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
-               class="buy-button" target="_blank">Inquire on WhatsApp</a>
+            <p class="description">${item.DESCRIZIONE.replace(/\n/g, '<br>')}</p>
+            <a href="https://linktr.ee/SABA.ceramics" class="buy-button" target="_blank">CONTACT US FOR INFO</a>
         </div>
         <div id="lightbox" class="lightbox" onclick="closeLightbox()">
             <span class="close-lightbox">&times;</span>
@@ -119,15 +112,6 @@ function renderProductDetail(data) {
     window.closeLightbox = function() {
         const lb = document.getElementById('lightbox');
         if (lb) lb.style.display = "none";
-    };
-
-    document.onkeydown = function(e) {
-        const lb = document.getElementById('lightbox');
-        if (lb && lb.style.display === "flex") {
-            if (e.key === "ArrowLeft") changeSlide(-1);
-            if (e.key === "ArrowRight") changeSlide(1);
-            if (e.key === "Escape") closeLightbox();
-        }
     };
 }
 
