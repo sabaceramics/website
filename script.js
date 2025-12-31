@@ -9,7 +9,7 @@
 
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
-// --- GENERAZIONE SLUG (come primo script) ---
+// --- GENERAZIONE SLUG ---
 function generateSlug(text) {
     if (!text) return 'product';
     return text.toString()
@@ -43,10 +43,8 @@ async function init() {
                 } else {
                     if (homeView) homeView.style.display = 'block';
                     if (productView) productView.style.display = 'none';
-                    
-                    // ✅ Ripristina il titolo originale quando l'utente torna in Home
+                    // Ripristina il titolo originale quando l'utente torna in Home
                     document.title = "Saba Ceramics | Handcrafted Pottery";
-                    
                     renderHomeGrid(results.data);
                 }
             }
@@ -62,12 +60,20 @@ function renderHomeGrid(data) {
     data.forEach((item, index) => {
         if (!item.TITOLO || !item.IMMAGINE1) return;
 
-        // ... (logica categorie invariata) ...
+        const descLower = (item.DESCRIZIONE || "").toLowerCase();
+        let cats = [];
+        if (descLower.includes('raku')) cats.push('raku');
+        if (descLower.includes('saggar')) cats.push('saggar');
+        if (descLower.includes('kintsugi')) cats.push('kintsugi');
+        if (descLower.includes('lamp') || descLower.includes('lantern')) cats.push('lamps');
+        if (descLower.includes('plate')) cats.push('plates');
+        if (descLower.includes('vase')) cats.push('vases');
+        if (cats.length === 0) cats.push('other');
 
         const card = document.createElement('a');
         const slug = generateSlug(item.TITOLO);
         
-        // ✅ Modifica qui: Assicura che lo SKU sia pulito e convertito in testo
+        // SKU pulito per il link (gestisce numeri e lettere)
         const sku = (item.SKU !== undefined && item.SKU !== null) ? item.SKU.toString().trim() : "pottery";
         
         card.href = `/product/${sku}/${slug}`;
@@ -85,46 +91,36 @@ function renderHomeGrid(data) {
     });
 }
 
-// --- AGGIUNGI QUESTA RIGA ALLA FINE DEL FILE SCRIPT.JS ---
-// Serve per gestire il tasto "Indietro" e "Avanti" del browser
-window.onpopstate = function() {
-    init();
-};
-
 // --- RENDER DETTAGLIO PRODOTTO ---
 function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
-    const sku = pathParts[2];
+    const skuFromUrl = pathParts[2];
     
-    // ✅ Ricerca flessibile: gestisce SKU numerici, alfanumerici e rimuove spazi extra
-    const item = data.find(d => d.SKU && d.SKU.toString().trim() == sku); 
+    // Ricerca flessibile dello SKU nel CSV
+    const item = data.find(d => d.SKU && d.SKU.toString().trim() == skuFromUrl);
     
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
 
-    // ✅ Aggiorna il titolo della scheda del browser
+    // Titolo dinamico per la scheda del browser
     document.title = `${item.TITOLO} | Saba Ceramics`;
 
-    // --- PULIZIA DESCRIZIONE (come secondo script) ---
     let cleanDesc = (item.DESCRIZIONE || "")
         .replace(/&rsquo;/g, "'")
         .replace(/&quot;/g, '"')
         .replace(/&amp;/g, '&');
 
-    // --- IMMAGINI ---
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    // --- GENERAZIONE THUMBNAILS ---
     let thumbnailsHtml = '';
     images.forEach((url, i) => {
         thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
     });
 
-    // --- HTML DETTAGLIO PRODOTTO (wrapper e classi come secondo script) ---
     container.innerHTML = `
         <div class="product-media">
             <div class="slider-wrapper" onclick="openLightbox()">
@@ -147,9 +143,7 @@ function renderProductDetail(data) {
         </div>
     `;
 
-    // --- GALLERY / LIGHTBOX ---
     let currentIdx = 0;
-
     window.updateGallery = function(index) {
         currentIdx = index;
         const mainImg = document.getElementById('main-photo');
@@ -178,7 +172,6 @@ function renderProductDetail(data) {
         if(lightbox) lightbox.style.display = "none";
     };
 
-    // --- GESTIONE TASTIERA (Frecce e ESC) ---
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
         if (lb && lb.style.display === "flex") {
@@ -189,7 +182,20 @@ function renderProductDetail(data) {
     };
 }
 
-// --- FILTRAGGIO PRODOTTI (come secondo script) ---
+// --- GESTIONE TASTO INDIETRO/AVANTI ---
+window.onpopstate = function() {
+    init();
+};
+
+// --- FUNZIONE PER TORNARE ALLA HOME ---
+window.showHome = function(e) {
+    if (e) e.preventDefault();
+    window.history.pushState(null, null, '/');
+    init();
+    window.scrollTo(0, 0);
+};
+
+// --- FILTRAGGIO ---
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('filter-btn')) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -201,17 +207,4 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Funzione per tornare alla Home correttamente
-window.showHome = function(e) {
-    if (e) e.preventDefault();
-    window.history.pushState(null, null, '/');
-    document.title = "Saba Ceramics | Handcrafted Pottery";
-    init(); // Riesegue la logica per mostrare home-view
-    window.scrollTo(0, 0); // Torna in cima alla pagina
-};
-
-// --- AVVIO SCRIPT ---
 init();
-
-
-
