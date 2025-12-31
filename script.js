@@ -25,7 +25,7 @@ async function init() {
             skipEmptyLines: true,
             delimiter: ";",
             complete: function(results) {
-                if (window.location.pathname.includes('product.html')) {
+                if (window.location.pathname.includes('/product/')) {
                     renderProductDetail(results.data);
                 } else {
                     renderHomeGrid(results.data);
@@ -57,10 +57,10 @@ function renderHomeGrid(data) {
 
         const card = document.createElement('a');
 
-        // --- URL PRODOTTO (come primo script) ---
+        // --- URL PRODOTTO (modificato per URL "belli") ---
         const slug = generateSlug(item.TITOLO);
         const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
-        card.href = `product.html?sku=${sku}&name=${slug}&id=${index}`;
+        card.href = `/product/${sku}/${slug}`;
 
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
@@ -70,9 +70,9 @@ function renderHomeGrid(data) {
 
 // --- RENDER DETTAGLIO PRODOTTO ---
 function renderProductDetail(data) {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const item = data[id];
+    const pathParts = window.location.pathname.split('/');
+    const sku = pathParts[2];
+    const item = data.find(d => d.SKU.toString() === sku); // ✅ Modifica qui
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
 
