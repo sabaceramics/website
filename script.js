@@ -1,6 +1,6 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
-// FUNZIONE AGGIUNTA: Serve solo per l'URL pulito
+// Funzione per ripulire il titolo (rimuove accenti e caratteri speciali per l'URL)
 function generateSlug(text) {
     if (!text) return 'product';
     return text.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
@@ -44,7 +44,7 @@ function renderHomeGrid(data) {
         card.className = 'product-card';
         card.setAttribute('data-categories', cats.join(' '));
 
-        // --- UNICA MODIFICA: URL SEO ---
+        // --- UNICA MODIFICA: GENERAZIONE URL CON SKU E TITOLO ---
         const slug = generateSlug(item.TITOLO);
         const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
         const seoUrl = `product.html?sku=${sku}&name=${slug}&id=${index}`;
@@ -79,7 +79,7 @@ function renderProductDetail(data) {
 
     let currentIdx = 0;
 
-    // STRUTTURA COPIATA DAL TUO BACKUP
+    // Struttura HTML preservata fedelmente dal tuo backup
     container.innerHTML = `
         <div class="product-media">
             <div class="main-image-container">
@@ -90,7 +90,9 @@ function renderProductDetail(data) {
                 ` : ''}
             </div>
             <div class="thumbnail-grid">
-                ${images.map((img, i) => `<img src="${img}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})" alt="thumbnail">`).join('')}
+                ${images.map((img, i) => `
+                    <img src="${img}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})" alt="thumbnail">
+                `).join('')}
             </div>
         </div>
         <div class="product-details">
@@ -99,14 +101,19 @@ function renderProductDetail(data) {
             <a href="https://wa.me/393294020926?text=Interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
                class="buy-button" target="_blank">Inquire on WhatsApp</a>
         </div>
-        <div id="lightbox" class="lightbox" onclick="closeLightbox()"><span class="close-lightbox">&times;</span><img id="lightbox-img" src="" alt="Full view"></div>
+        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+            <span class="close-lightbox">&times;</span>
+            <img id="lightbox-img" src="" alt="Full view">
+        </div>
     `;
 
     window.updateGallery = function(idx) {
         currentIdx = idx;
         const mainImg = document.getElementById('main-img');
         if(mainImg) mainImg.src = images[currentIdx];
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
+        document.querySelectorAll('.thumb').forEach((t, i) => {
+            t.classList.toggle('active', i === idx);
+        });
     };
 
     window.changeSlide = function(dir) {
@@ -141,8 +148,9 @@ document.addEventListener('click', function(e) {
         e.target.classList.add('active');
         const cat = e.target.getAttribute('data-category').toLowerCase();
         document.querySelectorAll('.product-card').forEach(card => {
-            if (cat === 'all') card.style.display = 'block';
-            else {
+            if (cat === 'all') {
+                card.style.display = 'block';
+            } else {
                 const itemCats = card.getAttribute('data-categories').split(' ');
                 card.style.display = itemCats.includes(cat) ? 'block' : 'none';
             }
