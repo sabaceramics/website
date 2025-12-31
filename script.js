@@ -44,19 +44,36 @@ function renderHomeGrid(data) {
     data.forEach(item => {
         const skuValue = item.SKU || item.sku;
         if (!item.TITOLO || !item.IMMAGINE1 || !skuValue) return;
+        
+        // ✅ LOGICA FILTRI FLESSIBILE: Cerca nella DESCRIZIONE ignorando singolare/plurale e maiuscole
         const desc = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
+        
         if (/raku/i.test(desc)) cats.push('raku');
         if (/saggar/i.test(desc)) cats.push('saggar');
         if (/kintsugi/i.test(desc)) cats.push('kintsugi');
+        
+        // Cerca "lamp" o "lantern" (prende lamps, lanterns, ecc.)
         if (/lamp|lantern/i.test(desc)) cats.push('lamps');
+        
+        // Cerca "plate" (prende plate e plates)
         if (/plate/i.test(desc)) cats.push('plates');
+        
+        // Cerca "vase" (prende vase e vases)
         if (/vase/i.test(desc)) cats.push('vases');
+
+        if (cats.length === 0) cats.push('other');
+
         const card = document.createElement('a');
         card.href = `/product/${skuValue}/${generateSlug(item.TITOLO)}`;
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}">`;
-        card.onclick = function(e) { e.preventDefault(); window.history.pushState(null, null, card.href); init(); window.scrollTo(0, 0); };
+        card.onclick = function(e) { 
+            e.preventDefault(); 
+            window.history.pushState(null, null, card.href); 
+            init(); 
+            window.scrollTo(0, 0); 
+        };
         grid.appendChild(card);
     });
 }
@@ -130,3 +147,4 @@ function renderProductDetail(data) {
 window.onpopstate = () => init();
 window.showHome = (e) => { if(e) e.preventDefault(); window.history.pushState(null, null, '/'); init(); window.scrollTo(0,0); };
 init();
+
