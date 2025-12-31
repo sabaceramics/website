@@ -70,11 +70,16 @@ function renderHomeGrid(data) {
 
 // --- RENDER DETTAGLIO PRODOTTO ---
 function renderProductDetail(data) {
+    let sku = null;
     const pathParts = window.location.pathname.split('/');
-    const sku = pathParts[2];
-    const item = data.find(d => d.SKU.toString() === sku); // ✅ Modifica qui
+    if (pathParts.length >= 3 && pathParts[1] === 'product') {
+        sku = pathParts[2];
+    }
+    const item = data.find(d => d.SKU === sku);
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
+}
+
 
     // --- PULIZIA DESCRIZIONE (come secondo script) ---
     let cleanDesc = (item.DESCRIZIONE || "")
@@ -174,3 +179,4 @@ document.addEventListener('click', function(e) {
 
 // --- AVVIO SCRIPT ---
 init();
+
