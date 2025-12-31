@@ -6,7 +6,6 @@
     }
 })();
 
-// ✅ AGGIUNTA LA BARRA DAVANTI: Cerca il file nella root, non importa in che pagina sei
 const CSV_FILE = '/EtsyListingsDownload.csv';
 
 function generateSlug(text) {
@@ -17,18 +16,12 @@ function generateSlug(text) {
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
-        if (!response.ok) throw new Error("CSV non trovato al percorso: " + CSV_FILE);
         const csvText = await response.text();
-        
         Papa.parse(csvText, {
-            header: true,
-            skipEmptyLines: true,
-            dynamicTyping: false, 
-            transformHeader: h => h.trim(), 
+            header: true, skipEmptyLines: true, dynamicTyping: false, transformHeader: h => h.trim(),
             complete: function(results) {
                 const data = results.data;
                 const path = window.location.pathname;
-
                 if (path.includes('/product/')) {
                     document.getElementById('home-view').style.display = 'none';
                     document.getElementById('product-view').style.display = 'block';
@@ -41,18 +34,16 @@ async function init() {
                 }
             }
         });
-    } catch (e) { console.error("Errore Caricamento:", e.message); }
+    } catch (e) { console.error("Errore:", e); }
 }
 
 function renderHomeGrid(data) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
-
     data.forEach(item => {
         const skuValue = item.SKU || item.sku;
         if (!item.TITOLO || !item.IMMAGINE1 || !skuValue) return;
-
         const desc = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
         if (/raku/i.test(desc)) cats.push('raku');
@@ -61,108 +52,81 @@ function renderHomeGrid(data) {
         if (/lamp|lantern/i.test(desc)) cats.push('lamps');
         if (/plate/i.test(desc)) cats.push('plates');
         if (/vase/i.test(desc)) cats.push('vases');
-        if (cats.length === 0) cats.push('other');
-
         const card = document.createElement('a');
-        const sku = skuValue.toString().trim();
-        const slug = generateSlug(item.TITOLO);
-        
-        card.href = `/product/${sku}/${slug}`;
+        card.href = `/product/${skuValue}/${generateSlug(item.TITOLO)}`;
         card.className = `product-card ${cats.join(' ')}`;
-        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
-        
-        card.onclick = function(e) {
-            e.preventDefault();
-            window.history.pushState(null, null, card.href);
-            init();
-            window.scrollTo(0, 0);
-        };
+        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}">`;
+        card.onclick = function(e) { e.preventDefault(); window.history.pushState(null, null, card.href); init(); window.scrollTo(0, 0); };
         grid.appendChild(card);
     });
 }
 
 function renderProductDetail(data) {
-    const pathParts = window.location.pathname.split('/');
-    const skuFromUrl = pathParts[2].toString().trim();
-    
-    const item = data.find(d => {
-        const itemSku = (d.SKU || d.sku || "").toString().trim();
-        return itemSku === skuFromUrl;
-    });
-    
+    const skuFromUrl = window.location.pathname.split('/')[2];
+    const item = data.find(d => (d.SKU || d.sku || "").toString().trim() === skuFromUrl);
     const container = document.getElementById('product-detail-content');
-    if (!item) {
-        console.error("DEBUG: SKU richiesto '" + skuFromUrl + "' non trovato.");
-        window.history.replaceState(null, null, '/');
-        init();
-        return;
-    }
-
-    document.title = `${item.TITOLO} | Saba Ceramics`;
-    let cleanDesc = (item.DESCRIZIONE || "").replace(/\n/g, '<br>').replace(/&rsquo;/g, "'");
+    if (!item) { window.history.replaceState(null, null, '/'); init(); return; }
 
     let images = [];
     for (let i = 1; i <= 10; i++) {
-        const url = item[`IMMAGINE${i}`];
-        if (url && url.toString().trim() !== "") images.push(url.toString().trim());
+        let img = item[`IMMAGINE${i}`];
+        if (img && img.trim() !== "") images.push(img.trim());
     }
 
-    let thumbnailsHtml = '';
-    images.forEach((url, i) => {
-        thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
-    });
+    let currentIdx = 0;
 
     container.innerHTML = `
         <div class="product-layout">
-            <div class="product-media-column">
-                <div class="main-image-wrapper" onclick="openLightbox()">
-                    <img src="${images[0]}" id="main-photo" alt="${item.TITOLO}">
+            <div class="product-media">
+                <div class="slider-wrapper" id="slider-main">
+                    <button class="slider-arrow prev" id="arrow-prev">&#10094;</button>
+                    <img src="${images[0]}" id="main-photo">
+                    <button class="slider-arrow next" id="arrow-next">&#10095;</button>
                 </div>
-                <div class="thumbnail-grid">${thumbnailsHtml}</div>
-            </div>
-            <div class="product-info-column">
-                <h1 class="product-page-title">${item.TITOLO}</h1>
-                <div class="product-description-text">${cleanDesc}</div>
-                <div class="product-action">
-                    <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
+                <div class="thumbnail-container">
+                    ${images.map((url, i) => `<img src="${url}" class="thumb ${i===0?'active':''}" data-index="${i}">`).join('')}
                 </div>
             </div>
+            <div class="product-info-text">
+                <h1 class="section-title" style="text-align:left; margin-top:0;">${item.TITOLO}</h1>
+                <p class="product-description">${item.DESCRIZIONE.replace(/\n/g, '<br>')}</p>
+                <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
+            </div>
         </div>
-        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-            <span class="close-lightbox">&times;</span>
-            <img class="lightbox-content" id="lightbox-img">
-        </div>
+        <div id="lightbox" class="lightbox"><span class="close-lightbox">&times;</span><img class="lightbox-content" id="lb-img"></div>
     `;
 
-    window.updateGallery = function(index) {
-        document.getElementById('main-photo').src = images[index];
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === index));
+    function updateGallery(idx) {
+        currentIdx = idx;
+        document.getElementById('main-photo').src = images[currentIdx];
+        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+        if(document.getElementById('lightbox').style.display === 'flex') {
+            document.getElementById('lb-img').src = images[currentIdx];
+        }
+    }
+
+    // Eventi Click
+    document.getElementById('arrow-prev').onclick = (e) => { e.stopPropagation(); updateGallery((currentIdx - 1 + images.length) % images.length); };
+    document.getElementById('arrow-next').onclick = (e) => { e.stopPropagation(); updateGallery((currentIdx + 1) % images.length); };
+    document.querySelectorAll('.thumb').forEach(t => t.onclick = () => updateGallery(parseInt(t.dataset.index)));
+    
+    // Lightbox
+    document.getElementById('slider-main').onclick = () => {
+        document.getElementById('lb-img').src = images[currentIdx];
+        document.getElementById('lightbox').style.display = 'flex';
     };
-    window.openLightbox = function() {
-        const lb = document.getElementById('lightbox');
-        document.getElementById('lightbox-img').src = document.getElementById('main-photo').src;
-        lb.style.display = "flex";
+    document.querySelector('.close-lightbox').onclick = () => document.getElementById('lightbox').style.display = 'none';
+
+    // ✅ TASTIERA (Frecce Destra/Sinistra e ESC per chiudere)
+    document.onkeydown = function(e) {
+        if (document.getElementById('product-view').style.display === 'block') {
+            if (e.key === "ArrowLeft") updateGallery((currentIdx - 1 + images.length) % images.length);
+            if (e.key === "ArrowRight") updateGallery((currentIdx + 1) % images.length);
+            if (e.key === "Escape") document.getElementById('lightbox').style.display = 'none';
+        }
     };
-    window.closeLightbox = function() { document.getElementById('lightbox').style.display = "none"; };
 }
 
-// Gestione filtri
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('filter-btn')) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        const cat = e.target.getAttribute('data-category');
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
-        });
-    }
-});
-
-window.onpopstate = function() { init(); };
-window.showHome = function(e) {
-    if (e) e.preventDefault();
-    window.history.pushState(null, null, '/');
-    init();
-};
-
+window.onpopstate = () => init();
+window.showHome = (e) => { if(e) e.preventDefault(); window.history.pushState(null, null, '/'); init(); window.scrollTo(0,0); };
 init();
