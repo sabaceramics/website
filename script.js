@@ -21,13 +21,11 @@ async function init() {
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            dynamicTyping: true,
-            transformHeader: h => h.trim(),
+            dynamicTyping: false, // Forziamo tutto a testo per non avere conflitti con i numeri
+            transformHeader: h => h.trim(), 
             complete: function(results) {
                 const data = results.data;
                 const path = window.location.pathname;
-
-                console.log("Percorso attuale:", path); // DEBUG
 
                 if (path.includes('/product/')) {
                     document.getElementById('home-view').style.display = 'none';
@@ -41,7 +39,7 @@ async function init() {
                 }
             }
         });
-    } catch (e) { console.error("Errore Caricamento CSV:", e); }
+    } catch (e) { console.error("Errore CSV:", e); }
 }
 
 function renderHomeGrid(data) {
@@ -50,7 +48,9 @@ function renderHomeGrid(data) {
     grid.innerHTML = '';
 
     data.forEach(item => {
-        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
+        // Cerchiamo la colonna SKU anche se Etsy la scrive diversamente
+        const skuValue = item.SKU || item.sku || item["SKU"];
+        if (!item.TITOLO || !item.IMMAGINE1 || !skuValue) return;
 
         const desc = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
@@ -63,7 +63,7 @@ function renderHomeGrid(data) {
         if (cats.length === 0) cats.push('other');
 
         const card = document.createElement('a');
-        const sku = item.SKU.toString().trim();
+        const sku = skuValue.toString().trim();
         const slug = generateSlug(item.TITOLO);
         
         card.href = `/product/${sku}/${slug}`;
@@ -72,9 +72,8 @@ function renderHomeGrid(data) {
         
         card.onclick = function(e) {
             e.preventDefault();
-            console.log("Cliccato prodotto SKU:", sku); // DEBUG
             window.history.pushState(null, null, card.href);
-            init(); // Forza il ricaricamento della vista
+            init();
             window.scrollTo(0, 0);
         };
         grid.appendChild(card);
@@ -83,16 +82,19 @@ function renderHomeGrid(data) {
 
 function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
-    const skuFromUrl = pathParts[2];
+    const skuFromUrl = pathParts[2].toString().trim();
     
-    console.log("Cerco nel CSV lo SKU:", skuFromUrl); // DEBUG
-
-    const item = data.find(d => d.SKU && d.SKU.toString().trim() == skuFromUrl);
+    // ✅ RICERCA ULTRA-FLESSIBILE: confronta tutto come testo e pulisce gli spazi
+    const item = data.find(d => {
+        const itemSku = (d.SKU || d.sku || "").toString().trim();
+        return itemSku === skuFromUrl;
+    });
     
     const container = document.getElementById('product-detail-content');
     if (!item) {
-        console.error("PRODOTTO NON TROVATO PER SKU:", skuFromUrl);
-        document.getElementById('product-view').innerHTML = `<h2 style="padding:100px; text-align:center;">Prodotto non trovato (SKU: ${skuFromUrl}). <a href="/">Torna alla Home</a></h2>`;
+        console.error("DEBUG: SKU richiesto '" + skuFromUrl + "' non trovato tra i prodotti.");
+        window.history.replaceState(null, null, '/');
+        init();
         return;
     }
 
@@ -132,7 +134,6 @@ function renderProductDetail(data) {
         </div>
     `;
 
-    // Funzioni gallery interne
     window.updateGallery = function(index) {
         document.getElementById('main-photo').src = images[index];
         document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === index));
@@ -145,7 +146,29 @@ function renderProductDetail(data) {
     window.closeLightbox = function() { document.getElementById('lightbox').style.display = "none"; };
 }
 
-// Navigazione
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const cat = e.target.getAttribute('data-category');
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
+        });
+    }
+    const anchor = e.target.closest('a');
+    if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
+        if (window.location.pathname !== '/') {
+            e.preventDefault();
+            window.history.pushState(null, null, '/');
+            init();
+            setTimeout(() => {
+                const target = document.querySelector(anchor.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            }, 200);
+        }
+    }
+});
+
 window.onpopstate = function() { init(); };
 window.showHome = function(e) {
     if (e) e.preventDefault();
