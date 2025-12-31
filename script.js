@@ -1,4 +1,3 @@
-// --- GESTIONE SPA REDIRECT ---
 (function() {
     var urlParams = new URLSearchParams(window.location.search);
     var redirectPath = urlParams.get('p');
@@ -17,33 +16,30 @@ function generateSlug(text) {
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
-        if (!response.ok) throw new Error("File CSV non trovato");
         const csvText = await response.text();
         
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            // ✅ Rimosso il delimitatore fisso: PapaParse capisce da solo se è , o ;
             dynamicTyping: true, 
             transformHeader: h => h.trim(), 
             complete: function(results) {
                 const data = results.data;
-                const homeView = document.getElementById('home-view');
-                const productView = document.getElementById('product-view');
+                const path = window.location.pathname;
 
-                if (window.location.pathname.includes('/product/')) {
-                    if (homeView) homeView.style.display = 'none';
-                    if (productView) productView.style.display = 'block';
+                if (path.includes('/product/')) {
+                    document.getElementById('home-view').style.display = 'none';
+                    document.getElementById('product-view').style.display = 'block';
                     renderProductDetail(data);
                 } else {
-                    if (homeView) homeView.style.display = 'block';
-                    if (productView) productView.style.display = 'none';
+                    document.getElementById('home-view').style.display = 'block';
+                    document.getElementById('product-view').style.display = 'none';
                     document.title = "Saba Ceramics | Handcrafted Pottery";
                     renderHomeGrid(data);
                 }
             }
         });
-    } catch (e) { console.error("Errore:", e); }
+    } catch (e) { console.error("Errore CSV:", e); }
 }
 
 function renderHomeGrid(data) {
@@ -52,22 +48,30 @@ function renderHomeGrid(data) {
     grid.innerHTML = '';
 
     data.forEach(item => {
-        // ✅ Mostra il prodotto solo se ha TITOLO, IMMAGINE e SKU
         if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
 
-        const descLower = (item.DESCRIZIONE || "").toLowerCase();
+        const desc = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
-        if (descLower.includes('raku')) cats.push('raku');
-        if (descLower.includes('saggar')) cats.push('saggar');
-        if (descLower.includes('kintsugi')) cats.push('kintsugi');
-        if (descLower.includes('lamp') || descLower.includes('lantern')) cats.push('lamps');
-        if (descLower.includes('plate')) cats.push('plates');
-        if (descLower.includes('vase')) cats.push('vases');
+
+        // ✅ LOGICA FLESSIBILE (Regex): /parola/i cerca ignorando maiuscole/minuscole
+        if (/raku/i.test(desc)) cats.push('raku');
+        if (/saggar/i.test(desc)) cats.push('saggar');
+        if (/kintsugi/i.test(desc)) cats.push('kintsugi');
+        
+        // Cerca "lamp" o "lantern" (anche al plurale)
+        if (/lamp|lantern/i.test(desc)) cats.push('lamps');
+        
+        // Cerca "plate" (anche plates)
+        if (/plate/i.test(desc)) cats.push('plates');
+        
+        // Cerca "vase" (anche vases)
+        if (/vase/i.test(desc)) cats.push('vases');
+
         if (cats.length === 0) cats.push('other');
 
         const card = document.createElement('a');
-        const slug = generateSlug(item.TITOLO);
         const sku = item.SKU.toString().trim();
+        const slug = generateSlug(item.TITOLO);
         
         card.href = `/product/${sku}/${slug}`;
         card.className = `product-card ${cats.join(' ')}`;
@@ -83,16 +87,38 @@ function renderHomeGrid(data) {
     });
 }
 
+// GESTIONE FILTRI E NAVIGAZIONE
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const cat = e.target.getAttribute('data-category');
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
+        });
+    }
+
+    const href = e.target.closest('a')?.getAttribute('href');
+    if (href && href.startsWith('#')) {
+        if (window.location.pathname !== '/') {
+            e.preventDefault();
+            window.history.pushState(null, null, '/');
+            init();
+            setTimeout(() => {
+                const target = document.querySelector(href);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            }, 150);
+        }
+    }
+});
+
 function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
     const skuFromUrl = pathParts[2];
-    
-    // ✅ Cerca il match ESATTO con lo SKU del tuo file
     const item = data.find(d => d.SKU && d.SKU.toString().trim() == skuFromUrl);
     
     const container = document.getElementById('product-detail-content');
     if (!item || !container) {
-        console.error("SKU non trovato nel CSV:", skuFromUrl);
         window.history.pushState(null, null, '/');
         init();
         return;
@@ -150,13 +176,11 @@ function renderProductDetail(data) {
         const lbImg = document.getElementById('lightbox-img');
         if(lb && lbImg) { lb.style.display = "flex"; lbImg.src = images[currentIdx]; }
     };
-    window.closeLightbox = function() { 
-        const lb = document.getElementById('lightbox');
-        if(lb) lb.style.display = "none"; 
-    };
+    window.closeLightbox = function() { document.getElementById('lightbox').style.display = "none"; };
 }
 
 window.onpopstate = function() { init(); };
+
 window.showHome = function(e) {
     if (e) e.preventDefault();
     window.history.pushState(null, null, '/');
