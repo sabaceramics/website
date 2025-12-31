@@ -100,9 +100,15 @@ window.onpopstate = function() {
 function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
     const sku = pathParts[2];
-    const item = data.find(d => d.SKU.toString() === sku); // ✅ Modifica qui
+    
+    // ✅ Ricerca flessibile: gestisce SKU numerici, alfanumerici e rimuove spazi extra
+    const item = data.find(d => d.SKU && d.SKU.toString().trim() == sku); 
+    
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
+
+    // ✅ Aggiorna il titolo della scheda del browser
+    document.title = `${item.TITOLO} | Saba Ceramics`;
 
     // --- PULIZIA DESCRIZIONE (come secondo script) ---
     let cleanDesc = (item.DESCRIZIONE || "")
@@ -211,4 +217,5 @@ window.showHome = function(e) {
 
 // --- AVVIO SCRIPT ---
 init();
+
 
