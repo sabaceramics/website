@@ -23,8 +23,9 @@ async function init() {
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            delimiter: ";",
-            transformHeader: function(h) { return h.trim(); }, 
+            // ✅ Rimosso il delimitatore fisso: PapaParse capisce da solo se è , o ;
+            dynamicTyping: true, 
+            transformHeader: h => h.trim(), 
             complete: function(results) {
                 const data = results.data;
                 const homeView = document.getElementById('home-view');
@@ -51,7 +52,8 @@ function renderHomeGrid(data) {
     grid.innerHTML = '';
 
     data.forEach(item => {
-        if (!item.TITOLO || !item.IMMAGINE1) return;
+        // ✅ Mostra il prodotto solo se ha TITOLO, IMMAGINE e SKU
+        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
 
         const descLower = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
@@ -65,7 +67,7 @@ function renderHomeGrid(data) {
 
         const card = document.createElement('a');
         const slug = generateSlug(item.TITOLO);
-        const sku = item.SKU ? item.SKU.toString().trim() : "pottery";
+        const sku = item.SKU.toString().trim();
         
         card.href = `/product/${sku}/${slug}`;
         card.className = `product-card ${cats.join(' ')}`;
@@ -85,16 +87,18 @@ function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
     const skuFromUrl = pathParts[2];
     
+    // ✅ Cerca il match ESATTO con lo SKU del tuo file
     const item = data.find(d => d.SKU && d.SKU.toString().trim() == skuFromUrl);
     
     const container = document.getElementById('product-detail-content');
     if (!item || !container) {
-        setTimeout(() => { window.history.pushState(null, null, '/'); init(); }, 1000);
+        console.error("SKU non trovato nel CSV:", skuFromUrl);
+        window.history.pushState(null, null, '/');
+        init();
         return;
     }
 
     document.title = `${item.TITOLO} | Saba Ceramics`;
-
     let cleanDesc = (item.DESCRIZIONE || "").replace(/\n/g, '<br>').replace(/&rsquo;/g, "'");
 
     let images = [];
@@ -146,11 +150,13 @@ function renderProductDetail(data) {
         const lbImg = document.getElementById('lightbox-img');
         if(lb && lbImg) { lb.style.display = "flex"; lbImg.src = images[currentIdx]; }
     };
-    window.closeLightbox = function() { document.getElementById('lightbox').style.display = "none"; };
+    window.closeLightbox = function() { 
+        const lb = document.getElementById('lightbox');
+        if(lb) lb.style.display = "none"; 
+    };
 }
 
 window.onpopstate = function() { init(); };
-
 window.showHome = function(e) {
     if (e) e.preventDefault();
     window.history.pushState(null, null, '/');
