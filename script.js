@@ -6,7 +6,8 @@
     }
 })();
 
-const CSV_FILE = 'EtsyListingsDownload.csv';
+// ✅ AGGIUNTA LA BARRA DAVANTI: Cerca il file nella root, non importa in che pagina sei
+const CSV_FILE = '/EtsyListingsDownload.csv';
 
 function generateSlug(text) {
     if (!text) return 'product';
@@ -16,12 +17,13 @@ function generateSlug(text) {
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
+        if (!response.ok) throw new Error("CSV non trovato al percorso: " + CSV_FILE);
         const csvText = await response.text();
         
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
-            dynamicTyping: false, // Forziamo tutto a testo per non avere conflitti con i numeri
+            dynamicTyping: false, 
             transformHeader: h => h.trim(), 
             complete: function(results) {
                 const data = results.data;
@@ -39,7 +41,7 @@ async function init() {
                 }
             }
         });
-    } catch (e) { console.error("Errore CSV:", e); }
+    } catch (e) { console.error("Errore Caricamento:", e.message); }
 }
 
 function renderHomeGrid(data) {
@@ -48,8 +50,7 @@ function renderHomeGrid(data) {
     grid.innerHTML = '';
 
     data.forEach(item => {
-        // Cerchiamo la colonna SKU anche se Etsy la scrive diversamente
-        const skuValue = item.SKU || item.sku || item["SKU"];
+        const skuValue = item.SKU || item.sku;
         if (!item.TITOLO || !item.IMMAGINE1 || !skuValue) return;
 
         const desc = (item.DESCRIZIONE || "").toLowerCase();
@@ -84,7 +85,6 @@ function renderProductDetail(data) {
     const pathParts = window.location.pathname.split('/');
     const skuFromUrl = pathParts[2].toString().trim();
     
-    // ✅ RICERCA ULTRA-FLESSIBILE: confronta tutto come testo e pulisce gli spazi
     const item = data.find(d => {
         const itemSku = (d.SKU || d.sku || "").toString().trim();
         return itemSku === skuFromUrl;
@@ -92,7 +92,7 @@ function renderProductDetail(data) {
     
     const container = document.getElementById('product-detail-content');
     if (!item) {
-        console.error("DEBUG: SKU richiesto '" + skuFromUrl + "' non trovato tra i prodotti.");
+        console.error("DEBUG: SKU richiesto '" + skuFromUrl + "' non trovato.");
         window.history.replaceState(null, null, '/');
         init();
         return;
@@ -146,6 +146,7 @@ function renderProductDetail(data) {
     window.closeLightbox = function() { document.getElementById('lightbox').style.display = "none"; };
 }
 
+// Gestione filtri
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('filter-btn')) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -154,18 +155,6 @@ document.addEventListener('click', function(e) {
         document.querySelectorAll('.product-card').forEach(card => {
             card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
         });
-    }
-    const anchor = e.target.closest('a');
-    if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
-        if (window.location.pathname !== '/') {
-            e.preventDefault();
-            window.history.pushState(null, null, '/');
-            init();
-            setTimeout(() => {
-                const target = document.querySelector(anchor.getAttribute('href'));
-                if (target) target.scrollIntoView({ behavior: 'smooth' });
-            }, 200);
-        }
     }
 });
 
