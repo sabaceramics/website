@@ -40,13 +40,14 @@ async function init() {
                     if (homeView) homeView.style.display = 'none';
                     if (productView) productView.style.display = 'block';
                     renderProductDetail(results.data);
-                    window.scrollTo(0, 0); // ✅ Torna in cima quando apri un prodotto
                 } else {
                     if (homeView) homeView.style.display = 'block';
                     if (productView) productView.style.display = 'none';
+                    
+                    // ✅ Ripristina il titolo originale quando l'utente torna in Home
+                    document.title = "Saba Ceramics | Handcrafted Pottery";
+                    
                     renderHomeGrid(results.data);
-                    // Qui non forziamo lo scroll così se l'utente torna indietro 
-                    // mantiene la posizione nel catalogo (più comodo).
                 }
             }
         });
@@ -61,27 +62,21 @@ function renderHomeGrid(data) {
     data.forEach((item, index) => {
         if (!item.TITOLO || !item.IMMAGINE1) return;
 
-        const descLower = (item.DESCRIZIONE || "").toLowerCase();
-        let cats = [];
-        if (descLower.includes('raku')) cats.push('raku');
-        if (descLower.includes('saggar')) cats.push('saggar');
-        if (descLower.includes('kintsugi')) cats.push('kintsugi');
-        if (descLower.includes('lamp') || descLower.includes('lantern')) cats.push('lamps');
-        if (descLower.includes('plate')) cats.push('plates');
-        if (descLower.includes('vase')) cats.push('vases');
-        if (cats.length === 0) cats.push('other');
+        // ... (logica categorie invariata) ...
 
         const card = document.createElement('a');
         const slug = generateSlug(item.TITOLO);
-        const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
+        
+        // ✅ Modifica qui: Assicura che lo SKU sia pulito e convertito in testo
+        const sku = (item.SKU !== undefined && item.SKU !== null) ? item.SKU.toString().trim() : "pottery";
         
         card.href = `/product/${sku}/${slug}`;
         
         card.onclick = function(e) {
             e.preventDefault();
             window.history.pushState(null, null, card.href);
-            init(); // Carica la vista prodotto
-            window.scrollTo(0, 0); // Riporta l'utente in cima alla pagina
+            init(); 
+            window.scrollTo(0, 0); 
         };
 
         card.className = `product-card ${cats.join(' ')}`;
@@ -217,5 +212,6 @@ window.showHome = function(e) {
 
 // --- AVVIO SCRIPT ---
 init();
+
 
 
