@@ -6,30 +6,35 @@ function renderProductDetail(data) {
         sku = pathParts[2]; // prende '19'
     }
 
-    const item = data.find(d => d.SKU === sku); // trova il prodotto corretto
+    // --- Trova il prodotto corretto nel CSV ---
+    const item = data.find(d => d.SKU && d.SKU.toString().trim() === sku);
     const container = document.getElementById('product-detail-content');
-    if (!item || !container) return;
 
-    // --- PULIZIA DESCRIZIONE ---
+    if (!item || !container) {
+        container.innerHTML = "<p>Prodotto non trovato.</p>";
+        return;
+    }
+
+    // --- Pulizia descrizione ---
     let cleanDesc = (item.DESCRIZIONE || "")
         .replace(/&rsquo;/g, "'")
         .replace(/&quot;/g, '"')
         .replace(/&amp;/g, '&');
 
-    // --- IMMAGINI ---
+    // --- Immagini ---
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    // --- GENERAZIONE THUMBNAILS ---
+    // --- Generazione thumbnails ---
     let thumbnailsHtml = '';
     images.forEach((url, i) => {
         thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
     });
 
-    // --- HTML DETTAGLIO PRODOTTO ---
+    // --- HTML dettagli prodotto ---
     container.innerHTML = `
         <div class="product-media">
             <div class="slider-wrapper" onclick="openLightbox()">
@@ -82,6 +87,7 @@ function renderProductDetail(data) {
         if(lightbox) lightbox.style.display = "none";
     };
 
+    // --- Gestione tastiera (Frecce e ESC) ---
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
         if (lb && lb.style.display === "flex") {
