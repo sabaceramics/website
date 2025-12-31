@@ -200,5 +200,15 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// Funzione per tornare alla Home correttamente
+window.showHome = function(e) {
+    if (e) e.preventDefault();
+    window.history.pushState(null, null, '/');
+    document.title = "Saba Ceramics | Handcrafted Pottery";
+    init(); // Riesegue la logica per mostrare home-view
+    window.scrollTo(0, 0); // Torna in cima alla pagina
+};
+
 // --- AVVIO SCRIPT ---
 init();
+
