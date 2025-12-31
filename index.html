@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saba Ceramics | Handcrafted Pottery</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
@@ -34,7 +35,6 @@
   <section id="catalog-section" class="catalog">
     <div class="container">
       <h2 class="section-title">Our Catalog</h2>
-      
       <div class="catalog-filters">
         <button class="filter-btn active" data-category="all">All</button>
         <button class="filter-btn" data-category="raku">Raku</button>
@@ -44,12 +44,35 @@
         <button class="filter-btn" data-category="plates">Plates</button>
         <button class="filter-btn" data-category="vases">Vases</button>
       </div>
-
       <div class="product-grid" id="product-grid"></div>
     </div>
   </section>
 
-  </main>
+  <section id="about-section" class="about">
+    <div class="container">
+      <div class="about-box">
+        <div class="about-text">
+          <h2 class="section-title">About Our Work</h2>
+          <p>Saba Ceramics is a small artisanal studio dedicated to the creation of one-of-a-kind pottery. Our philosophy is rooted in the beauty of imperfection and the dialogue between the maker and the elements.</p>
+        </div>
+        <div class="about-image">
+          <img src="images/about.jpg" alt="Ceramic detail">
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contacts">
+  <h2 class="section-title">Get in Touch</h2>
+  <div class="social-links">
+    <a href="https://wa.me/393294020926" target="_blank"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+    <a href="mailto:sabaceramics@gmail.com?subject=Inquiry from Website"><img src="images/email.png" alt="Email"></a>
+    <a href="https://instagram.com/saba.ceramics" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
+    <a href="https://www.facebook.com/profile.php?id=61570442885429" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+  </div>
+  <p class="copyright">&copy; 2024 Saba Ceramics. All rights reserved.</p>
+</footer>
 
 <script src="script.js"></script>
 </body>
