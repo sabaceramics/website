@@ -1,6 +1,6 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
-// FUNZIONE AGGIUNTA: Serve solo a trasformare il titolo in un formato adatto all'URL
+// Funzione necessaria solo per ripulire il titolo nell'URL
 function generateSlug(text) {
     if (!text) return 'product';
     return text.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
@@ -31,10 +31,8 @@ function renderHomeGrid(data) {
     data.forEach((item, index) => {
         if (!item.TITOLO || !item.IMMAGINE1) return;
         
-        // --- LOGICA DI FILTRAGGIO BASATA SULLA DESCRIZIONE ---
         const descLower = (item.DESCRIZIONE || "").toLowerCase();
         let cats = [];
-        
         if (descLower.includes('raku')) cats.push('raku');
         if (descLower.includes('saggar')) cats.push('saggar');
         if (descLower.includes('kintsugi')) cats.push('kintsugi');
@@ -46,7 +44,7 @@ function renderHomeGrid(data) {
         card.className = 'product-card';
         card.setAttribute('data-categories', cats.join(' '));
 
-        // --- UNICA MODIFICA EFFETTUATA ---
+        // --- UNICA MODIFICA RICHIESTA: URL CON SKU ---
         const slug = generateSlug(item.TITOLO);
         const sku = (item.SKU && item.SKU.trim() !== "") ? item.SKU.trim() : "pottery";
         const seoUrl = `product.html?sku=${sku}&name=${slug}&id=${index}`;
@@ -74,7 +72,6 @@ function renderProductDetail(data) {
         return;
     }
 
-    // Estrazione immagini
     let images = [];
     for (let i = 1; i <= 10; i++) {
         if (item[`IMMAGINE${i}`]) images.push(item[`IMMAGINE${i}`]);
@@ -82,6 +79,7 @@ function renderProductDetail(data) {
 
     let currentIdx = 0;
 
+    // Struttura HTML ripristinata dal tuo backup
     container.innerHTML = `
         <div class="product-media">
             <div class="main-image-container">
@@ -92,9 +90,7 @@ function renderProductDetail(data) {
                 ` : ''}
             </div>
             <div class="thumbnail-grid">
-                ${images.map((img, i) => `
-                    <img src="${img}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})" alt="thumbnail">
-                `).join('')}
+                ${images.map((img, i) => `<img src="${img}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})" alt="thumbnail">`).join('')}
             </div>
         </div>
         <div class="product-details">
@@ -103,20 +99,14 @@ function renderProductDetail(data) {
             <a href="https://wa.me/393294020926?text=I'm interested in: ${encodeURIComponent(item.TITOLO)} (SKU: ${item.SKU})" 
                class="buy-button" target="_blank">Inquire on WhatsApp</a>
         </div>
-
-        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-            <span class="close-lightbox">&times;</span>
-            <img id="lightbox-img" src="" alt="Full view">
-        </div>
+        <div id="lightbox" class="lightbox" onclick="closeLightbox()"><span class="close-lightbox">&times;</span><img id="lightbox-img" src="" alt="Full view"></div>
     `;
 
     window.updateGallery = function(idx) {
         currentIdx = idx;
         const mainImg = document.getElementById('main-img');
         if(mainImg) mainImg.src = images[currentIdx];
-        document.querySelectorAll('.thumb').forEach((t, i) => {
-            t.classList.toggle('active', i === idx);
-        });
+        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === idx));
     };
 
     window.changeSlide = function(dir) {
@@ -125,17 +115,14 @@ function renderProductDetail(data) {
     };
 
     window.openLightbox = function() {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        if(lightbox && lightboxImg) {
-            lightbox.style.display = "flex";
-            lightboxImg.src = images[currentIdx];
-        }
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        if(lb && lbImg) { lb.style.display = "flex"; lbImg.src = images[currentIdx]; }
     };
 
     window.closeLightbox = function() {
-        const lightbox = document.getElementById('lightbox');
-        if(lightbox) lightbox.style.display = "none";
+        const lb = document.getElementById('lightbox');
+        if(lb) lb.style.display = "none";
     };
 
     document.onkeydown = function(e) {
@@ -154,9 +141,8 @@ document.addEventListener('click', function(e) {
         e.target.classList.add('active');
         const cat = e.target.getAttribute('data-category').toLowerCase();
         document.querySelectorAll('.product-card').forEach(card => {
-            if (cat === 'all') {
-                card.style.display = 'block';
-            } else {
+            if (cat === 'all') card.style.display = 'block';
+            else {
                 const itemCats = card.getAttribute('data-categories').split(' ');
                 card.style.display = itemCats.includes(cat) ? 'block' : 'none';
             }
