@@ -5,87 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saba Ceramics | Handcrafted Pottery</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
 <header class="header">
-  <img src="images/logo.png" alt="Saba Ceramics Logo" class="logo">
+  <a href="/" onclick="event.preventDefault(); window.history.pushState(null, null, '/'); init();">
+    <img src="/images/logo.png" alt="Saba Ceramics Logo" class="logo">
+  </a>
 </header>
 
 <nav class="sticky-nav">
-  <a href="index.html">Home</a>
+  <a href="/" onclick="event.preventDefault(); window.history.pushState(null, null, '/'); init();">Home</a>
   <a href="#catalog-section">Catalog</a>
   <a href="#about-section">About Us</a>
   <a href="#contacts">Contacts</a>
 </nav>
 
 <main>
-  <section class="hero">
-    <img src="images/hero.jpg" alt="Saba Ceramics Process" class="hero-img">
-    
-    <div class="hero-text">
-      <h1>Handcrafted ceramic objects,<br>inspired by nature</h1>
+  <div id="home-view">
+    <section class="hero">
+      <img src="/images/hero.jpg" alt="Saba Ceramics Process" class="hero-img">
       
-      <div class="hero-description">
-        <p>In our work, we explore the spontaneous effects of fire and natural materials, creating warm, timeless designs for interiors and everyday objects.</p>
-        <p>We take a hands-on approach, favoring raku and wood-fired saggar techniques, embracing ancient methods to make each piece unique, with its own story.</p>
-        <p>Inspired by nature, we aim to reconnect people with the natural world through carefully handcrafted pieces—from design and shaping to firing and finishing.</p>
-      </div>
-
-      <h2 id="about-section" class="section-title">ABOUT US</h2>
-
-      <div class="about-box">
-        <img src="images/giulio.jpg" alt="Giulio Galamini" class="about-thumb">
-        <div class="about-info">
-          <h3>Giulio Galamini</h3>
-          <p><i>"I'm a ceramicist for passion, I handle the design and creation of our pieces, as well as branding, marketing, and sales. I work on the potter’s wheel, constantly experimenting with shapes, special firings like raku and saggar, and surface textures, seeking unique, elegant, timeless, and authentic forms."</i></p>
+      <div class="hero-text">
+        <h1>Handcrafted ceramic objects,<br>inspired by nature</h1>
+        
+        <div class="hero-description">
+          <p>In our work, we explore the spontaneous effects of fire and natural materials, creating warm, timeless designs for interiors and everyday objects.</p>
+          <p>We take a hands-on approach, favoring raku and wood-fired saggar techniques, embracing ancient methods to make each piece unique, with its own story.</p>
+          <p>Inspired by nature, we aim to reconnect people with the natural world through carefully handcrafted pieces—from design and shaping to firing and finishing.</p>
         </div>
-      </div>
 
-      <div class="about-box">
-        <img src="images/silvia.jpg" alt="Silvia Farina" class="about-thumb">
-        <div class="about-info">
-          <h3>Silvia Farina</h3>
-          <p><i>"I am a sculptor and visual artist. In my work, I explore forms of forest and other animal life, as well as trees and creatures with which I feel a deep connection. For Saba, I work as a designer and decorator, also handling firings and marketing."</i></p>
+        <h2 id="about-section" class="section-title">ABOUT US</h2>
+
+        <div class="about-box">
+          <img src="/images/giulio.jpg" alt="Giulio Galamini" class="about-thumb">
+          <div class="about-info">
+            <h3>Giulio Galamini</h3>
+            <p><i>"I'm a ceramicist for passion, I handle the design and creation of our pieces, as well as branding, marketing, and sales. I work on the potter’s wheel, constantly experimenting with shapes, special firings like raku and saggar, and surface textures, seeking unique, elegant, timeless, and authentic forms."</i></p>
+          </div>
         </div>
-      </div>
 
-      <h2 id="catalog-section" class="section-title">CATALOG</h2>
-      
-      <div class="catalog-filters">
-        <button class="filter-btn active" data-category="all">All</button>
-        <button class="filter-btn" data-category="raku">Raku</button>
-        <button class="filter-btn" data-category="saggar">Saggar</button>
-        <button class="filter-btn" data-category="kintsugi">Kintsugi</button>
-        <button class="filter-btn" data-category="lamps">Lamps & Lanterns</button>
-        <button class="filter-btn" data-category="plates">Plates</button>
-        <button class="filter-btn" data-category="vases">Vases</button>
-      </div>
+        <div class="about-box">
+          <img src="/images/silvia.jpg" alt="Silvia Farina" class="about-thumb">
+          <div class="about-info">
+            <h3>Silvia Farina</h3>
+            <p><i>"I am a sculptor and visual artist. In my work, I explore forms of forest and other animal life, as well as trees and creatures with which I feel a deep connection. For Saba, I work as a designer and decorator, also handling firings and marketing."</i></p>
+          </div>
+        </div>
 
-      <div class="product-grid" id="product-grid"></div>
-    </div>
-  </section>
+        <h2 id="catalog-section" class="section-title">CATALOG</h2>
+        
+        <div class="catalog-filters">
+          <button class="filter-btn active" data-category="all">All</button>
+          <button class="filter-btn" data-category="raku">Raku</button>
+          <button class="filter-btn" data-category="saggar">Saggar</button>
+          <button class="filter-btn" data-category="kintsugi">Kintsugi</button>
+          <button class="filter-btn" data-category="lamps">Lamps & Lanterns</button>
+          <button class="filter-btn" data-category="plates">Plates</button>
+          <button class="filter-btn" data-category="vases">Vases</button>
+        </div>
+
+        <div class="product-grid" id="product-grid"></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="product-view" style="display:none;">
+    <div class="product-container" id="product-detail-content">
+      </div>
+  </div>
 
   <footer id="contacts">
     <h2 class="section-title">Get in Touch</h2>
     <div class="social-links">
-      <a href="https://wa.me/393294020926" target="_blank"><img src="images/whatsapp.png" alt="WhatsApp"></a>
-      
-      <a href="mailto:sabaceramics@gmail.com?subject=Inquiry from Website"><img src="images/email.png" alt="Email"></a>
-      
-      <a href="https://instagram.com/saba.ceramics" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
-      <a href="https://www.facebook.com/profile.php?id=61570442885429" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
-      <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="images/pinterest.png" alt="Pinterest"></a>
+      <a href="https://wa.me/393294020926" target="_blank"><img src="/images/whatsapp.png" alt="WhatsApp"></a>
+      <a href="mailto:sabaceramics@gmail.com?subject=Inquiry from Website"><img src="/images/email.png" alt="Email"></a>
+      <a href="https://instagram.com/saba.ceramics" target="_blank"><img src="/images/instagram.png" alt="Instagram"></a>
+      <a href="https://www.facebook.com/profile.php?id=61570442885429" target="_blank"><img src="/images/facebook.png" alt="Facebook"></a>
+      <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="/images/pinterest.png" alt="Pinterest"></a>
     </div>
     <p style="font-size: 0.8rem; opacity: 0.8;">© 2025 SABA Ceramics. All rights reserved.</p>
   </footer>
 </main>
 
-<script src="script.js"></script>
+<script src="/script.js"></script>
 </body>
-
-
 </html>
-
