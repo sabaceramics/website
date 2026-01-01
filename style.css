@@ -153,13 +153,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     max-width: 800px;
     margin: 20px auto 40px auto;
     line-height: 1.5;
-    color: #3e1b08; /* Colore marrone scuro come i titoli */
-    font-size: 1.2rem; /* Leggermente più grande per esaltare il font */
+    color: #3e1b08;
+    font-size: 1.2rem;
     padding: 0 15px;
-    
-    /* CAMBIO FONT: Usiamo quello dell'immagine */
     font-family: 'Playfair Display', serif; 
-    font-style: italic; /* Molti font eleganti rendono al meglio in italic */
+    font-style: italic;
+    font-weight: 400;
     width: 100%;
     display: block;
 }
@@ -169,6 +168,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
