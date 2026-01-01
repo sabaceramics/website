@@ -10,11 +10,18 @@ async function init() {
             skipEmptyLines: true, 
             delimiter: ",", 
             quoteChar: '"',
+            newline: "", // <--- AGGIUNGI QUESTA: gestisce i ritorni a capo dentro le descrizioni
+            transformHeader: function(h) {
+                return h.trim().toUpperCase();
+            },
             complete: function(results) {
+                // Rimuove eventuali righe vuote o malformate che non hanno TITOLO
+                const validData = results.data.filter(item => item.TITOLO && item.TITOLO.trim() !== "");
+                
                 if (window.location.pathname.includes('product.html')) {
-                    renderProductDetail(results.data);
+                    renderProductDetail(validData);
                 } else {
-                    renderHomeGrid(results.data);
+                    renderHomeGrid(validData);
                 }
             }
         });
@@ -135,3 +142,4 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
