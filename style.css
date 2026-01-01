@@ -137,4 +137,20 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .social-links img { width: 30px; transition: 0.4s; }
 .social-links a:hover img { transform: scale(1.3); }
 
+/* --- INTRODUZIONE CATALOGO --- */
+.catalog-intro {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    line-height: 1.6;
+    color: #4a4540; /* Grigio caldo che hai già usato */
+    font-size: 1.05rem;
+    padding: 0 15px;
+}
+
+.catalog-intro p {
+    margin-bottom: 12px;
+}
+
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
