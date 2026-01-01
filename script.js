@@ -1,5 +1,11 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
+// --- CONFIGURAZIONE CATALOGO ---
+let allProductsData = [];    // Contiene tutti i dati del CSV
+let currentFilteredData = []; // Contiene i dati dopo aver applicato il filtro
+let currentPage = 1;
+const ITEMS_PER_PAGE = 24;   // Numero di prodotti per pagina
+
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
@@ -8,17 +14,22 @@ async function init() {
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
-            delimiter: ",", // Se il tuo CSV usa il punto e virgola, cambia qui in ";"
+            delimiter: ",", 
             quoteChar: '"',
             transformHeader: function(h) {
                 return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
             },
             complete: function(results) {
+                // Routing semplice in base alla pagina
                 if (window.location.pathname.includes('product.html')) {
                     renderProductDetail(results.data);
-                } else {
-                    renderHomeGrid(results.data);
-                }
+                } else if (window.location.pathname.includes('catalog.html')) {
+                    // Siamo nel catalogo: salviamo i dati e inizializziamo
+                    allProductsData = results.data;
+                    currentFilteredData = allProductsData; // All'inizio vediamo tutto
+                    renderCatalog();
+                } 
+                // Se siamo in index.html non facciamo nulla (o future logiche)
             }
         });
     } catch (e) { console.error("Errore:", e); }
@@ -34,34 +45,104 @@ function createSlug(text) {
         .trim()
         .replace(/\s+/g, '-')     
         .replace(/[^\w-]+/g, '')  
-        .replace(/--+/g, '-');   
+        .replace(/--+/g, '-');    
 }
 
-function renderHomeGrid(data) {
+// --- NUOVA LOGICA CATALOGO CON PAGINAZIONE ---
+
+function renderCatalog() {
     const grid = document.getElementById('product-grid');
+    const paginationContainer = document.getElementById('pagination-controls');
+    
     if (!grid) return;
     grid.innerHTML = '';
-    
-    data.forEach((item) => {
+    paginationContainer.innerHTML = '';
+
+    // 1. Calcoliamo quali prodotti mostrare in base alla pagina
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const paginatedItems = currentFilteredData.slice(start, end);
+
+    // 2. Renderizziamo le card
+    paginatedItems.forEach((item) => {
         if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
+        
         const titleSlug = createSlug(item.TITOLO).substring(0, 50);
         const sku = item.SKU.trim();
+        
         const card = document.createElement('a');
         card.href = `product.html?sku=${sku}&name=${titleSlug}`;
-        const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
-        let cats = [];
-        if (searchText.includes('raku')) cats.push('raku');
-        if (searchText.includes('saggar')) cats.push('saggar');
-        if (searchText.includes('kintsugi')) cats.push('kintsugi');
-        if (searchText.includes('vas')) cats.push('vases');
+        card.className = 'product-card'; // Nota: le classi filtro non servono più qui, filtriamo sui dati
         
-        if (cats.length === 0) cats.push('other');
-        
-        card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
     });
+
+    // 3. Renderizziamo i controlli Paginazione
+    renderPaginationControls(paginationContainer);
+    
+    // Scroll in alto quando cambia pagina
+    if(window.scrollY > 400) window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+function renderPaginationControls(container) {
+    const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
+    
+    if (totalPages <= 1) return; // Se c'è una sola pagina, nascondiamo i bottoni
+
+    const prevBtn = document.createElement('button');
+    prevBtn.innerText = "< PREV";
+    prevBtn.className = "page-btn";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderCatalog();
+        }
+    };
+
+    const nextBtn = document.createElement('button');
+    nextBtn.innerText = "NEXT >";
+    nextBtn.className = "page-btn";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderCatalog();
+        }
+    };
+
+    container.appendChild(prevBtn);
+    container.appendChild(nextBtn);
+}
+
+// Gestore Filtri Catalogo
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-btn')) {
+        // Aggiorna stile bottoni
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        
+        const cat = e.target.getAttribute('data-category').toLowerCase();
+        
+        // FILTRA I DATI
+        if (cat === 'all') {
+            currentFilteredData = allProductsData;
+        } else {
+            currentFilteredData = allProductsData.filter(item => {
+                const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
+                if (cat === 'vases') return searchText.includes('vas'); // Logica speciale per vasi
+                return searchText.includes(cat);
+            });
+        }
+
+        // Resetta a pagina 1 quando si cambia filtro
+        currentPage = 1;
+        renderCatalog();
+    }
+});
+
+// --- LOGICA PRODOTTO (Invariata) ---
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
@@ -70,33 +151,25 @@ function renderProductDetail(data) {
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
     if (!item || !document.getElementById('js-product-title')) return;
 
-    // 1. Preparazione e Pulizia Testi (Spostato qui sopra per poterli usare subito)
     let desc = item.DESCRIZIONE || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
     const cleanTitle = `${item.TITOLO} | Saba Ceramics`;
     const shortDesc = cleanDesc.substring(0, 160);
 
-    // 2. LOGICA SEO & SOCIAL (Dinamica)
     document.title = cleanTitle;
-    
-    // Meta description classica
     document.querySelector('meta[name="description"]')?.setAttribute("content", shortDesc);
-    
-    // Open Graph (Social)
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", cleanTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", shortDesc);
     if (item.IMMAGINE1) {
         document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMMAGINE1.trim());
     }
 
-    // 3. Preparazione Immagini
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    // 4. Inserimento Dati nell'HTML (DOM Manipulation)
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
@@ -106,7 +179,6 @@ function renderProductDetail(data) {
         mainPhoto.alt = item.TITOLO;
     }
 
-    // Miniature
     const thumbContainer = document.getElementById('js-thumb-container');
     if (thumbContainer) {
         thumbContainer.innerHTML = ''; 
@@ -119,7 +191,6 @@ function renderProductDetail(data) {
         });
     }
 
-    // 5. Setup Galleria e Event Listeners
     let currentIdx = 0;
 
     const updateGallery = (index, imgs) => {
@@ -152,7 +223,6 @@ function renderProductDetail(data) {
         if (lb) lb.style.display = "none";
     };
 
-    // Assegnazione Click
     const btnPrev = document.getElementById('js-btn-prev');
     const btnNext = document.getElementById('js-btn-next');
     const sliderWrapper = document.getElementById('js-slider-wrapper');
@@ -169,7 +239,6 @@ function renderProductDetail(data) {
         };
     }
 
-    // Tastiera
     document.onkeydown = function(e) {
         const lb = document.getElementById('js-lightbox');
         if (lb && lb.style.display === "flex") {
@@ -180,21 +249,4 @@ function renderProductDetail(data) {
     };
 }
 
-// Gestore Filtri Home
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('filter-btn')) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        const cat = e.target.getAttribute('data-category').toLowerCase();
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.style.display = (cat === 'all' || card.classList.contains(cat)) ? 'block' : 'none';
-        });
-    }
-});
-
 init();
-
-
-
-
-
