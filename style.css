@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');
 
 /* --- 1. SETTAGGI GLOBALI --- */
 html { scroll-behavior: smooth; }
@@ -159,6 +159,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
