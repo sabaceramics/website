@@ -14,9 +14,8 @@
 </header>
 
 <nav class="sticky-nav">
-  <a href="#top">Home</a>
-  <a href="#catalog">Catalog</a>
-  <a href="#about">About Us</a>
+  <a href="index.html" class="active">Home</a>
+  <a href="catalog.html">Catalog</a> <a href="#about">About Us</a>
   <a href="#contacts">Contacts</a>
 </nav>
 
@@ -50,19 +49,8 @@
           <p><i>"I am a sculptor and visual artist. In my work, I explore forms of forest and other animal life, as well as trees and creatures with which I feel a deep connection. For Saba, I work as a designer and decorator, also handling firings and marketing."</i></p>
         </div>
       </div>
-
-      <h2 id="catalog" class="section-title">CATALOG</h2>
- 
-      <div class="catalog-filters">
-        <button class="filter-btn active" data-category="all">All</button>
-        <button class="filter-btn" data-category="raku">Raku</button>
-        <button class="filter-btn" data-category="saggar">Saggar</button>
-        <button class="filter-btn" data-category="kintsugi">Kintsugi</button>
-        <button class="filter-btn" data-category="vases">Vases</button>
+      
       </div>
-
-      <div class="product-grid" id="product-grid"></div>
-    </div>
   </section>
 
   <footer id="contacts">
@@ -74,20 +62,10 @@
       <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="images/pinterest.png" alt="Pinterest"></a>
     </div>
     <p class="copyright">© <span id="year"></span> SABA Ceramics. All rights reserved.</p>
-    <script>
-  document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
   </footer>
 </main>
 
 <script src="script.js"></script>
 </body>
-
-
 </html>
-
-
-
-
-
-
