@@ -68,6 +68,8 @@ function renderProductDetail(data) {
     const skuFromUrl = fullId.split('-sku-').pop();
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
     if (!item || !document.getElementById('js-product-title')) return;
+    document.title = `${item.TITOLO} | Saba Ceramics`;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", cleanDesc.substring(0, 160));
     let desc = item.DESCRIZIONE || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
     let images = [];
@@ -158,4 +160,5 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
 
