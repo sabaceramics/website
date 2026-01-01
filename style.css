@@ -70,13 +70,12 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
     overflow: hidden;
 }
 
-/* Attenzione: ho corretto l'ID in #js-main-photo per farlo combaciare con l'HTML */
 #js-main-photo { 
     max-width: 100%; 
     max-height: 100%; 
     width: auto;
     height: auto;
-    object-fit: contain; /* Mantiene le proporzioni del vaso senza tagliarlo */
+    object-fit: contain;
     display: block; 
 }
 
@@ -94,18 +93,16 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 }
 
 .slider-arrow:hover { background: #3e1b08; color: white; }
-.prev { left: 0; } 
-.next { right: 0; }
+.prev { left: 5px; } .next { right: 5px; }}
 
 .thumbnail-container { 
     display: flex; 
     gap: 8px; 
     overflow-x: auto; 
     padding: 10px 0; 
-    scrollbar-width: thin; /* Per Firefox */
+    scrollbar-width: thin;
 }
 
-/* Rende le miniature un po' più grandi e belle */
 .thumb { 
     width: 80px; 
     height: 80px; 
@@ -117,8 +114,42 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 }
 .thumb.active { border: 2px solid #3e1b08; opacity: 0.6; }
 
-.product-info-text { flex: 1.5; position: sticky; top: 100px; }
-.product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 30px; font-size: 1rem; }
+.product-info-text { 
+    flex: 1.5; 
+    position: sticky; 
+    top: 100px; 
+}
+
+.product-description { 
+    white-space: pre-wrap; 
+    color: #4a4540; 
+    line-height: 1.6; 
+    margin-bottom: 40px; 
+}
+
+.contact-btn-wrapper {
+    margin-top: 20px;
+}
+
+.contact-btn { 
+    display: inline-block; 
+    background-color: #f9f7f2; 
+    color: #3e1b08; 
+    border: 1px solid #3e1b08; 
+    padding: 15px 35px; 
+    text-transform: uppercase; 
+    font-weight: 600; 
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-decoration: none; 
+    transition: 0.4s ease; 
+}
+
+.contact-btn:hover { 
+    background-color: #3e1b08; 
+    color: #f9f7f2; 
+    transform: scale(1.05); 
+}
 
 /* --- LIGHTBOX --- */
 .lightbox { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
@@ -133,3 +164,4 @@ nav a:hover { color: #3e1b08; transform: scale(1.1); }
 
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
