@@ -154,11 +154,10 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     margin: 20px auto 40px auto;
     line-height: 1.5;
     color: #3e1b08;
-    font-size: 1.2rem;
+    font-size: 1.25rem; 
     padding: 0 15px;
-    font-family: 'Playfair Display', serif; 
-    font-style: italic;
-    font-weight: 400;
+    font-family: 'Playfair Display', serif !important; 
+    font-style: italic !important;
     width: 100%;
     display: block;
 }
@@ -168,6 +167,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
