@@ -24,31 +24,37 @@ async function init() {
     } catch (e) { console.error("Errore:", e); }
 }
 
+// Funzione di supporto per creare lo slug SEO
+function createSlug(text) {
+    return text
+        .toString()
+        .toLowerCase()
+        .normalize('NFD') // Rimuove accenti
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')     // Spazi diventano trattini
+        .replace(/[^\w-]+/g, '')  // Rimuove caratteri speciali
+        .replace(/--+/g, '-');    // Evita trattini doppi
+}
+
 function renderHomeGrid(data) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
     
     data.forEach((item) => {
-        // Controllo di sicurezza: se manca Titolo, Immagine o SKU, saltiamo il prodotto
-        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
-        
+        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;  
+        const titleSlug = createSlug(item.TITOLO).substring(0, 50);
+        const fullId = `${titleSlug}-sku-${item.SKU.trim()}`;
+        const card = document.createElement('a');
+        card.href = `product.html?id=${fullId}`;
         const titleLower = item.TITOLO.toLowerCase();
         let cats = [];
         if (titleLower.includes('raku')) cats.push('raku');
         if (titleLower.includes('saggar')) cats.push('saggar');
         if (titleLower.includes('kintsugi')) cats.push('kintsugi');
-        if (titleLower.includes('lamps') || titleLower.includes('lanterns')) cats.push('lamps');
-        if (titleLower.includes('plates')) cats.push('plates');
         if (titleLower.includes('vases')) cats.push('vases');
         if (cats.length === 0) cats.push('other');
-        
-        const card = document.createElement('a');
-        
-        // --- MODIFICA 1: Usiamo lo SKU nel link invece dell'indice ---
-        // Usiamo .trim() per evitare spazi vuoti accidentali nel CSV
-        card.href = `product.html?id=${item.SKU.trim()}`;
-        
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
@@ -57,19 +63,13 @@ function renderHomeGrid(data) {
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id'); // Qui "id" ora contiene lo SKU (es. "5" o "A01")
-    
-    // --- MODIFICA 2: Cerchiamo il prodotto tramite SKU ---
-    // .find() cerca nell'array l'elemento che ha lo SKU uguale all'id nell'URL
-    const item = data.find(product => product.SKU && product.SKU.trim() === id);
-    
-    // Se non trova l'item o non siamo nella pagina giusta, usciamo
+    const fullId = params.get('id'); // Es: "vaso-raku-sku-5"
+    if (!fullId) return;
+    const skuFromUrl = fullId.split('-sku-').pop();
+    const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
     if (!item || !document.getElementById('js-product-title')) return;
-
-    // 1. Preparazione Dati
     let desc = item.DESCRIZIONE || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-    
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
@@ -158,3 +158,4 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
