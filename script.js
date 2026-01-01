@@ -6,7 +6,10 @@ async function init() {
         if (!response.ok) throw new Error("File CSV non trovato");
         const csvText = await response.text();
         Papa.parse(csvText, {
-            header: true, skipEmptyLines: true, delimiter: ";",
+            header: true, 
+            skipEmptyLines: true, 
+            delimiter: ",", 
+            quoteChar: '"',
             complete: function(results) {
                 if (window.location.pathname.includes('product.html')) {
                     renderProductDetail(results.data);
