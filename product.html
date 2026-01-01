@@ -15,16 +15,39 @@
   </a>
   <nav>
     <a href="index.html">Home</a>
-    <a href="index.html#catalog-section">Catalog</a>
-    <a href="index.html#about-section">About Us</a>
+    <a href="index.html#catalog">Catalog</a>
+    <a href="index.html#about">About Us</a>
     <a href="#contacts">Contacts</a>
   </nav>
 </header>
 
 <main>
   <div class="product-container" id="product-detail-content">
-    </div>
+      
+      <div class="product-media">
+          <div class="slider-wrapper" id="js-slider-wrapper">
+              <button class="slider-arrow prev" id="js-btn-prev">&#10094;</button>
+              <img src="" id="js-main-photo" alt="Product Image">
+              <button class="slider-arrow next" id="js-btn-next">&#10095;</button>
+          </div>
+          <div class="thumbnail-container" id="js-thumb-container"></div>
+      </div>
+
+      <div class="product-info-text">
+          <h1 class="section-title" style="text-align:left; margin-top:0;" id="js-product-title">Loading...</h1>
+          <p class="product-description" id="js-product-desc"></p>
+          <div class="contact-btn-wrapper">
+              <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
+          </div>
+      </div>
+
+  </div>
 </main>
+
+<div id="js-lightbox" class="lightbox">
+    <span class="close-lightbox" id="js-close-lightbox">&times;</span>
+    <img class="lightbox-content" id="js-lightbox-img" alt="">
+</div>
 
 <footer id="contacts">
   <h2 class="section-title">Get in Touch</h2>
@@ -35,13 +58,10 @@
     <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="images/pinterest.png" alt="Pinterest"></a>
   </div>
   <p class="copyright">© <span id="year"></span> SABA Ceramics. All rights reserved.</p>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 </footer>
 
 <script src="script.js"></script>
 
 </body>
-
-
 </html>
-
-
