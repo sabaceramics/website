@@ -41,13 +41,12 @@ function renderHomeGrid(data) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    
     data.forEach((item) => {
-        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;  
+        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
         const titleSlug = createSlug(item.TITOLO).substring(0, 50);
-        const fullId = `${titleSlug}-sku-${item.SKU.trim()}`;
+        const sku = item.SKU.trim();
         const card = document.createElement('a');
-        card.href = `product.html?id=${fullId}`;
+        card.href = `product.html?sku=${sku}&name=${titleSlug}`;
         const titleLower = item.TITOLO.toLowerCase();
         let cats = [];
         if (titleLower.includes('raku')) cats.push('raku');
@@ -55,6 +54,7 @@ function renderHomeGrid(data) {
         if (titleLower.includes('kintsugi')) cats.push('kintsugi');
         if (titleLower.includes('vases')) cats.push('vases');
         if (cats.length === 0) cats.push('other');
+        
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
@@ -63,12 +63,9 @@ function renderHomeGrid(data) {
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
-    const fullId = params.get('id'); // Es: "vaso-raku-sku-5"
-    if (!fullId) return;
-
-    const skuFromUrl = fullId.split('-sku-').pop();
+    const skuFromUrl = params.get('sku'); 
+    if (!skuFromUrl) return;
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
-    
     if (!item || !document.getElementById('js-product-title')) return;
 
     // 1. Preparazione e Pulizia Testi (Spostato qui sopra per poterli usare subito)
@@ -194,6 +191,7 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
 
 
 
