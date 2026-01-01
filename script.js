@@ -65,40 +65,62 @@ function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
     const fullId = params.get('id'); // Es: "vaso-raku-sku-5"
     if (!fullId) return;
+
     const skuFromUrl = fullId.split('-sku-').pop();
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
+    
     if (!item || !document.getElementById('js-product-title')) return;
-    document.title = `${item.TITOLO} | Saba Ceramics`;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", cleanDesc.substring(0, 160));
+
+    // 1. Preparazione e Pulizia Testi (Spostato qui sopra per poterli usare subito)
     let desc = item.DESCRIZIONE || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+    const cleanTitle = `${item.TITOLO} | Saba Ceramics`;
+    const shortDesc = cleanDesc.substring(0, 160);
+
+    // 2. LOGICA SEO & SOCIAL (Dinamica)
+    document.title = cleanTitle;
+    
+    // Meta description classica
+    document.querySelector('meta[name="description"]')?.setAttribute("content", shortDesc);
+    
+    // Open Graph (Social)
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", cleanTitle);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", shortDesc);
+    if (item.IMMAGINE1) {
+        document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMMAGINE1.trim());
+    }
+
+    // 3. Preparazione Immagini
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    // 2. Inserimento Dati nell'HTML (DOM Manipulation)
+    // 4. Inserimento Dati nell'HTML (DOM Manipulation)
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
     const mainPhoto = document.getElementById('js-main-photo');
-    mainPhoto.src = images[0];
-    mainPhoto.alt = item.TITOLO;
+    if (mainPhoto && images.length > 0) {
+        mainPhoto.src = images[0];
+        mainPhoto.alt = item.TITOLO;
+    }
 
     // Miniature
     const thumbContainer = document.getElementById('js-thumb-container');
-    thumbContainer.innerHTML = ''; 
-    
-    images.forEach((url, index) => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.className = `thumb ${index === 0 ? 'active' : ''}`;
-        img.onclick = () => updateGallery(index, images); 
-        thumbContainer.appendChild(img);
-    });
+    if (thumbContainer) {
+        thumbContainer.innerHTML = ''; 
+        images.forEach((url, index) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.className = `thumb ${index === 0 ? 'active' : ''}`;
+            img.onclick = () => updateGallery(index, images); 
+            thumbContainer.appendChild(img);
+        });
+    }
 
-    // 3. Setup Event Listeners
+    // 5. Setup Galleria e Event Listeners
     let currentIdx = 0;
 
     const updateGallery = (index, imgs) => {
@@ -120,23 +142,35 @@ function renderProductDetail(data) {
     const openLightbox = () => {
         const lb = document.getElementById('js-lightbox');
         const lbImg = document.getElementById('js-lightbox-img');
-        lb.style.display = "flex";
-        lbImg.src = images[currentIdx];
+        if (lb && lbImg) {
+            lb.style.display = "flex";
+            lbImg.src = images[currentIdx];
+        }
     };
 
     const closeLightbox = () => {
-        document.getElementById('js-lightbox').style.display = "none";
+        const lb = document.getElementById('js-lightbox');
+        if (lb) lb.style.display = "none";
     };
 
-    document.getElementById('js-btn-prev').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
-    document.getElementById('js-btn-next').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
-    
-    document.getElementById('js-slider-wrapper').onclick = openLightbox;
-    document.getElementById('js-close-lightbox').onclick = closeLightbox;
-    document.getElementById('js-lightbox').onclick = (e) => {
-        if(e.target.id === 'js-lightbox') closeLightbox();
-    };
+    // Assegnazione Click
+    const btnPrev = document.getElementById('js-btn-prev');
+    const btnNext = document.getElementById('js-btn-next');
+    const sliderWrapper = document.getElementById('js-slider-wrapper');
+    const closeLbBtn = document.getElementById('js-close-lightbox');
+    const lightboxContainer = document.getElementById('js-lightbox');
 
+    if (btnPrev) btnPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
+    if (btnNext) btnNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
+    if (sliderWrapper) sliderWrapper.onclick = openLightbox;
+    if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
+    if (lightboxContainer) {
+        lightboxContainer.onclick = (e) => {
+            if(e.target.id === 'js-lightbox') closeLightbox();
+        };
+    }
+
+    // Tastiera
     document.onkeydown = function(e) {
         const lb = document.getElementById('js-lightbox');
         if (lb && lb.style.display === "flex") {
@@ -160,5 +194,6 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
 
 
