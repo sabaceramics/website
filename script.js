@@ -53,72 +53,89 @@ function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const item = data[id];
-    const container = document.getElementById('product-detail-content');
-    if (!item || !container) return;
+    
+    // Se non trova l'item o non siamo nella pagina giusta, usciamo
+    if (!item || !document.getElementById('js-product-title')) return;
+
+    // 1. Preparazione Dati
     let desc = item.DESCRIZIONE || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+    
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    let thumbnailsHtml = '';
-    images.forEach((url, i) => {
-        thumbnailsHtml += `<img src="${url}" class="thumb ${i===0?'active':''}" onclick="updateGallery(${i})">`;
+    // 2. Inserimento Dati nell'HTML (DOM Manipulation)
+    // Titolo e Descrizione
+    document.getElementById('js-product-title').textContent = item.TITOLO;
+    document.getElementById('js-product-desc').innerText = cleanDesc; // Usa innerText per mantenere le "a capo"
+
+    // Immagine Principale
+    const mainPhoto = document.getElementById('js-main-photo');
+    mainPhoto.src = images[0];
+    mainPhoto.alt = item.TITOLO;
+
+    // Miniature
+    const thumbContainer = document.getElementById('js-thumb-container');
+    thumbContainer.innerHTML = ''; // Pulisce
+    
+    images.forEach((url, index) => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = `thumb ${index === 0 ? 'active' : ''}`;
+        img.onclick = () => updateGallery(index, images); // Passiamo images e index
+        thumbContainer.appendChild(img);
     });
 
-    container.innerHTML = `
-        <div class="product-media">
-            <div class="slider-wrapper" onclick="openLightbox()">
-                <button class="slider-arrow prev" onclick="changeSlide(-1); event.stopPropagation();">&#10094;</button>
-                <img src="${images[0]}" id="main-photo" alt="${item.TITOLO}">
-                <button class="slider-arrow next" onclick="changeSlide(1); event.stopPropagation();">&#10095;</button>
-            </div>
-            <div class="thumbnail-container">${thumbnailsHtml}</div>
-        </div>
-        <div class="product-info-text">
-            <h1 class="section-title" style="text-align:left; margin-top:0;">${item.TITOLO}</h1>
-            <p class="product-description">${cleanDesc}</p>
-            <div class="contact-btn-wrapper">
-                <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
-            </div>
-        </div>
-        <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-            <img class="lightbox-content" id="lightbox-img">
-        </div>
-    `;
-
-    let currentIdx = 0;
+    // 3. Setup Event Listeners per Slider e Lightbox
+    // Dobbiamo clonare i bottoni per rimuovere vecchi listener se ricarichiamo (best practice)
+    // Ma qui basta assegnare le funzioni
     
-    window.updateGallery = function(index) {
+    let currentIdx = 0;
+
+    // Definiamo le funzioni interne per usare le variabili locali (closure)
+    const updateGallery = (index, imgs) => {
         currentIdx = index;
-        const mainImg = document.getElementById('main-photo');
-        const lbImg = document.getElementById('lightbox-img');
-        if(mainImg) mainImg.src = images[currentIdx];
-        if(lbImg) lbImg.src = images[currentIdx];
+        const mainImg = document.getElementById('js-main-photo');
+        const lbImg = document.getElementById('js-lightbox-img');
+        
+        if (mainImg) mainImg.src = imgs[currentIdx];
+        if (lbImg) lbImg.src = imgs[currentIdx];
+        
         document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
     };
 
-    window.changeSlide = function(dir) {
+    const changeSlide = (dir) => {
         currentIdx = (currentIdx + dir + images.length) % images.length;
-        updateGallery(currentIdx);
+        updateGallery(currentIdx, images);
     };
 
-    window.openLightbox = function() {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        lightbox.style.display = "flex";
-        lightboxImg.src = images[currentIdx];
+    const openLightbox = () => {
+        const lb = document.getElementById('js-lightbox');
+        const lbImg = document.getElementById('js-lightbox-img');
+        lb.style.display = "flex";
+        lbImg.src = images[currentIdx];
     };
 
-    window.closeLightbox = function() {
-        document.getElementById('lightbox').style.display = "none";
+    const closeLightbox = () => {
+        document.getElementById('js-lightbox').style.display = "none";
     };
 
+    // Assegnazione Eventi ai bottoni HTML
+    document.getElementById('js-btn-prev').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
+    document.getElementById('js-btn-next').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
+    
+    document.getElementById('js-slider-wrapper').onclick = openLightbox;
+    document.getElementById('js-close-lightbox').onclick = closeLightbox;
+    document.getElementById('js-lightbox').onclick = (e) => {
+        if(e.target.id === 'js-lightbox') closeLightbox();
+    };
+
+    // Supporto tastiera
     document.onkeydown = function(e) {
-        const lb = document.getElementById('lightbox');
+        const lb = document.getElementById('js-lightbox');
         if (lb && lb.style.display === "flex") {
             if (e.key === "ArrowLeft") changeSlide(-1);
             if (e.key === "ArrowRight") changeSlide(1);
@@ -127,6 +144,7 @@ function renderProductDetail(data) {
     };
 }
 
+// Gestore Filtri Home
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('filter-btn')) {
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -139,4 +157,3 @@ document.addEventListener('click', function(e) {
 });
 
 init();
-
