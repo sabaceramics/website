@@ -166,7 +166,73 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     margin-bottom: 8px;
 }
 
+/* --- MODIFICHE RICHIESTE --- */
+
+/* 1 & 5. Copyright piccolo/chiaro e Rimozione linea nera footer */
+#contacts { 
+    padding: 60px 5%; 
+    text-align: center; 
+    background-color: #e9e1d3; 
+    border-top: none; /* Linea eliminata */
+    margin-top: 50px; 
+}
+.copyright { 
+    font-size: 0.75rem; 
+    color: #8e7e72; 
+    margin-top: 20px; 
+}
+
+/* 3. Font libera e Serif nel catalogo */
+.intro-serif {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #3e1b08;
+}
+
+/* 7. Navigazione più grande */
+nav a { 
+    text-decoration: none; 
+    color: #1a1a1a; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    font-size: 1.1rem; /* Aumentato da 0.85rem */
+    font-weight: 600; 
+    transition: 0.4s ease; 
+}
+
+/* 6. Slider Automatico e Manuale */
+.auto-slider {
+    width: 100%;
+    overflow-x: auto; /* Permette lo scorrimento manuale */
+    background: #f9f7f2;
+    padding: 20px 0;
+    scrollbar-width: none; /* Nasconde scrollbar Firefox */
+}
+.auto-slider::-webkit-scrollbar { display: none; } /* Nasconde scrollbar Chrome */
+
+.slider-track {
+    display: flex;
+    gap: 15px;
+    width: max-content;
+    animation: scroll 40s linear infinite;
+}
+.slider-track:hover { animation-play-state: paused; }
+
+.slider-track img {
+    height: 300px;
+    width: auto;
+    border: 1px solid #e0ddd5;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
