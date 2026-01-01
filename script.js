@@ -250,3 +250,44 @@ function renderProductDetail(data) {
 }
 
 init();
+
+
+// --- GESTIONE SCROLL FLUIDO PER IL MENU ---
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Logica per il tasto CATALOG (id="catalog")
+    const catalogBtn = document.getElementById('catalog');
+    if (catalogBtn) {
+        catalogBtn.addEventListener('click', function(e) {
+            if (window.location.pathname.includes('catalog.html')) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // 2. Logica per il tasto HOME (id="home")
+    const homeBtn = document.getElementById('home');
+    if (homeBtn) {
+        homeBtn.addEventListener('click', function(e) {
+            if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+    }
+
+    // 3. Logica per il tasto ABOUT US (id="about-nav")
+    const aboutBtn = document.getElementById('about-nav');
+    if (aboutBtn) {
+        aboutBtn.addEventListener('click', function(e) {
+            if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+                const section = document.getElementById('about');
+                if (section) {
+                    e.preventDefault();
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    }
+});
