@@ -8,7 +8,7 @@ async function init() {
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
-            delimiter: ",",
+            delimiter: ",", // Se il tuo CSV usa il punto e virgola, cambia qui in ";"
             quoteChar: '"',
             transformHeader: function(h) {
                 return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
@@ -28,8 +28,10 @@ function renderHomeGrid(data) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
-    data.forEach((item, index) => {
-        if (!item.TITOLO || !item.IMMAGINE1) return;
+    
+    data.forEach((item) => {
+        // Controllo di sicurezza: se manca Titolo, Immagine o SKU, saltiamo il prodotto
+        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
         
         const titleLower = item.TITOLO.toLowerCase();
         let cats = [];
@@ -42,7 +44,11 @@ function renderHomeGrid(data) {
         if (cats.length === 0) cats.push('other');
         
         const card = document.createElement('a');
-        card.href = `product.html?id=${index}`;
+        
+        // --- MODIFICA 1: Usiamo lo SKU nel link invece dell'indice ---
+        // Usiamo .trim() per evitare spazi vuoti accidentali nel CSV
+        card.href = `product.html?id=${item.SKU.trim()}`;
+        
         card.className = `product-card ${cats.join(' ')}`;
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
@@ -51,8 +57,11 @@ function renderHomeGrid(data) {
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const item = data[id];
+    const id = params.get('id'); // Qui "id" ora contiene lo SKU (es. "5" o "A01")
+    
+    // --- MODIFICA 2: Cerchiamo il prodotto tramite SKU ---
+    // .find() cerca nell'array l'elemento che ha lo SKU uguale all'id nell'URL
+    const item = data.find(product => product.SKU && product.SKU.trim() === id);
     
     // Se non trova l'item o non siamo nella pagina giusta, usciamo
     if (!item || !document.getElementById('js-product-title')) return;
@@ -68,34 +77,28 @@ function renderProductDetail(data) {
     }
 
     // 2. Inserimento Dati nell'HTML (DOM Manipulation)
-    // Titolo e Descrizione
     document.getElementById('js-product-title').textContent = item.TITOLO;
-    document.getElementById('js-product-desc').innerText = cleanDesc; // Usa innerText per mantenere le "a capo"
+    document.getElementById('js-product-desc').innerText = cleanDesc; 
 
-    // Immagine Principale
     const mainPhoto = document.getElementById('js-main-photo');
     mainPhoto.src = images[0];
     mainPhoto.alt = item.TITOLO;
 
     // Miniature
     const thumbContainer = document.getElementById('js-thumb-container');
-    thumbContainer.innerHTML = ''; // Pulisce
+    thumbContainer.innerHTML = ''; 
     
     images.forEach((url, index) => {
         const img = document.createElement('img');
         img.src = url;
         img.className = `thumb ${index === 0 ? 'active' : ''}`;
-        img.onclick = () => updateGallery(index, images); // Passiamo images e index
+        img.onclick = () => updateGallery(index, images); 
         thumbContainer.appendChild(img);
     });
 
-    // 3. Setup Event Listeners per Slider e Lightbox
-    // Dobbiamo clonare i bottoni per rimuovere vecchi listener se ricarichiamo (best practice)
-    // Ma qui basta assegnare le funzioni
-    
+    // 3. Setup Event Listeners
     let currentIdx = 0;
 
-    // Definiamo le funzioni interne per usare le variabili locali (closure)
     const updateGallery = (index, imgs) => {
         currentIdx = index;
         const mainImg = document.getElementById('js-main-photo');
@@ -123,7 +126,6 @@ function renderProductDetail(data) {
         document.getElementById('js-lightbox').style.display = "none";
     };
 
-    // Assegnazione Eventi ai bottoni HTML
     document.getElementById('js-btn-prev').onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
     document.getElementById('js-btn-next').onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     
@@ -133,7 +135,6 @@ function renderProductDetail(data) {
         if(e.target.id === 'js-lightbox') closeLightbox();
     };
 
-    // Supporto tastiera
     document.onkeydown = function(e) {
         const lb = document.getElementById('js-lightbox');
         if (lb && lb.style.display === "flex") {
