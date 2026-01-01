@@ -29,30 +29,32 @@ function createSlug(text) {
     return text
         .toString()
         .toLowerCase()
-        .normalize('NFD') // Rimuove accenti
+        .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
-        .replace(/\s+/g, '-')     // Spazi diventano trattini
-        .replace(/[^\w-]+/g, '')  // Rimuove caratteri speciali
-        .replace(/--+/g, '-');    // Evita trattini doppi
+        .replace(/\s+/g, '-')     
+        .replace(/[^\w-]+/g, '')  
+        .replace(/--+/g, '-');   
 }
 
 function renderHomeGrid(data) {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
     grid.innerHTML = '';
+    
     data.forEach((item) => {
         if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
         const titleSlug = createSlug(item.TITOLO).substring(0, 50);
         const sku = item.SKU.trim();
         const card = document.createElement('a');
         card.href = `product.html?sku=${sku}&name=${titleSlug}`;
-        const titleLower = item.TITOLO.toLowerCase();
+        const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
         let cats = [];
-        if (titleLower.includes('raku')) cats.push('raku');
-        if (titleLower.includes('saggar')) cats.push('saggar');
-        if (titleLower.includes('kintsugi')) cats.push('kintsugi');
-        if (titleLower.includes('vases')) cats.push('vases');
+        if (searchText.includes('raku')) cats.push('raku');
+        if (searchText.includes('saggar')) cats.push('saggar');
+        if (searchText.includes('kintsugi')) cats.push('kintsugi');
+        if (searchText.includes('vas')) cats.push('vases');
+        
         if (cats.length === 0) cats.push('other');
         
         card.className = `product-card ${cats.join(' ')}`;
@@ -191,6 +193,7 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
 
 
 
