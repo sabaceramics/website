@@ -29,7 +29,11 @@ async function init() {
                     currentFilteredData = allProductsData; // All'inizio vediamo tutto
                     renderCatalog();
                 } 
-                // Se siamo in index.html non facciamo nulla (o future logiche)
+                
+                // AGGIUNTA: Inizializza lo slider se siamo in Home
+                if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+                    initDynamicSlider();
+                }
             }
         });
     } catch (e) { console.error("Errore:", e); }
@@ -43,7 +47,7 @@ function createSlug(text) {
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
-        .replace(/\s+/g, '-')     
+        .replace(/\s+/g, '-')      
         .replace(/[^\w-]+/g, '')  
         .replace(/--+/g, '-');    
 }
@@ -72,7 +76,7 @@ function renderCatalog() {
         
         const card = document.createElement('a');
         card.href = `product.html?sku=${sku}&name=${titleSlug}`;
-        card.className = 'product-card'; // Nota: le classi filtro non servono più qui, filtriamo sui dati
+        card.className = 'product-card'; 
         
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
@@ -311,3 +315,75 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// --- NUOVA LOGICA SLIDER DINAMICO (SOLO PER HOME) ---
+
+function initDynamicSlider() {
+    const track = document.getElementById('js-slider-track');
+    const container = document.getElementById('js-slider-container');
+    if (!track || !container) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let scrollSpeed = 1;
+
+    async function loadGallery() {
+        let i = 1;
+        let foundAll = false;
+        while (!foundAll && i <= 15) {
+            const imgPath = `images/pres${i}.jpg`;
+            const exists = await new Promise(r => {
+                const img = new Image();
+                img.onload = () => r(true);
+                img.onerror = () => r(false);
+                img.src = imgPath;
+            });
+            if (exists) {
+                const img = document.createElement('img');
+                img.src = imgPath;
+                track.appendChild(img);
+                i++;
+            } else { foundAll = true; }
+        }
+        if (track.children.length > 0) {
+            track.innerHTML += track.innerHTML; // Clone per loop infinito
+            startAutoScroll();
+        }
+    }
+
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        container.style.cursor = 'grabbing';
+        startX = e.pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+    });
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeft - walk;
+    });
+
+    function startAutoScroll() {
+        function step() {
+            if (!isDown) {
+                container.scrollLeft += scrollSpeed;
+                if (container.scrollLeft >= track.scrollWidth / 2) {
+                    container.scrollLeft = 0;
+                }
+            }
+            requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    loadGallery();
+}
