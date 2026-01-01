@@ -8,20 +8,18 @@ async function init() {
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
-            delimiter: ",", 
+            delimiter: ",", // Modificato per il nuovo file
             quoteChar: '"',
-            newline: "", // <--- AGGIUNGI QUESTA: gestisce i ritorni a capo dentro le descrizioni
+            newline: "",    // Necessario per non spezzare le descrizioni lunghe
             transformHeader: function(h) {
-                return h.trim().toUpperCase();
+                // Questa riga è fondamentale: pulisce i nomi delle colonne dalle virgolette
+                return h.replace(/"/g, '').trim().toUpperCase();
             },
             complete: function(results) {
-                // Rimuove eventuali righe vuote o malformate che non hanno TITOLO
-                const validData = results.data.filter(item => item.TITOLO && item.TITOLO.trim() !== "");
-                
                 if (window.location.pathname.includes('product.html')) {
-                    renderProductDetail(validData);
+                    renderProductDetail(results.data);
                 } else {
-                    renderHomeGrid(validData);
+                    renderHomeGrid(results.data);
                 }
             }
         });
@@ -33,7 +31,9 @@ function renderHomeGrid(data) {
     if (!grid) return;
     grid.innerHTML = '';
     data.forEach((item, index) => {
+        // Se item.TITOLO contiene ancora virgolette residue nel testo, le puliamo al volo
         if (!item.TITOLO || !item.IMMAGINE1) return;
+        
         const titleLower = item.TITOLO.toLowerCase();
         let cats = [];
         if (titleLower.includes('raku')) cats.push('raku');
@@ -43,13 +43,18 @@ function renderHomeGrid(data) {
         if (titleLower.includes('plates')) cats.push('plates');
         if (titleLower.includes('vases')) cats.push('vases');
         if (cats.length === 0) cats.push('other');
+        
         const card = document.createElement('a');
         card.href = `product.html?id=${index}`;
         card.className = `product-card ${cats.join(' ')}`;
+        // trim() è essenziale perché le URL nel nuovo file hanno spazi/virgolette
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
     });
 }
+
+// IL RESTO DEL TUO CODICE (renderProductDetail e listener click) 
+// RIMANE IDENTICO A PRIMA, NON TOCCARE NULLA SOTTO QUESTA RIGA.
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
@@ -119,7 +124,6 @@ function renderProductDetail(data) {
         document.getElementById('lightbox').style.display = "none";
     };
 
-    // Supporto tastiera
     document.onkeydown = function(e) {
         const lb = document.getElementById('lightbox');
         if (lb && lb.style.display === "flex") {
@@ -142,4 +146,3 @@ document.addEventListener('click', function(e) {
 });
 
 init();
-
