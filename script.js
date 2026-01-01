@@ -8,12 +8,10 @@ async function init() {
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
-            delimiter: ",", // Modificato per il nuovo file
+            delimiter: ",",
             quoteChar: '"',
-            newline: "",    // Necessario per non spezzare le descrizioni lunghe
             transformHeader: function(h) {
-                // Questa riga è fondamentale: pulisce i nomi delle colonne dalle virgolette
-                return h.replace(/"/g, '').trim().toUpperCase();
+                return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
             },
             complete: function(results) {
                 if (window.location.pathname.includes('product.html')) {
@@ -31,7 +29,6 @@ function renderHomeGrid(data) {
     if (!grid) return;
     grid.innerHTML = '';
     data.forEach((item, index) => {
-        // Se item.TITOLO contiene ancora virgolette residue nel testo, le puliamo al volo
         if (!item.TITOLO || !item.IMMAGINE1) return;
         
         const titleLower = item.TITOLO.toLowerCase();
@@ -47,14 +44,10 @@ function renderHomeGrid(data) {
         const card = document.createElement('a');
         card.href = `product.html?id=${index}`;
         card.className = `product-card ${cats.join(' ')}`;
-        // trim() è essenziale perché le URL nel nuovo file hanno spazi/virgolette
         card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
         grid.appendChild(card);
     });
 }
-
-// IL RESTO DEL TUO CODICE (renderProductDetail e listener click) 
-// RIMANE IDENTICO A PRIMA, NON TOCCARE NULLA SOTTO QUESTA RIGA.
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
@@ -62,8 +55,8 @@ function renderProductDetail(data) {
     const item = data[id];
     const container = document.getElementById('product-detail-content');
     if (!item || !container) return;
-
-    let cleanDesc = item.DESCRIZIONE.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
+    let desc = item.DESCRIZIONE || ""; 
+    let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
     let images = [];
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMMAGINE${i}`];
@@ -146,3 +139,4 @@ document.addEventListener('click', function(e) {
 });
 
 init();
+
