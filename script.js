@@ -291,3 +291,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+document.addEventListener('keydown', function(e) {
+    // Funziona solo se siamo in catalog.html
+    if (window.location.pathname.includes('catalog.html')) {
+        const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
+        
+        if (e.key === "ArrowRight") {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderCatalog();
+            }
+        } else if (e.key === "ArrowLeft") {
+            if (currentPage > 1) {
+                currentPage--;
+                renderCatalog();
+            }
+        }
+    }
+});
