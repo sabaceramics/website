@@ -227,31 +227,30 @@ function renderProductDetail(data) {
 
     let currentIdx = 0;
 
-    const updateGallery = (index, imgs) => {
+const updateGallery = (index, imgs) => {
     const mainImg = document.getElementById('js-main-photo');
     const lbImg = document.getElementById('js-lightbox-img');
-    const direction = index > currentIdx ? 'next' : 'prev';
     currentIdx = index;
-    const applySmoothChange = (el) => {
+
+    const applyCrossFade = (el) => {
         if (!el) return;
-        el.style.opacity = '0.3'; // Non metterlo a 0, così non c'è il flash nero
-        el.style.transform = direction === 'next' ? 'translateX(-10px)' : 'translateX(10px)';
         
-        // Questo timer deve scendere a 100 per essere veloce come il tuo CSS
+        // Abbassiamo appena l'opacità per ammorbidire il cambio
+        el.style.opacity = '0.4'; 
+        
         setTimeout(() => {
+            // Cambiamo la sorgente mentre l'immagine è ancora visibile al 40%
             el.src = imgs[currentIdx];
-            el.style.transform = direction === 'next' ? 'translateX(10px)' : 'translateX(-10px)';
             
-            // Questo timer deve essere brevissimo
             setTimeout(() => {
+                // Riportiamo subito a 1
                 el.style.opacity = '1';
-                el.style.transform = 'translateX(0)';
-            }, 20); 
-        }, 100); 
+            }, 20); // Tempo di reazione quasi nullo
+        }, 40); // Cambio fulmineo
     };
 
-    applySmoothChange(mainImg);
-    applySmoothChange(lbImg);
+    applyCrossFade(mainImg);
+    applyCrossFade(lbImg);
     
     document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
 };
@@ -489,6 +488,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
