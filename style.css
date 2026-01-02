@@ -202,7 +202,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
                  cursor: pointer; }
 .lb-arrow {
     position: absolute; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: white; font-size: 3rem;
+    background: none; border: none; color: #e9dbcf; font-size: 2rem;
     cursor: pointer; padding: 20px; z-index: 100000;
 }
 .lb-prev { left: 10px; }
@@ -302,6 +302,7 @@ input[type="text"], input[type="email"], textarea {
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
 
 
 
