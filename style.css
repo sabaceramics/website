@@ -199,6 +199,26 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 #js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 800 !important; font-size: 2rem; color: #3e1b08; letter-spacing: 1px; }
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
+/* Effetto scorrimento per la foto principale e lightbox */
+#js-main-photo, #js-lightbox-img {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.slide-out-left {
+    transform: translateX(-20px);
+    opacity: 0;
+}
+
+.slide-out-right {
+    transform: translateX(20px);
+    opacity: 0;
+}
+
+.slide-in {
+    transform: translateX(0);
+    opacity: 1;
+}
+
 /* Buttons & Forms */
 .contact-btn { 
     display: inline-block; background-color: #f9f7f2; color: #3e1b08; border: 1px solid #3e1b08; 
@@ -400,6 +420,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
