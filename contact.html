@@ -22,15 +22,25 @@
     <p class="intro-serif" style="text-align: center; margin-bottom: 30px;">
       Write to us for any information or inquiries,<br>we will get back to you as soon as possible.
     </p>
-    <form action="https://formspree.io/f/xrebqzaq" method="POST" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-      <input type="email" name="email" placeholder="Your email" required style="padding: 10px; border: 1px solid #e0ddd5;">
-      <textarea name="message" placeholder="Write your message here" rows="6" required style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;"></textarea>
-      <button type="submit" class="contact-btn">Send Message</button>
-    </form>
+   <form action="https://formspree.io/f/xrebqzaq" method="POST"
+      style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+  <div style="display: flex; gap: 15px;">
+    <input type="text" name="name" placeholder="Name" required
+           style="flex: 1; padding: 10px; border: 1px solid #e0ddd5;">
+    <input type="text" name="surname" placeholder="Surname" required
+           style="flex: 1; padding: 10px; border: 1px solid #e0ddd5;">
+  </div>
+  <input type="email" name="email" placeholder="Email" required
+         style="padding: 10px; border: 1px solid #e0ddd5;">
+  <textarea name="message" placeholder="Your message" rows="6" required
+            style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;"></textarea>
+  <button type="submit" class="contact-btn">Send Message</button>
+</form>
   </div>
 </main>
 </body>
 
 </html>
+
 
 
