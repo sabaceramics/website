@@ -78,7 +78,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
 .product-grid { 
     display: grid; 
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    grid-template-columns: repeat(4, 1fr); /* Forza 4 colonne su schermi grandi */
     gap: 20px; 
 }
 
@@ -392,7 +392,7 @@ textarea {
 
     /* Catalogo */
     .product-grid {
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: repeat(2, 1fr); /* 2 vasi per riga su tablet e telefoni */
         gap: 12px;
         padding: 0 5px;
     }
@@ -408,6 +408,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
