@@ -361,14 +361,35 @@ input[type="text"], input[type="email"], textarea {
         text-align: left;
     }
 
-    .lb-prev { left: 10px; }
-    .lb-next { right: 10px; }
-    .close-lightbox { right: 10px; top: -50px; }
+   .lightbox-wrapper {
+        width: 95%;
+        height: auto;
+    }
+   
+    .lightbox-content {
+        max-height: 70vh;
+    }
+   
+    .lb-prev {
+       left: 10px;
+    }
+   
+    .lb-next {
+       right: 10px;
+    }
+   
+    .close-lightbox {
+       right: 10px;
+       top: -50px;
+    }
 
     /* Contatti */
    
-    .contact-form-row { flex-direction: column; }
+    .contact-form-row {
+       flex-direction: column;
+    }
 }
+
 
 
 
