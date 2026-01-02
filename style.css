@@ -261,15 +261,47 @@ input[type="text"], input[type="email"], textarea {
     .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 5px; }
     .product-card img { height: 160px; }
 
-    /* Pagina Prodotto */
-    .product-container { flex-direction: column; padding: 10px 5%; gap: 15px; }
-    .slider-wrapper { height: 250px !important; width: 100% !important; display: flex; justify-content: center; align-items: center; overflow: hidden; } 
-    #js-main-photo { max-height: 250px !important; width: auto !important; max-width: 100%; object-fit: contain; }
-    .product-info-text { position: static; width: 100%; text-align: left; padding-top: 10px; }
-    #js-product-title { font-size: 1.2rem; text-align: left; margin-top: 0; }
+    /* Pagina Prodotto Mobile */
+    .product-container { 
+        flex-direction: column; 
+        padding: 10px 0; 
+        gap: 15px; 
+    }
+
+    .product-media {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .slider-wrapper { 
+        height: auto !important; 
+        min-height: 300px; 
+        width: 100% !important; 
+        border: none; 
+        background: transparent; 
+    } 
+
+    #js-main-photo { 
+        display: block;
+        width: 100% !important; 
+        height: auto !important; 
+        max-height: 450px; 
+        object-fit: contain; 
+    }
+
+    .thumbnail-container {
+        padding: 0 10px; 
+    }
+
+    .product-info-text { 
+        padding: 0 20px; 
+        text-align: left;
+    }
 
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
 
 
