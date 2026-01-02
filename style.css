@@ -80,7 +80,7 @@ nav a:hover, nav a.active {
 /* --- 4. ABOUT US --- */
 
 .about-section-bg {
-    background-color: #ceb8aa;
+    background-color: #dacfc7;
     width: 100%;
     padding: 80px 0; 
     margin: 40px 0;
@@ -466,6 +466,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
