@@ -259,4 +259,56 @@ nav a {
     100% { transform: translateX(-50%); }
 }
 
-@media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+/* --- OTTIMIZZAZIONE MOBILE --- */
+@media (max-width: 768px) {
+    /* Logo e Header */
+    .logo { height: 150px; } /* Ridotto da 240px per non occupare tutto lo schermo */
+    .header { padding: 30px 5% 20px 5%; }
+
+    /* Navigazione */
+    nav { 
+        gap: 15px; 
+        width: 95%; 
+        padding: 10px 0;
+    }
+    nav a { 
+        font-size: 0.9rem; /* Ridotto leggermente per evitare che vadano a capo */
+        letter-spacing: 1px;
+    }
+
+    /* Titoli Hero (H1 e Catalogo/Contatti) */
+    .hero-text h1, 
+    .hero-text .section-title { 
+        font-size: 2.2rem !important; /* Molto più leggibile su smartphone */
+        line-height: 1.1;
+    }
+
+    /* Hero Image */
+    .hero { padding: 20px 5%; }
+    .hero-img { max-height: 300px; }
+
+    /* About Us (Layout verticale su mobile) */
+    .about-box { 
+        flex-direction: column; 
+        text-align: center; 
+        padding: 20px;
+    }
+    .about-thumb { width: 90px; height: 90px; }
+
+    /* Catalogo (2 colonne stabili su mobile) */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px;
+    }
+    .product-card img { height: 180px; } /* Foto più proporzionate */
+
+    /* Pagina Prodotto */
+    .product-container { 
+        flex-direction: column; 
+        padding: 20px 5%;
+    }
+    .slider-wrapper { height: 350px; }
+    .product-info-text { position: static; width: 100%; }
+    .product-media { max-width: 100%; min-width: 100%; }
+}
+
