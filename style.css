@@ -15,7 +15,7 @@ body {
 
 /* --- 2. HEADER E NAVIGAZIONE --- */
 .header { padding: 60px 5% 30px 5%; display: flex; flex-direction: column; align-items: center; }
-.logo { height: 280px; width: auto; margin-bottom: 25px; display: block; border: none; }
+.logo { height: 320px; width: auto; margin-bottom: 25px; display: block; border: none; }
 .header a { display: block; } 
 
 nav { 
@@ -414,6 +414,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
