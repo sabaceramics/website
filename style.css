@@ -15,7 +15,7 @@ body {
 
 /* --- 2. HEADER E NAVIGAZIONE --- */
 .header { padding: 60px 5% 30px 5%; display: flex; flex-direction: column; align-items: center; }
-.logo { height: 240px; width: auto; margin-bottom: 30px; display: block; border: none; }
+.logo { height: 280px; width: auto; margin-bottom: 25px; display: block; border: none; }
 .header a { display: block; } 
 
 nav { 
@@ -40,8 +40,8 @@ nav a {
     color: #1a1a1a; 
     text-transform: uppercase; 
     letter-spacing: 1.5px; 
-    font-size: 0.80rem; /* Aumentato da 0.85rem */
-    font-weight: 500; 
+    font-size: 0.95rem; /* Aumentato da 0.85rem */
+    font-weight: 550; 
     transition: 0.4s ease;
     display: inline-block;
 }
@@ -414,6 +414,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
