@@ -296,7 +296,7 @@ input[type="text"], input[type="email"], textarea {
    ========================================= */
 @media (max-width: 768px) {
     /* Header & Navigazione */
-    .logo { height: 130px; }
+    .logo { height: 150px; }
     .header { padding: 20px 5% 15px 5%; }
     
     nav { 
@@ -399,6 +399,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
