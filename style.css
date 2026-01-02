@@ -38,6 +38,10 @@ img { display: block; max-width: 100%; }
     text-transform: uppercase;
 }
 
+.no-upper { 
+    text-transform: none !important; 
+}
+
 /* Usato per le intro nel catalogo e testi speciali */
 .intro-serif {
     font-family: 'Playfair Display', serif;
@@ -271,3 +275,4 @@ input[type="text"], input[type="email"], textarea {
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
