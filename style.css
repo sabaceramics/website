@@ -59,6 +59,15 @@ nav a:hover, nav a.active {
     margin: 0 auto; 
 }
 
+.section-title {
+    font-family: 'Cormorant Garamond', serif; 
+    text-align: center; 
+    letter-spacing: 2px; 
+    margin: 40px 0 25px 0; 
+    font-weight: 700; 
+    font-size: 2.2rem; /* Leggermente più grande per eleganza */
+    color: #3e1b08;
+
 .hero-img { 
     width: 100%; 
     max-height: 450px; 
@@ -84,13 +93,18 @@ nav a:hover, nav a.active {
 /* --- 4. ABOUT US --- */
 
 .about-section-bg {
-    background-color: #eee3d9;
+    background-color: #ceb8aa; /* Il colore che hai chiesto */
     width: 100%;
-    padding: 80px 0; 
+    padding: 60px 0 80px 0; 
     margin: 40px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.about-section-bg .section-title {
+    margin-top: 0;
+    margin-bottom: 50px;
 }
 
 .about-box { 
@@ -106,16 +120,21 @@ nav a:hover, nav a.active {
     width: 90%;   
 }
 
-.about-thumb { width: 160px;
-              height: 160px;
-              border-radius: 50%;
-              object-fit: cover;
-              flex-shrink: 0; }
+.about-thumb { 
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0; 
+}
 
-.about-info h3 { text-transform: uppercase;
-                margin-bottom: 8px;
-                font-size: 1rem;
-                color: #3e1b08 }
+.about-info h3 { 
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #3e1b08;
+    font-family: 'Montserrat', sans-serif;
+}
 
 /* --- 5. CATALOGO (Aggiornato per 4 colonne) --- */
 
@@ -470,25 +489,4 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
