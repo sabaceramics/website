@@ -306,7 +306,14 @@ nav a {
     
     /* Ridimensionamento foto slider automatico per mobile */
     .slider-track img {
-        height: 280px; 
+        height: 380px;
+        width: auto;
+    }
+
+    /* Permette lo scorrimento fluido con il dito senza scatti */
+    .auto-slider {
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y; /* Impedisce interferenze con lo scroll verticale della pagina */
     }
 
     /* Testi descrittivi (About, Intro, Prodotto) */
@@ -344,3 +351,4 @@ nav a {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
