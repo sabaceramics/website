@@ -14,6 +14,7 @@ body {
 
 
 /* --- 2. HEADER E NAVIGAZIONE --- */
+
 .header { padding: 60px 5% 30px 5%; display: flex; flex-direction: column; align-items: center; }
 .logo { height: 320px; width: auto; margin-bottom: 25px; display: block; border: none; }
 .header a { display: block; } 
@@ -59,15 +60,6 @@ nav a:hover, nav a.active {
     margin: 0 auto; 
 }
 
-.section-title {
-    font-family: 'Cormorant Garamond', serif; 
-    text-align: center; 
-    letter-spacing: 2px; 
-    margin: 40px 0 25px 0; 
-    font-weight: 700; 
-    font-size: 2.2rem; /* Leggermente più grande per eleganza */
-    color: #3e1b08;
-
 .hero-img { 
     width: 100%; 
     max-height: 450px; 
@@ -76,9 +68,20 @@ nav a:hover, nav a.active {
     margin-bottom: 35px; 
 }
 
+.section-title {
+    font-family: 'Cormorant Garamond', serif; 
+    text-align: center; 
+    letter-spacing: 2px; 
+    margin: 40px 0 25px 0; 
+    font-weight: 700; 
+    font-size: 2rem; 
+    color: #3e1b08; 
+    text-transform: uppercase;
+}
+
 .hero-text h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;       
+    font-weight: 600;        
     font-size: 3rem;        
     line-height: 1.2;        
     text-align: center;
@@ -87,15 +90,16 @@ nav a:hover, nav a.active {
 }
 
 .hero-description p {
-  margin-bottom: 1.4em;
+    margin-bottom: 1.4em;
+    text-align: center;
 }
 
 /* --- 4. ABOUT US --- */
 
 .about-section-bg {
-    background-color: #ceb8aa; /* Il colore che hai chiesto */
+    background-color: #ceb8aa;
     width: 100%;
-    padding: 60px 0 80px 0; 
+    padding: 60px 0; 
     margin: 40px 0;
     display: flex;
     flex-direction: column;
@@ -112,31 +116,9 @@ nav a:hover, nav a.active {
     align-items: center; 
     gap: 25px; 
     background: white;
-    padding: 25px; 
-    margin-bottom: 20px; 
-    border: 1px solid #e0ddd5; 
-    border-radius: 4px;
-    max-width: 850px;
-    width: 90%;   
-}
+    padding:
 
-.about-thumb { 
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex-shrink: 0; 
-}
-
-.about-info h3 { 
-    text-transform: uppercase;
-    margin-bottom: 8px;
-    font-size: 1rem;
-    color: #3e1b08;
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* --- 5. CATALOGO (Aggiornato per 4 colonne) --- */
+/* --- 5. CATALOGO  --- */
 
 .catalog-filters { 
     display: flex; 
@@ -489,4 +471,5 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
