@@ -286,6 +286,15 @@ textarea {
     width: 100%;
 }
 
+/* Forza il font Montserrat solo per il titolo nella pagina prodotto */
+#js-product-title {
+    font-family: 'Montserrat', sans-serif !important;
+    text-transform: none; /* Se vuoi che rispetti le maiuscole del CSV */
+    font-weight: 700;    /* Lo rende bello evidente */
+    font-size: 2.2rem;   /* Regola la grandezza come preferisci */
+    letter-spacing: normal;
+}
+
 /* --- OTTIMIZZAZIONE MOBILE --- */
 
 @media (max-width: 768px) {
@@ -408,6 +417,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
