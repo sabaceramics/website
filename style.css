@@ -225,19 +225,32 @@ input[type="text"], input[type="email"], textarea {
    8. MEDIA QUERIES (MOBILE)
    ========================================= */
 @media (max-width: 768px) {
-    /* Header */
+    /* Header & Navigazione */
     .logo { height: 130px; }
     .header { padding: 20px 5% 15px 5%; }
-    nav { flex-wrap: nowrap !important; gap: 8px; width: 100%; padding: 10px 0; }
-    nav a { font-size: 0.78rem !important; letter-spacing: 0; white-space: nowrap; }
+    
+    /* Ridotto il gap e la dimensione per evitare sovrapposizioni */
+    nav { 
+        flex-wrap: wrap !important; /* Permette di andare su due righe se lo spazio finisce */
+        gap: 12px 15px; 
+        width: 100%; 
+        padding: 10px 5%; 
+        justify-content: center;
+    }
+    nav a { 
+        font-size: 0.72rem !important; /* Leggermente più piccolo */
+        letter-spacing: 0.5px; 
+        white-space: nowrap; 
+    }
 
     /* Home */
     .hero { padding: 15px 5%; }
     .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
+    .hero-description p { text-align: left; } /* Mantiene l'allineamento a sinistra richiesto */
     .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
     .about-thumb { width: 100px !important; height: 100px !important; }
     
-    /* Slider Mobile */
+    /* Slider Mobile Home */
     .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
     .auto-slider { touch-action: pan-y !important; overflow-x: hidden; }
 
@@ -245,14 +258,16 @@ input[type="text"], input[type="email"], textarea {
     .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 5px; }
     .product-card img { height: 160px; }
 
-    /* Prodotto */
+    /* Pagina Prodotto */
     .product-container { flex-direction: column; padding: 15px 5%; gap: 20px; }
-    .slider-wrapper { height: 320px; }
-    .product-info-text { position: static; width: 100%; text-align: center; }
+    
+    /* Ridotta l'altezza per non occupare tutto lo schermo */
+    .slider-wrapper { height: 280px !important; } 
+    #js-main-photo { max-height: 280px; object-fit: contain; }
+    
+    .product-info-text { position: static; width: 100%; text-align: left; } /* Testo a sinistra anche qui */
+    #js-product-title { font-size: 1.3rem; text-align: left; }
 
     /* Contatti */
     .contact-form-row { flex-direction: column; }
-
 }
-
-
