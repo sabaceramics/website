@@ -201,7 +201,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 /* Effetto scorrimento per la foto principale e lightbox */
 #js-main-photo, #js-lightbox-img {
-    transition: opacity 0.08s ease-in-out;
+    transition: opacity 0.05s linear; 
     will-change: opacity;
 }
 
@@ -421,6 +421,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
