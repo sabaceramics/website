@@ -232,19 +232,22 @@ function renderProductDetail(data) {
         if (lb) lb.style.display = "none";
     };
 
-    const btnPrev = document.getElementById('js-btn-prev');
-    const btnNext = document.getElementById('js-btn-next');
-    const sliderWrapper = document.getElementById('js-slider-wrapper');
+    const lbPrev = document.getElementById('js-lb-prev');
+    const lbNext = document.getElementById('js-lb-next');
+    const mainPhotoImg = document.getElementById('js-main-photo');
     const closeLbBtn = document.getElementById('js-close-lightbox');
-    const lightboxContainer = document.getElementById('js-lightbox');
+    const lightboxOverlay = document.getElementById('js-lightbox');
+    if (mainPhotoImg) {
+        mainPhotoImg.style.cursor = "zoom-in";
+        mainPhotoImg.onclick = openLightbox;
+    }
 
-    if (btnPrev) btnPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
-    if (btnNext) btnNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
-    if (sliderWrapper) sliderWrapper.onclick = openLightbox;
+    if (lbPrev) lbPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
+    if (lbNext) lbNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
-    if (lightboxContainer) {
-        lightboxContainer.onclick = (e) => {
-            if(e.target.id === 'js-lightbox') closeLightbox();
+    if (lightboxOverlay) {
+        lightboxOverlay.onclick = (e) => {
+            if (e.target.id === 'js-lightbox') closeLightbox();
         };
     }
 
@@ -256,7 +259,6 @@ function renderProductDetail(data) {
             if (e.key === "Escape") closeLightbox();
         }
     };
-}
 
 init();
 
@@ -434,10 +436,6 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
-
-
-
-
 
 
 
