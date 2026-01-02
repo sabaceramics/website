@@ -281,14 +281,20 @@ nav a {
 
     /* Navigazione */
     nav { 
-        gap: 12px; 
-        width: 95%; 
+        display: flex !important;
+        flex-direction: row !important; /* Impedisce categoricamente di andare a capo */
+        flex-wrap: nowrap !important;   /* Blocca il wrapping */
+        justify-content: center;
+        gap: 8px; /* Spazio stretto tra le voci */
+        width: 100%;
         padding: 10px 0;
-        flex-wrap: wrap; 
     }
+
     nav a { 
-        font-size: 0.85rem; 
-        letter-spacing: 0.5px;
+        font-size: 0.78rem !important; /* Riduzione millimetrica per sicurezza */
+        letter-spacing: 0px; 
+        white-space: nowrap; /* Impedisce a "About Us" di spezzarsi in due righe */
+        flex-shrink: 1; /* Permette ai link di restringersi se lo schermo è minuscolo */
     }
 
     /* Titoli Hero */
@@ -374,3 +380,4 @@ nav a {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
