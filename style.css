@@ -77,6 +77,10 @@ nav a:hover, nav a.active {
     margin-bottom: 30px;
 }
 
+.hero-description p {
+  margin-bottom: 1.4em;
+}
+
 /* --- 4. ABOUT US --- */
 
 .about-section-bg {
@@ -466,6 +470,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
