@@ -267,57 +267,80 @@ nav a {
 }
 
 /* --- OTTIMIZZAZIONE MOBILE --- */
-@media (max-width: 768px) {
-    /* Logo e Header */
-    .logo { height: 150px; } /* Ridotto da 240px per non occupare tutto lo schermo */
-    .header { padding: 30px 5% 20px 5%; }
 
-    /* Navigazione */
+@media (max-width: 768px) {
+    /* 1. Reset preventivo per evitare scorrimento orizzontale */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Logo e Header */
+    .logo { height: 130px; } /* Leggermente più piccolo per dare respiro */
+    .header { padding: 20px 5% 15px 5%; }
+
+    /* Navigazione: ora più flessibile se i link sono lunghi */
     nav { 
-        gap: 15px; 
+        gap: 12px; 
         width: 95%; 
         padding: 10px 0;
+        flex-wrap: wrap; /* Se non ci stanno su una riga, vanno a capo ordinatamente */
     }
     nav a { 
-        font-size: 0.9rem; /* Ridotto leggermente per evitare che vadano a capo */
-        letter-spacing: 1px;
+        font-size: 0.85rem; 
+        letter-spacing: 0.5px;
     }
 
-    /* Titoli Hero (H1 e Catalogo/Contatti) */
+    /* Titoli Hero: Ridotti per evitare che escano dai bordi */
     .hero-text h1, 
     .hero-text .section-title { 
-        font-size: 2.2rem !important; /* Molto più leggibile su smartphone */
-        line-height: 1.1;
+        font-size: 1.8rem !important; /* Misura di sicurezza per parole lunghe */
+        line-height: 1.2;
+        word-wrap: break-word; /* Spezza le parole se troppo lunghe */
+        padding: 0 10px;
     }
 
-    /* Hero Image */
-    .hero { padding: 20px 5%; }
-    .hero-img { max-height: 300px; }
+    /* Hero Image e Slider */
+    .hero { padding: 15px 5%; }
+    .hero-img { max-height: 250px; }
+    
+    /* Ridimensionamento foto slider automatico per mobile */
+    .slider-track img {
+        height: 280px; 
+    }
+
+    /* Testi descrittivi (About, Intro, Prodotto) */
+    .intro-serif, .catalog-intro, .product-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        padding: 0 10px;
+        text-align: center;
+    }
 
     /* About Us (Layout verticale su mobile) */
     .about-box { 
         flex-direction: column; 
         text-align: center; 
         padding: 20px;
+        gap: 15px;
     }
-    .about-thumb { width: 90px; height: 90px; }
+    .about-thumb { width: 100px; height: 100px; }
 
     /* Catalogo (2 colonne stabili su mobile) */
     .product-grid {
         grid-template-columns: repeat(2, 1fr); 
-        gap: 10px;
+        gap: 12px;
+        padding: 0 5px;
     }
-    .product-card img { height: 180px; } /* Foto più proporzionate */
+    .product-card img { height: 160px; } 
 
     /* Pagina Prodotto */
     .product-container { 
         flex-direction: column; 
-        padding: 20px 5%;
+        padding: 15px 5%;
+        gap: 20px;
     }
-    .slider-wrapper { height: 350px; }
-    .product-info-text { position: static; width: 100%; }
+    .slider-wrapper { height: 320px; }
+    .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
-
-
-
