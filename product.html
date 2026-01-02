@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details | Saba Ceramics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+</head>
+<body>
+
+<header class="header">
+  <a href="index.html"><img src="images/logo.png" alt="Saba Ceramics Logo" class="logo"></a>
+</header>
+
+<nav class="sticky-nav">
+  <a href="index.html">Home</a>
+  <a href="catalog.html">Catalog</a>
+  <a href="index.html#about">About Us</a>
+  <a href="#contacts">Contacts</a>
+</nav>
+
+<main>
+  <div class="product-container" id="product-detail-content">
+      
+      <div class="product-media">
+          <div class="slider-wrapper">
+              <button class="slider-arrow prev" id="js-prev-btn">&#10094;</button>
+              <img id="js-main-photo" src="" alt="Product Image">
+              <button class="slider-arrow next" id="js-next-btn">&#10095;</button>
+          </div>
+          <div class="thumbnail-container" id="js-thumb-container"></div>
+      </div>
+
+      <div class="product-info-text">
+          <h1 class="section-title" style="text-align:left; margin-top:0;" id="js-product-title">Loading...</h1>
+          <p class="product-description" id="js-product-desc"></p>
+          <div class="contact-btn-wrapper">
+              <a href="https://linktr.ee/SABA.ceramics" target="_blank" class="contact-btn">CONTACT US FOR INFO</a>
+          </div>
+      </div>
+  </div>
+</main>
+
+<div id="js-lightbox" class="lightbox">
+    <span class="close-lightbox" id="js-close-lightbox">&times;</span>
+    <img class="lightbox-content" id="js-lightbox-img" alt="">
+</div>
+
+<footer id="contacts">
+  <h2 class="section-title">Get in Touch</h2>
+  <div class="social-links">
+    <a href="https://wa.me/393294020926" target="_blank"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+    <a href="https://instagram.com/saba.ceramics" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
+    <a href="https://www.facebook.com/profile.php?id=61570442885429" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+    <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="images/pinterest.png" alt="Pinterest"></a>
+    <a href="contact.html"><img src="images/email.png" alt="Email"></a>
+  </div>
+  <p class="copyright">© <span id="year"></span> SABA Ceramics. All rights reserved.</p>
+</footer>
+
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+<script src="script.js"></script>
+</body>
+</html>

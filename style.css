@@ -1,0 +1,229 @@
+/* =========================================
+   1. IMPORT FONTS & RESET
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+html { scroll-behavior: smooth; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+    font-family: 'Montserrat', sans-serif; 
+    line-height: 1.6; 
+    color: #1a1a1a; 
+    background-color: #f9f7f2; 
+    width: 100%;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+img { display: block; max-width: 100%; }
+
+/* =========================================
+   2. TYPOGRAPHY & TITOLI
+   ========================================= */
+.section-title {
+    font-family: 'Cormorant Garamond', serif; 
+    text-align: center; 
+    letter-spacing: 2px; 
+    margin: 40px 0 25px 0; 
+    font-weight: 700; 
+    font-size: 2rem; 
+    color: #3e1b08; 
+    text-transform: uppercase;
+}
+
+/* Usato per le intro nel catalogo e testi speciali */
+.intro-serif {
+    font-family: 'Playfair Display', serif;
+    font-style: normal;
+    font-size: 1.1rem;
+    color: #3e1b08;
+    text-align: center;
+    padding: 0 10px;
+}
+
+/* =========================================
+   3. HEADER & NAVIGAZIONE
+   ========================================= */
+.header { padding: 60px 5% 30px 5%; display: flex; flex-direction: column; align-items: center; }
+.logo { height: 320px; width: auto; margin-bottom: 25px; }
+
+nav { 
+    border-top: 1px solid #1a1a1a; 
+    border-bottom: 1px solid #1a1a1a; 
+    padding: 15px 0; 
+    width: 90%; max-width: 1200px; margin: 0 auto; 
+    display: flex; justify-content: center; gap: 30px;
+    background-color: #f9f7f2; 
+    position: sticky; top: 0; z-index: 1000; 
+}
+
+nav a { 
+    text-transform: uppercase; letter-spacing: 1.5px; 
+    font-size: 0.95rem; font-weight: 600; color: #1a1a1a;
+}
+nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
+
+/* =========================================
+   4. HOME PAGE
+   ========================================= */
+/* Hero Section */
+.hero { padding: 40px 10%; max-width: 1200px; margin: 0 auto; }
+.hero-img { width: 100%; max-height: 450px; object-fit: cover; border: 1px solid #e0ddd5; margin-bottom: 35px; }
+
+.hero-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600; font-size: 3rem; line-height: 1.2;
+    text-align: center; color: #3e1b08; margin-bottom: 30px;
+}
+.hero-description p { margin-bottom: 1.4em; text-align: center; }
+
+/* About Us Section (Fascia Colorata) */
+.about-section-bg {
+    background-color: #ceb8aa;
+    width: 100%; padding: 80px 0; margin: 60px 0;
+    display: flex; flex-direction: column; align-items: center;
+}
+.about-section-bg .section-title { margin-top: 0; margin-bottom: 50px; }
+
+.about-box { 
+    display: flex; align-items: center; gap: 30px; 
+    background: white; padding: 30px; margin-bottom: 30px; 
+    border: 1px solid #e0ddd5; border-radius: 4px;
+    max-width: 850px; width: 90%;   
+}
+.about-thumb { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
+.about-info p i { font-size: 0.95rem; color: #1a1a1a; }
+
+/* Auto Slider */
+.auto-slider {
+    width: 100%; overflow: hidden; background: #f9f7f2; padding: 30px 0;
+    cursor: grab; user-select: none;
+}
+.auto-slider:active { cursor: grabbing; }
+.slider-track { display: flex; gap: 15px; width: max-content; }
+.slider-track img { height: 600px; width: auto; border: 1px solid #e0ddd5; pointer-events: none; -webkit-user-drag: none; }
+
+/* =========================================
+   5. CATALOGO
+   ========================================= */
+.catalog-intro {
+    text-align: center; max-width: 800px; margin: 20px auto 40px auto;
+    font-size: 1.25rem; padding: 0 15px; font-weight: 500;
+}
+.catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap; }
+
+.filter-btn { 
+    background-color: #f9f7f2; color: #3e1b08; border: none; padding: 10px 22px;
+    text-transform: uppercase; font-size: 0.90rem; font-weight: 600; letter-spacing: 1.5px;
+    cursor: pointer; transition: 0.4s ease; 
+}
+.filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
+
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.product-card { background: white; padding: 10px; border: 1px solid #e0ddd5; transition: transform 0.3s ease; display: block; }
+.product-card:hover { transform: scale(1.05); }
+.product-card img { width: 100%; height: 250px; object-fit: cover; }
+
+/* Paginazione */
+.pagination-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
+.page-btn {
+    background-color: white; border: 1px solid #3e1b08; color: #3e1b08;
+    padding: 10px 20px; cursor: pointer; font-weight: 600; text-transform: uppercase; transition: 0.3s;
+}
+.page-btn:hover { background-color: #3e1b08; color: white; }
+.page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* =========================================
+   6. PAGINA PRODOTTO
+   ========================================= */
+.product-container { display: flex; gap: 40px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
+.product-media { flex: 1; min-width: 300px; max-width: 550px; display: flex; flex-direction: column; gap: 15px; }
+
+.slider-wrapper { 
+    position: relative; width: 100%; height: 500px; 
+    border: 1px solid #e0ddd5; background: #fff; cursor: zoom-in; 
+    display: flex; align-items: center; justify-content: center; overflow: hidden; 
+}
+#js-main-photo { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.slider-arrow { 
+    position: absolute; top: 50%; transform: translateY(-50%); 
+    background: rgba(255,255,255,0.7); border: none; padding: 15px 10px; 
+    cursor: pointer; font-size: 20px; transition: 0.3s; 
+}
+.slider-arrow:hover { background: #3e1b08; color: white; }
+.prev { left: 0; } .next { right: 0; }
+
+.thumbnail-container { display: flex; gap: 8px; overflow-x: auto; padding: 5px 0; }
+.thumb { width: 65px; height: 65px; object-fit: cover; border: 1px solid #e0ddd5; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
+.thumb.active { border: 2px solid #3e1b08; }
+
+.product-info-text { flex: 1.5; position: sticky; top: 100px; }
+#js-product-title { font-family: 'Montserrat', sans-serif !important; text-transform: none; font-weight: 700; font-size: 1.5rem; }
+.product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
+
+/* Buttons & Forms */
+.contact-btn { 
+    display: inline-block; background-color: #f9f7f2; color: #3e1b08; border: 1px solid #3e1b08; 
+    padding: 15px 35px; text-transform: uppercase; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; 
+    transition: 0.4s ease; 
+}
+.contact-btn:hover { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.05); }
+
+/* Lightbox */
+.lightbox { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+.lightbox-content { max-width: 90%; max-height: 90%; object-fit: contain; }
+.close-lightbox { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; cursor: pointer; }
+
+/* =========================================
+   7. FOOTER & CONTATTI
+   ========================================= */
+#contacts { padding: 60px 5%; text-align: center; background-color: #e9e1d3; margin-top: 50px; }
+.social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
+.social-links img { width: 30px; transition: 0.4s; }
+.social-links a:hover img { transform: scale(1.3); }
+.copyright { font-size: 0.75rem; color: #8e7e72; margin-top: 20px; }
+
+/* Input Forms */
+.contact-form-row { display: flex; gap: 15px; width: 100%; }
+.contact-form-row input { flex: 1; min-width: 0; }
+input[type="text"], input[type="email"], textarea {
+    box-sizing: border-box !important; width: 100%; padding: 10px; 
+    border: 1px solid #e0ddd5; font-family: inherit;
+}
+
+/* =========================================
+   8. MEDIA QUERIES (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    /* Header */
+    .logo { height: 130px; }
+    .header { padding: 20px 5% 15px 5%; }
+    nav { flex-wrap: nowrap !important; gap: 8px; width: 100%; padding: 10px 0; }
+    nav a { font-size: 0.78rem !important; letter-spacing: 0; white-space: nowrap; }
+
+    /* Home */
+    .hero { padding: 15px 5%; }
+    .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
+    .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
+    .about-thumb { width: 100px !important; height: 100px !important; }
+    
+    /* Slider Mobile */
+    .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
+    .auto-slider { touch-action: pan-y !important; overflow-x: hidden; }
+
+    /* Catalogo */
+    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 5px; }
+    .product-card img { height: 160px; }
+
+    /* Prodotto */
+    .product-container { flex-direction: column; padding: 15px 5%; gap: 20px; }
+    .slider-wrapper { height: 320px; }
+    .product-info-text { position: static; width: 100%; text-align: center; }
+
+    /* Contatti */
+    .contact-form-row { flex-direction: column; }
+}
