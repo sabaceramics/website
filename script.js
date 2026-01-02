@@ -52,8 +52,7 @@ function createSlug(text) {
         .replace(/--+/g, '-');    
 }
 
-// --- NUOVA LOGICA CATALOGO CON PAGINAZIONE ---
-
+// Rendering catalogo
 function renderCatalog() {
     const grid = document.getElementById('product-grid');
     const paginationContainer = document.getElementById('pagination-controls');
@@ -85,13 +84,14 @@ function renderCatalog() {
     // 3. Renderizziamo i controlli Paginazione
     renderPaginationControls(paginationContainer);
     
-    // Scroll in alto fino ai filtri senza coprire l'header
+    // 4. Scroll in alto fino ai filtri senza coprire l'header
     const filterSection = document.querySelector('.catalog-filters:last-of-type');
     if (filterSection) {
         const headerOffset = document.querySelector('.sticky-nav').offsetHeight || 0;
         const elementPosition = filterSection.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - headerOffset - 10; // 10px margine
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    }
 }
 
 function renderPaginationControls(container) {
@@ -392,4 +392,5 @@ function initDynamicSlider() {
 
     loadGallery();
 }
+
 
