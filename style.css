@@ -160,7 +160,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     background: rgba(255,255,255,0.7); border: none; padding: 15px 10px; 
     cursor: pointer; font-size: 20px; transition: 0.3s; 
 }
-.slider-arrow:hover { background: #3e1b08; color: white; }
+.slider-arrow:hover { background: none; color: #f5f3ee; }
 .prev { left: 0; } .next { right: 0; }
 
 .thumbnail-container { display: flex; gap: 8px; overflow-x: auto; padding: 5px 0; }
@@ -202,7 +202,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
                  cursor: pointer; }
 .lb-arrow {
     position: absolute; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: #e9dbcf; font-size: 2rem;
+    background: none; border: none; color: #f5f3ee; font-size: 2rem;
     cursor: pointer; padding: 20px; z-index: 100000;
 }
 .lb-prev { left: 10px; }
@@ -302,6 +302,7 @@ input[type="text"], input[type="email"], textarea {
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
 
 
 
