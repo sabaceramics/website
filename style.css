@@ -233,16 +233,15 @@ input[type="text"], input[type="email"], textarea {
     .logo { height: 130px; }
     .header { padding: 20px 5% 15px 5%; }
     
-    /* Ridotto il gap e la dimensione per evitare sovrapposizioni */
     nav { 
-        flex-wrap: wrap !important; /* Permette di andare su due righe se lo spazio finisce */
+        flex-wrap: wrap !important;
         gap: 12px 15px; 
         width: 100%; 
         padding: 10px 5%; 
         justify-content: center;
     }
     nav a { 
-        font-size: 0.72rem !important; /* Leggermente più piccolo */
+        font-size: 0.72rem !important; 
         letter-spacing: 0.5px; 
         white-space: nowrap; 
     }
@@ -250,7 +249,7 @@ input[type="text"], input[type="email"], textarea {
     /* Home */
     .hero { padding: 15px 5%; }
     .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
-    .hero-description p { text-align: left; } /* Mantiene l'allineamento a sinistra richiesto */
+    .hero-description p { text-align: left; }
     .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
     .about-thumb { width: 100px !important; height: 100px !important; }
     
@@ -263,16 +262,14 @@ input[type="text"], input[type="email"], textarea {
     .product-card img { height: 160px; }
 
     /* Pagina Prodotto */
-    .product-container { flex-direction: column; padding: 15px 5%; gap: 20px; }
-    
-    /* Ridotta l'altezza per non occupare tutto lo schermo */
-    .slider-wrapper { height: 280px !important; } 
-    #js-main-photo { max-height: 280px; object-fit: contain; }
-    
-    .product-info-text { position: static; width: 100%; text-align: left; } /* Testo a sinistra anche qui */
-    #js-product-title { font-size: 1.3rem; text-align: left; }
+    .product-container { flex-direction: column; padding: 10px 5%; gap: 15px; }
+    .slider-wrapper { height: 250px !important; width: 100% !important; display: flex; justify-content: center; align-items: center; overflow: hidden; } 
+    #js-main-photo { max-height: 250px !important; width: auto !important; max-width: 100%; object-fit: contain; }
+    .product-info-text { position: static; width: 100%; text-align: left; padding-top: 10px; }
+    #js-product-title { font-size: 1.2rem; text-align: left; margin-top: 0; }
 
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
 
