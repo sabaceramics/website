@@ -232,25 +232,25 @@ const updateGallery = (index, imgs) => {
     const lbImg = document.getElementById('js-lightbox-img');
     currentIdx = index;
 
-    const applyCrossFade = (el) => {
+    const applyInstantFade = (el) => {
         if (!el) return;
         
-        // Abbassiamo appena l'opacità per ammorbidire il cambio
-        el.style.opacity = '0.4'; 
+        // Non scendiamo a 0 o 0.4, restiamo molto alti (0.8)
+        // per mantenere la luminosità costante.
+        el.style.opacity = '0.8'; 
         
         setTimeout(() => {
-            // Cambiamo la sorgente mentre l'immagine è ancora visibile al 40%
             el.src = imgs[currentIdx];
             
+            // Appena la nuova immagine è caricata (20ms), torna a 1.
             setTimeout(() => {
-                // Riportiamo subito a 1
                 el.style.opacity = '1';
-            }, 20); // Tempo di reazione quasi nullo
-        }, 40); // Cambio fulmineo
+            }, 20);
+        }, 30); // Cambio quasi istantaneo
     };
 
-    applyCrossFade(mainImg);
-    applyCrossFade(lbImg);
+    applyInstantFade(mainImg);
+    applyInstantFade(lbImg);
     
     document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
 };
@@ -488,6 +488,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
