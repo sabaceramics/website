@@ -252,8 +252,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     padding: 20px;
 }
 
-.lb-prev { left: 10px; }
-.lb-next { right: 10px; }
+.lb-prev { left: -60px; }
+.lb-next { right: -60px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #472710 !important; 
@@ -350,9 +350,15 @@ input[type="text"], input[type="email"], textarea {
         text-align: left;
     }
 
+    .lb-prev { left: 10px; }
+    .lb-next { right: 10px; }
+    .close-lightbox { right: 10px; top: -50px; }
+
     /* Contatti */
+   
     .contact-form-row { flex-direction: column; }
 }
+
 
 
 
