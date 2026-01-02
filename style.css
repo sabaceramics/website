@@ -155,12 +155,13 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     text-align: center;
     max-width: 800px;
     margin: 20px auto 40px auto;
-    line-height: 1.5;
+    line-height: 1.6;               
     color: #3e1b08;
     font-size: 1.25rem; 
     padding: 0 15px;
-    font-family: 'Playfair Display', serif !important; 
-    font-style: italic !important;
+    font-family: 'Montserrat', sans-serif !important;  /* Cambiato font */
+    font-style: normal;             
+    font-weight: 500;               
     width: 100%;
     display: block;
 }
@@ -235,6 +236,7 @@ nav a {
 
 
 @media (max-width: 900px) { .product-container { flex-direction: column; } .product-info-text { position: static; } }
+
 
 
 
