@@ -234,17 +234,20 @@ function renderProductDetail(data) {
     currentIdx = index;
     const applySmoothChange = (el) => {
         if (!el) return;
-        el.style.opacity = '0';
-        el.style.transform = direction === 'next' ? 'translateX(-20px)' : 'translateX(20px)';
+        el.style.opacity = '0.3'; // Non metterlo a 0, così non c'è il flash nero
+        el.style.transform = direction === 'next' ? 'translateX(-10px)' : 'translateX(10px)';
         
+        // Questo timer deve scendere a 100 per essere veloce come il tuo CSS
         setTimeout(() => {
             el.src = imgs[currentIdx];
-            el.style.transform = direction === 'next' ? 'translateX(20px)' : 'translateX(-20px)';
+            el.style.transform = direction === 'next' ? 'translateX(10px)' : 'translateX(-10px)';
+            
+            // Questo timer deve essere brevissimo
             setTimeout(() => {
                 el.style.opacity = '1';
                 el.style.transform = 'translateX(0)';
-            }, 50);
-        }, 250);
+            }, 20); 
+        }, 100); 
     };
 
     applySmoothChange(mainImg);
@@ -486,5 +489,6 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
