@@ -151,7 +151,32 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// --- LOGICA PRODOTTO (Invariata) ---
+
+// --- FUNZIONE DI SUPPORTO PER SWIPE MOBILE (SOLO SOTTO 768px) ---
+
+function enableMobileSwipe(element, callback) {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    element.addEventListener('touchstart', e => {
+        if (window.innerWidth <= 768) {
+            touchStartX = e.changedTouches[0].screenX;
+        }
+    }, { passive: true });
+
+    element.addEventListener('touchend', e => {
+        if (window.innerWidth <= 768) {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) { // Sensibilità dello swipe
+                if (diff > 0) callback(1);  // Swipe sinistra -> avanti
+                else callback(-1);          // Swipe destra -> indietro
+            }
+        }
+    }, { passive: true });
+}
+
+// --- LOGICA PRODOTTO ---
 
 function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
@@ -245,6 +270,10 @@ function renderProductDetail(data) {
         mainPhotoImg.onclick = openLightbox;
     }
 
+    const mainWrapper = document.querySelector('.slider-wrapper');
+    const lbImgElement = document.getElementById('js-lightbox-img');
+    if (mainWrapper) enableMobileSwipe(mainWrapper, changeSlide);
+    if (lbImgElement) enableMobileSwipe(lbImgElement, changeSlide);
     if (mainPrev) mainPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
     if (mainNext) mainNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (lbPrev) lbPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
@@ -442,3 +471,4 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
