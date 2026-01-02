@@ -1,16 +1,21 @@
 const CSV_FILE = 'EtsyListingsDownload.csv';
 
 // --- CONFIGURAZIONE CATALOGO ---
-let allProductsData = [];    // Contiene tutti i dati del CSV
-let currentFilteredData = []; // Contiene i dati dopo aver applicato il filtro
+let allProductsData = [];    
+let currentFilteredData = []; 
 let currentPage = 1;
-const ITEMS_PER_PAGE = 24;   // Numero di prodotti per pagina
+const ITEMS_PER_PAGE = 24;   
+
+// --- CONFIGURAZIONE PRODOTTO E LIGHTBOX ---
+let currentProductImages = []; // Array per contenere le foto del prodotto corrente
+let currentImageIndex = 0;     // Indice della foto visualizzata
 
 async function init() {
     try {
         const response = await fetch(CSV_FILE);
         if (!response.ok) throw new Error("File CSV non trovato");
         const csvText = await response.text();
+        
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
@@ -20,417 +25,314 @@ async function init() {
                 return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
             },
             complete: function(results) {
-                // Routing semplice in base alla pagina
+                // Gestione Pagine
                 if (window.location.pathname.includes('product.html')) {
                     renderProductDetail(results.data);
                 } else if (window.location.pathname.includes('catalog.html')) {
-                    // Siamo nel catalogo: salviamo i dati e inizializziamo
                     allProductsData = results.data;
-                    currentFilteredData = allProductsData; // All'inizio vediamo tutto
+                    currentFilteredData = allProductsData; 
                     renderCatalog();
                 } 
                 
-                // AGGIUNTA: Inizializza lo slider se siamo in Home
-                if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
-                    initDynamicSlider();
+                // Slider Home
+                if (document.getElementById('js-slider-track')) {
+                    initHomeSlider(results.data);
                 }
             }
         });
-    } catch (e) { console.error("Errore:", e); }
-}
 
-// Funzione di supporto per creare lo slug SEO
-function createSlug(text) {
-    return text
-        .toString()
-        .toLowerCase()
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .trim()
-        .replace(/\s+/g, '-')      
-        .replace(/[^\w-]+/g, '')  
-        .replace(/--+/g, '-');    
-}
+        setupNavigation(); // Attiva la logica per il tasto Home e Highlight
 
-// Rendering catalogo
-function renderCatalog() {
-    const grid = document.getElementById('product-grid');
-    const paginationContainer = document.getElementById('pagination-controls');
-    
-    if (!grid) return;
-    grid.innerHTML = '';
-    paginationContainer.innerHTML = '';
-
-    // 1. Calcoliamo quali prodotti mostrare in base alla pagina
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = start + ITEMS_PER_PAGE;
-    const paginatedItems = currentFilteredData.slice(start, end);
-
-    // 2. Renderizziamo le card
-    paginatedItems.forEach((item) => {
-        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
-        
-        const titleSlug = createSlug(item.TITOLO).substring(0, 50);
-        const sku = item.SKU.trim();
-        
-        const card = document.createElement('a');
-        card.href = `product.html?sku=${sku}&name=${titleSlug}`;
-        card.className = 'product-card'; 
-        
-        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
-        grid.appendChild(card);
-    });
-
-    // 3. Renderizziamo i controlli Paginazione
-    renderPaginationControls(paginationContainer);
-    
-    // 4. Scroll in alto fino ai filtri senza coprire l'header
-    const filterSection = document.querySelector('.catalog-filters:last-of-type');
-    if (filterSection) {
-        const headerOffset = document.querySelector('.sticky-nav').offsetHeight || 0;
-        const elementPosition = filterSection.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset - 10; // 10px margine
-        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+    } catch (error) {
+        console.error("Errore:", error);
     }
 }
 
-function renderPaginationControls(container) {
-    const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
+// --- LOGICA NAVIGAZIONE (PUNTO 3) ---
+function setupNavigation() {
+    // Gestione Highlight link attivo
+    const navLinks = document.querySelectorAll('nav a');
+    const currentPath = window.location.pathname;
     
-    if (totalPages <= 1) return; // Se c'è una sola pagina, nascondiamo i bottoni
-
-    const prevBtn = document.createElement('button');
-    prevBtn.innerText = "< PREV";
-    prevBtn.className = "page-btn";
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderCatalog();
-        }
-    };
-
-    const nextBtn = document.createElement('button');
-    nextBtn.innerText = "NEXT >";
-    nextBtn.className = "page-btn";
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderCatalog();
-        }
-    };
-
-    container.appendChild(prevBtn);
-    container.appendChild(nextBtn);
-}
-
-// Gestore Filtri Catalogo
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('filter-btn')) {
-        // Aggiorna stile bottoni
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
         
-        const cat = e.target.getAttribute('data-category').toLowerCase();
-        
-        // FILTRA I DATI
-        if (cat === 'all') {
-            currentFilteredData = allProductsData;
-        } else {
-            currentFilteredData = allProductsData.filter(item => {
-                const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
-                if (cat === 'vases') return searchText.includes('vas'); // Logica speciale per vasi
-                return searchText.includes(cat);
+        // Logica Scroll Top per Home
+        if (href === 'index.html' || href === '/') {
+            link.addEventListener('click', (e) => {
+                // Se siamo già in index.html, previeni il reload e scrolla su
+                if (currentPath.endsWith('index.html') || currentPath === '/') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
             });
         }
 
-        // Resetta a pagina 1 quando si cambia filtro
-        currentPage = 1;
-        renderCatalog();
-    }
-});
-
-// --- LOGICA PRODOTTO (Invariata) ---
-
-function renderProductDetail(data) {
-    const params = new URLSearchParams(window.location.search);
-    const skuFromUrl = params.get('sku'); 
-    if (!skuFromUrl) return;
-    const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
-    if (!item || !document.getElementById('js-product-title')) return;
-
-    let desc = item.DESCRIZIONE || ""; 
-    let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-    const cleanTitle = `${item.TITOLO} | Saba Ceramics`;
-    const shortDesc = cleanDesc.substring(0, 160);
-
-    document.title = cleanTitle;
-    document.querySelector('meta[name="description"]')?.setAttribute("content", shortDesc);
-    document.querySelector('meta[property="og:title"]')?.setAttribute("content", cleanTitle);
-    document.querySelector('meta[property="og:description"]')?.setAttribute("content", shortDesc);
-    if (item.IMMAGINE1) {
-        document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMMAGINE1.trim());
-    }
-
-    let images = [];
-    for (let i = 1; i <= 10; i++) {
-        const url = item[`IMMAGINE${i}`];
-        if (url && url.trim() !== "") images.push(url.trim());
-    }
-
-    document.getElementById('js-product-title').textContent = item.TITOLO;
-    document.getElementById('js-product-desc').innerText = cleanDesc; 
-
-    const mainPhoto = document.getElementById('js-main-photo');
-    if (mainPhoto && images.length > 0) {
-        mainPhoto.src = images[0];
-        mainPhoto.alt = item.TITOLO;
-    }
-
-    const thumbContainer = document.getElementById('js-thumb-container');
-    if (thumbContainer) {
-        thumbContainer.innerHTML = ''; 
-        images.forEach((url, index) => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = `thumb ${index === 0 ? 'active' : ''}`;
-            img.onclick = () => updateGallery(index, images); 
-            thumbContainer.appendChild(img);
-        });
-    }
-
-    let currentIdx = 0;
-
-    const updateGallery = (index, imgs) => {
-        currentIdx = index;
-        const mainImg = document.getElementById('js-main-photo');
-        const lbImg = document.getElementById('js-lightbox-img');
-        
-        if (mainImg) mainImg.src = imgs[currentIdx];
-        if (lbImg) lbImg.src = imgs[currentIdx];
-        
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
-    };
-
-    const changeSlide = (dir) => {
-        currentIdx = (currentIdx + dir + images.length) % images.length;
-        updateGallery(currentIdx, images);
-    };
-
-    const openLightbox = () => {
-        const lb = document.getElementById('js-lightbox');
-        const lbImg = document.getElementById('js-lightbox-img');
-        if (lb && lbImg) {
-            lb.style.display = "flex";
-            lbImg.src = images[currentIdx];
+        // Active state style
+        if (href === 'index.html' && (currentPath.endsWith('index.html') || currentPath === '/')) {
+            link.classList.add('active');
+        } else if (href.includes('catalog.html') && currentPath.includes('catalog.html')) {
+            link.classList.add('active');
         }
-    };
-
-    const closeLightbox = () => {
-        const lb = document.getElementById('js-lightbox');
-        if (lb) lb.style.display = "none";
-    };
-
-    const btnPrev = document.getElementById('js-btn-prev');
-    const btnNext = document.getElementById('js-btn-next');
-    const sliderWrapper = document.getElementById('js-slider-wrapper');
-    const closeLbBtn = document.getElementById('js-close-lightbox');
-    const lightboxContainer = document.getElementById('js-lightbox');
-
-    if (btnPrev) btnPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
-    if (btnNext) btnNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
-    if (sliderWrapper) sliderWrapper.onclick = openLightbox;
-    if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
-    if (lightboxContainer) {
-        lightboxContainer.onclick = (e) => {
-            if(e.target.id === 'js-lightbox') closeLightbox();
-        };
-    }
-
-    document.onkeydown = function(e) {
-        const lb = document.getElementById('js-lightbox');
-        if (lb && lb.style.display === "flex") {
-            if (e.key === "ArrowLeft") changeSlide(-1);
-            if (e.key === "ArrowRight") changeSlide(1);
-            if (e.key === "Escape") closeLightbox();
-        }
-    };
+    });
 }
 
-init();
+// --- CATALOGO ---
+function renderCatalog() {
+    const grid = document.getElementById('product-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
 
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const itemsToShow = currentFilteredData.slice(start, end);
 
-// --- GESTIONE SCROLL FLUIDO PER IL MENU ---
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Logica per il tasto CATALOG (id="catalog")
-    const catalogBtn = document.getElementById('catalog');
-    if (catalogBtn) {
-        catalogBtn.addEventListener('click', function(e) {
-            if (window.location.pathname.includes('catalog.html')) {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+    itemsToShow.forEach(product => {
+        if (!product.IMMAGINE1) return;
+        const card = document.createElement('a');
+        card.href = `product.html?sku=${product.SKU}`; 
+        card.className = 'product-card';
+        card.innerHTML = `
+            <img src="${product.IMMAGINE1}" alt="${product.TITOLO}" loading="lazy">
+        `;
+        grid.appendChild(card);
+    });
+
+    renderPagination();
+    setupFilters();
+}
+
+function setupFilters() {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            btn.classList.add('active');
+            
+            const category = btn.dataset.category.toLowerCase();
+            if (category === 'all') {
+                currentFilteredData = allProductsData;
+            } else {
+                currentFilteredData = allProductsData.filter(p => {
+                    const text = (p.TITOLO + " " + p.TAG + " " + p.DESCRIZIONE).toLowerCase();
+                    return text.includes(category);
+                });
             }
+            currentPage = 1;
+            renderCatalog();
         });
+    });
+}
+
+function renderPagination() {
+    const container = document.getElementById('pagination-controls');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
+    if (totalPages <= 1) return;
+
+    // Prev Button
+    const prevBtn = document.createElement('button');
+    prevBtn.textContent = 'Prev';
+    prevBtn.className = 'page-btn';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => { currentPage--; renderCatalog(); window.scrollTo(0,0); };
+    container.appendChild(prevBtn);
+
+    // Next Button
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    nextBtn.className = 'page-btn';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => { currentPage++; renderCatalog(); window.scrollTo(0,0); };
+    container.appendChild(nextBtn);
+}
+
+// --- DETTAGLIO PRODOTTO ---
+function renderProductDetail(data) {
+    const params = new URLSearchParams(window.location.search);
+    const sku = params.get('sku');
+    const product = data.find(p => p.SKU === sku);
+
+    if (!product) {
+        document.getElementById('js-product-title').textContent = 'Product not found';
+        return;
     }
 
-    // 2. Logica per il tasto HOME (id="home")
-    const homeBtn = document.getElementById('home');
-    if (homeBtn) {
-        homeBtn.addEventListener('click', function(e) {
-            if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
-    }
+    // Popola testi
+    document.getElementById('js-product-title').textContent = product.TITOLO;
+    document.getElementById('js-product-desc').textContent = product.DESCRIZIONE;
 
-    // 3. Logica per il tasto ABOUT US (id="about-nav")
-    const aboutBtn = document.getElementById('about-nav');
-    if (aboutBtn) {
-        aboutBtn.addEventListener('click', function(e) {
-            if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
-                const section = document.getElementById('about');
-                if (section) {
-                    e.preventDefault();
-                    section.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-    }
-});
-
-
-document.addEventListener('keydown', function(e) {
-    // Funziona solo se siamo in catalog.html
-    if (window.location.pathname.includes('catalog.html')) {
-        const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
-        
-        if (e.key === "ArrowRight") {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderCatalog();
-            }
-        } else if (e.key === "ArrowLeft") {
-            if (currentPage > 1) {
-                currentPage--;
-                renderCatalog();
-            }
+    // Raccogli immagini
+    currentProductImages = [];
+    for (let i = 1; i <= 10; i++) {
+        if (product[`IMMAGINE${i}`]) {
+            currentProductImages.push(product[`IMMAGINE${i}`]);
         }
     }
-});
 
-// --- LOGICA SLIDER DINAMICO (SOLO PER HOME) ---
+    // Setup Slider
+    const mainImg = document.getElementById('js-main-photo');
+    const thumbContainer = document.getElementById('js-thumb-container');
+    
+    // Mostra prima immagine
+    updateMainImage(0);
 
-function initDynamicSlider() {
+    // Genera miniature
+    thumbContainer.innerHTML = '';
+    currentProductImages.forEach((imgUrl, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgUrl;
+        thumb.className = index === 0 ? 'thumb active' : 'thumb';
+        thumb.onclick = () => updateMainImage(index);
+        thumbContainer.appendChild(thumb);
+    });
+
+    // Eventi frecce slider normale
+    document.getElementById('js-prev-btn').onclick = () => changeImage(-1);
+    document.getElementById('js-next-btn').onclick = () => changeImage(1);
+
+    // --- SETUP LIGHTBOX (PUNTO 1) ---
+    // Cliccando la foto principale si apre il lightbox
+    mainImg.onclick = () => openLightbox();
+    
+    // Eventi chiusura lightbox
+    document.getElementById('js-close-lightbox').onclick = closeLightbox;
+    document.getElementById('js-lightbox').onclick = (e) => {
+        if(e.target.id === 'js-lightbox') closeLightbox();
+    };
+
+    // Eventi tastiera (Frecce e ESC)
+    document.addEventListener('keydown', handleKeyboard);
+}
+
+function updateMainImage(index) {
+    currentImageIndex = index;
+    const mainImg = document.getElementById('js-main-photo');
+    mainImg.src = currentProductImages[currentImageIndex];
+
+    // Aggiorna stato miniature
+    const thumbs = document.querySelectorAll('.thumb');
+    thumbs.forEach((t, i) => {
+        if (i === index) t.classList.add('active');
+        else t.classList.remove('active');
+    });
+}
+
+function changeImage(direction) {
+    let newIndex = currentImageIndex + direction;
+    if (newIndex < 0) newIndex = currentProductImages.length - 1;
+    if (newIndex >= currentProductImages.length) newIndex = 0;
+    updateMainImage(newIndex);
+    
+    // Se il lightbox è aperto, aggiorniamo anche quello
+    const lightbox = document.getElementById('js-lightbox');
+    if (lightbox.style.display === 'flex') {
+        document.getElementById('js-lightbox-img').src = currentProductImages[newIndex];
+    }
+}
+
+// --- FUNZIONI LIGHTBOX ---
+function openLightbox() {
+    const lightbox = document.getElementById('js-lightbox');
+    const lightboxImg = document.getElementById('js-lightbox-img');
+    
+    lightboxImg.src = currentProductImages[currentImageIndex];
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Blocca scroll pagina sotto
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('js-lightbox');
+    lightbox.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Riabilita scroll
+}
+
+function handleKeyboard(e) {
+    const lightbox = document.getElementById('js-lightbox');
+    // Le frecce funzionano sia per lo slider normale che per il lightbox
+    if (e.key === 'ArrowLeft') changeImage(-1);
+    if (e.key === 'ArrowRight') changeImage(1);
+    
+    // ESC chiude solo se il lightbox è aperto
+    if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+        closeLightbox();
+    }
+}
+
+// --- SLIDER HOME ---
+function initHomeSlider(data) {
     const track = document.getElementById('js-slider-track');
     const container = document.getElementById('js-slider-container');
-    if (!track || !container) return;
+    
+    // Mescola e prendi 10 immagini
+    const shuffled = data.sort(() => 0.5 - Math.random()).slice(0, 10);
+    
+    shuffled.forEach(item => {
+        if(item.IMMAGINE1) {
+            const img = document.createElement('img');
+            img.src = item.IMMAGINE1;
+            track.appendChild(img);
+        }
+    });
 
+    // Duplica per loop infinito
+    const clone = track.innerHTML;
+    track.innerHTML += clone;
+
+    // Drag Logic
     let isDown = false;
     let startX;
     let scrollLeft;
-    let currentId = 1;
-    let loadedCount = 0;
-
-    function loadNextImage() {
-        const img = document.createElement('img');
-        img.src = `images/pres${currentId}.jpg`;
-        
-        img.onload = function() {
-            track.appendChild(this);
-            loadedCount++;
-            currentId++;
-            loadNextImage(); 
-        };
-
-        img.onerror = function() {
-            if (this.src.endsWith('.jpg')) {
-                this.src = `images/pres${currentId}.JPG`;
-            } else {
-                finalizeSlider();
-            }
-        };
-    }
-
-    function finalizeSlider() {
-        if (loadedCount > 0) {
-            track.innerHTML += track.innerHTML;
-            startAutoScroll();
-        }
-    }
-
-    // --- LOGICA DRAG & TOUCH UNIFICATA ---
-    
-    let startY; // Aggiungiamo questa variabile all'inizio dello script insieme alle altre
 
     const start = (e) => {
         isDown = true;
-        const pageX = e.pageX || e.touches[0].pageX;
-        const pageY = e.pageY || e.touches[0].pageY; // Registriamo anche la Y iniziale
-        
-        startX = pageX - container.offsetLeft;
-        startY = pageY; // Serve per capire la direzione del movimento
+        container.classList.add('active');
+        startX = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
         scrollLeft = container.scrollLeft;
     };
 
     const end = () => {
         isDown = false;
+        container.classList.remove('active');
     };
 
     const move = (e) => {
         if (!isDown) return;
+        const x = (e.pageX || e.touches[0].pageX) - container.offsetLeft;
+        const walk = (x - startX) * 2; 
         
-        const pageX = e.pageX || e.touches[0].pageX;
-        const pageY = e.pageY || e.touches[0].pageY;
+        const diffX = Math.abs((e.pageX || e.touches[0].pageX) - startX);
         
-        const x = pageX - container.offsetLeft;
-        const walk = (x - startX) * 2;
-
-        // Calcoliamo quanto ci siamo mossi in orizzontale e in verticale
-        const diffX = Math.abs(pageX - startX);
-        const diffY = Math.abs(pageY - startY);
-
-        // Se il movimento è più orizzontale che verticale, muoviamo lo slider
-        if (diffX > diffY) {
-            if (e.cancelable) e.preventDefault(); // Blocca lo scroll pagina SOLO se scorriamo lateralmente
-            container.scrollLeft = scrollLeft - walk;
-        } else {
-            // Se l'utente sta andando su/giù, interrompiamo il drag dello slider
-            isDown = false; 
+        // Su mobile, se stiamo scrollando orizzontalmente, preveniamo lo scroll pagina
+        if(e.type === 'touchmove' && diffX > 10) {
+           if(e.cancelable) e.preventDefault();
         }
+        
+        container.scrollLeft = scrollLeft - walk;
     };
 
-    // Eventi Mouse
     container.addEventListener('mousedown', start);
     window.addEventListener('mouseup', end);
     container.addEventListener('mousemove', move);
 
-    // Eventi Touch (per Mobile)
     container.addEventListener('touchstart', start, { passive: true });
     window.addEventListener('touchend', end);
-    container.addEventListener('touchmove', move, { passive: false }); 
-    // Nota: passive: false è necessario per permettere e.preventDefault() nel movimento
+    container.addEventListener('touchmove', move, { passive: false });
 
-    function startAutoScroll() {
-        function step() {
-            if (!isDown) {
-                container.scrollLeft += 1;
-                if (container.scrollLeft >= track.scrollWidth / 2) {
-                    container.scrollLeft = 0;
-                }
+    // Auto Scroll
+    function autoScroll() {
+        if (!isDown) {
+            container.scrollLeft += 1;
+            if (container.scrollLeft >= track.scrollWidth / 2) {
+                container.scrollLeft = 0;
             }
-            requestAnimationFrame(step);
         }
-        requestAnimationFrame(step);
+        requestAnimationFrame(autoScroll);
     }
-
-    loadNextImage();
+    requestAnimationFrame(autoScroll);
 }
 
-
-
-
-
-
+// Avvio
+init();
