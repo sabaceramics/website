@@ -308,12 +308,17 @@ nav a {
     .slider-track img {
         height: 380px;
         width: auto;
+        /* AGGIUNGI QUESTE 3 RIGHE: */
+        pointer-events: none;      /* Impedisce al dito di "agganciare" l'immagine singola */
+        -webkit-user-drag: none;   /* Blocca il trascinamento predefinito del file */
+        user-select: none;         /* Impedisce la selezione del testo/immagine */
     }
 
     /* Permette lo scorrimento fluido con il dito senza scatti */
     .auto-slider {
         -webkit-overflow-scrolling: touch;
-        touch-action: pan-y; /* Impedisce interferenze con lo scroll verticale della pagina */
+        touch-action: pan-y; 
+        user-select: none;         /* Evita che compaiano i cursori di selezione testo */
     }
 
     /* Testi descrittivi (About, Intro, Prodotto) */
@@ -351,4 +356,5 @@ nav a {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
