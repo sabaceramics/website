@@ -237,11 +237,16 @@ function renderProductDetail(data) {
     const mainPhotoImg = document.getElementById('js-main-photo');
     const closeLbBtn = document.getElementById('js-close-lightbox');
     const lightboxOverlay = document.getElementById('js-lightbox');
+    const mainPrev = document.getElementById('js-prev-btn');
+    const mainNext = document.getElementById('js-next-btn');
+    
     if (mainPhotoImg) {
         mainPhotoImg.style.cursor = "zoom-in";
         mainPhotoImg.onclick = openLightbox;
     }
 
+    if (mainPrev) mainPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
+    if (mainNext) mainNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (lbPrev) lbPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
     if (lbNext) lbNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
@@ -437,7 +442,3 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
-
-
-
-
