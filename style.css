@@ -331,18 +331,20 @@ textarea {
     .hero-img { max-height: 250px; }
     
     .slider-track img {
-        height: 380px;
-        width: auto;
-        pointer-events: none;      
-        -webkit-user-drag: none;   
-        user-select: none;         
+    height: 380px;
+    width: auto;
+    pointer-events: auto; /* Cambiato da none a auto */
+    -webkit-user-drag: none;
+    user-select: none;
+    touch-action: pan-y; /* Dice all'immagine di lasciar passare lo scroll verticale */
     }
 
     .auto-slider {
-        -webkit-overflow-scrolling: touch;
-        touch-action: pan-y; 
-        user-select: none;         
-    }
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y !important; /* Forza il browser a permettere lo scroll verticale */
+    user-select: none;
+    overflow-x: hidden; 
+}
 
 /* --- CONTATTI (Contact.html) --- */
     .contact-form-row { 
@@ -406,5 +408,6 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
