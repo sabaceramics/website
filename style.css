@@ -276,27 +276,27 @@ nav a {
     }
 
     /* Logo e Header */
-    .logo { height: 130px; } /* Leggermente più piccolo per dare respiro */
+    .logo { height: 130px; } 
     .header { padding: 20px 5% 15px 5%; }
 
-    /* Navigazione: ora più flessibile se i link sono lunghi */
+    /* Navigazione */
     nav { 
         gap: 12px; 
         width: 95%; 
         padding: 10px 0;
-        flex-wrap: wrap; /* Se non ci stanno su una riga, vanno a capo ordinatamente */
+        flex-wrap: wrap; 
     }
     nav a { 
         font-size: 0.85rem; 
         letter-spacing: 0.5px;
     }
 
-    /* Titoli Hero: Ridotti per evitare che escano dai bordi */
+    /* Titoli Hero */
     .hero-text h1, 
     .hero-text .section-title { 
-        font-size: 1.8rem !important; /* Misura di sicurezza per parole lunghe */
+        font-size: 1.8rem !important; 
         line-height: 1.2;
-        word-wrap: break-word; /* Spezza le parole se troppo lunghe */
+        word-wrap: break-word; 
         padding: 0 10px;
     }
 
@@ -304,21 +304,39 @@ nav a {
     .hero { padding: 15px 5%; }
     .hero-img { max-height: 250px; }
     
-    /* Ridimensionamento foto slider automatico per mobile */
     .slider-track img {
         height: 380px;
         width: auto;
-        /* AGGIUNGI QUESTE 3 RIGHE: */
-        pointer-events: none;      /* Impedisce al dito di "agganciare" l'immagine singola */
-        -webkit-user-drag: none;   /* Blocca il trascinamento predefinito del file */
-        user-select: none;         /* Impedisce la selezione del testo/immagine */
+        pointer-events: none;      
+        -webkit-user-drag: none;   
+        user-select: none;         
     }
 
-    /* Permette lo scorrimento fluido con il dito senza scatti */
     .auto-slider {
         -webkit-overflow-scrolling: touch;
         touch-action: pan-y; 
-        user-select: none;         /* Evita che compaiano i cursori di selezione testo */
+        user-select: none;         
+    }
+
+    /* --- CONTATTI (Contact.html) --- */
+    /* Forza Nome e Cognome uno sotto l'altro */
+    .contact-form-row { 
+        display: flex;
+        flex-direction: column; 
+        gap: 15px;
+    }
+
+    .contact-form-row .form-group {
+        width: 100% !important; 
+    }
+
+    /* Reset universale per gli input: evita che sbordino a destra */
+    input[type="text"], 
+    input[type="email"], 
+    textarea {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box; /* Include padding nei 100% di larghezza */
     }
 
     /* Testi descrittivi (About, Intro, Prodotto) */
@@ -329,7 +347,7 @@ nav a {
         text-align: center;
     }
 
-    /* About Us (Layout verticale su mobile) */
+    /* About Us */
     .about-box { 
         flex-direction: column; 
         text-align: center; 
@@ -338,7 +356,7 @@ nav a {
     }
     .about-thumb { width: 100px; height: 100px; }
 
-    /* Catalogo (2 colonne stabili su mobile) */
+    /* Catalogo */
     .product-grid {
         grid-template-columns: repeat(2, 1fr); 
         gap: 12px;
@@ -356,5 +374,3 @@ nav a {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
-
-
