@@ -233,25 +233,32 @@ nav a {
 
 .auto-slider {
     width: 100%;
-    overflow-x: auto; /* Permette lo scorrimento manuale */
+    overflow: hidden; /* Nascondiamo la barra per il drag fluido */
     background: #f9f7f2;
     padding: 20px 0;
-    scrollbar-width: none; /* Nasconde scrollbar Firefox */
+    cursor: grab; /* Indica che è trascinabile */
+    user-select: none; /* Impedisce selezioni fastidiose durante il drag */
 }
 
-.auto-slider::-webkit-scrollbar { display: none; } /* Nasconde scrollbar Chrome */
+.auto-slider:active {
+    cursor: grabbing;
+}
+
+.auto-slider::-webkit-scrollbar { display: none; }
+
 .slider-track {
     display: flex;
     gap: 15px;
     width: max-content;
-    animation: scroll 40s linear infinite;
+    /* L'animazione 'scroll' viene gestita dal nuovo script per non confliggere col drag */
 }
 
-.slider-track:hover { animation-play-state: paused; }
 .slider-track img {
     height: 300px;
     width: auto;
     border: 1px solid #e0ddd5;
+    pointer-events: none; /* FONDAMENTALE per permettere il drag su GitHub senza blocchi */
+    -webkit-user-drag: none;
 }
 
 @keyframes scroll {
@@ -311,4 +318,5 @@ nav a {
     .product-info-text { position: static; width: 100%; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
