@@ -4,7 +4,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 html { scroll-behavior: smooth; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box; 
+  -webkit-tap-highlight-color: transparent;
+}
 
 body { 
     font-family: 'Montserrat', sans-serif; 
@@ -226,4 +231,5 @@ input[type="text"], input[type="email"], textarea {
 
     /* Contatti */
     .contact-form-row { flex-direction: column; }
+
 }
