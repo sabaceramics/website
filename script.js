@@ -140,9 +140,9 @@ document.addEventListener('click', function(e) {
         } else {
             currentFilteredData = allProductsData.filter(item => {
                 const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
-                if (cat === 'vases') return searchText.includes('vas'); // Logica speciale per vasi
-                return searchText.includes(cat);
-            });
+                const root = cat.endsWith('s') ? cat.slice(0, -1) : cat;
+                return searchText.includes(root);
+});
         }
 
         // Resetta a pagina 1 quando si cambia filtro
@@ -259,6 +259,7 @@ function renderProductDetail(data) {
             if (e.key === "Escape") closeLightbox();
         }
     };
+}
 
 init();
 
@@ -436,6 +437,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
