@@ -10,14 +10,13 @@
 <body id="top">
 
 <header class="header">
-  <a href="index.html">
-    <img src="images/logo.png" alt="Saba Ceramics Logo" class="logo">
-  </a>
+  <a href="index.html"><img src="images/logo.png" alt="Saba Ceramics Logo" class="logo"></a>
 </header>
 
 <nav class="sticky-nav">
-  <a href="index.html" id="home">Home</a>
-  <a href="index.html#about" id="about-nav">About Us</a>
+  <a href="index.html">Home</a>
+  <a href="catalog.html" class="active">Catalog</a>
+  <a href="index.html#about">About Us</a>
   <a href="#contacts">Contacts</a>
 </nav>
 
@@ -26,10 +25,10 @@
     <div class="hero-text">
       <h2 class="section-title">WELCOME TO OUR CATALOG!</h2>
       
-  <div class="catalog-filters"> 
-    <p>Here you can explore the pieces we currently have available.<br>
-    If you’d like more information or want to learn more about a specific piece, please don’t hesitate to contact us.</p>
-</div>
+      <div class="catalog-intro"> 
+        <p>Here you can explore the pieces we currently have available.<br>
+        If you’d like more information or want to learn more about a specific piece, please don’t hesitate to contact us.</p>
+      </div>
 
       <div class="catalog-filters"> 
         <button class="filter-btn active" data-category="all">All</button>
@@ -40,15 +39,14 @@
       </div>
 
       <div class="product-grid" id="product-grid">
-        </div>
+         </div>
 
-      <div id="pagination-controls" class="pagination-container">
-        </div>
-
+      <div id="pagination-controls" class="pagination-container"></div>
     </div>
   </section>
+</main>
 
-  <footer id="contacts">
+<footer id="contacts">
     <h2 class="section-title">Get in Touch</h2>
     <div class="social-links">
       <a href="https://wa.me/393294020926" target="_blank"><img src="images/whatsapp.png" alt="WhatsApp"></a>
@@ -58,14 +56,9 @@
       <a href="contact.html"><img src="images/email.png" alt="Email"></a>
     </div>
     <p class="copyright">© <span id="year"></span> SABA Ceramics. All rights reserved.</p>
-    <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
-  </footer>
-</main>
+</footer>
 
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
 <script src="script.js"></script>
 </body>
-
 </html>
-
-
-
