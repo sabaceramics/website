@@ -228,15 +228,30 @@ function renderProductDetail(data) {
     let currentIdx = 0;
 
     const updateGallery = (index, imgs) => {
-        currentIdx = index;
-        const mainImg = document.getElementById('js-main-photo');
-        const lbImg = document.getElementById('js-lightbox-img');
+    const mainImg = document.getElementById('js-main-photo');
+    const lbImg = document.getElementById('js-lightbox-img');
+    const direction = index > currentIdx ? 'next' : 'prev';
+    currentIdx = index;
+    const applySmoothChange = (el) => {
+        if (!el) return;
+        el.style.opacity = '0';
+        el.style.transform = direction === 'next' ? 'translateX(-20px)' : 'translateX(20px)';
         
-        if (mainImg) mainImg.src = imgs[currentIdx];
-        if (lbImg) lbImg.src = imgs[currentIdx];
-        
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+        setTimeout(() => {
+            el.src = imgs[currentIdx];
+            el.style.transform = direction === 'next' ? 'translateX(20px)' : 'translateX(-20px)';
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateX(0)';
+            }, 50);
+        }, 250);
     };
+
+    applySmoothChange(mainImg);
+    applySmoothChange(lbImg);
+    
+    document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+};
 
     const changeSlide = (dir) => {
         currentIdx = (currentIdx + dir + images.length) % images.length;
@@ -471,4 +486,5 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
