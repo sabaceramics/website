@@ -279,9 +279,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeBtn = document.getElementById('home');
     if (homeBtn) {
         homeBtn.addEventListener('click', function(e) {
-            if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
+            const isHomePage = window.location.pathname.endsWith('/') || 
+                               window.location.pathname.includes('index.html') ||
+                               window.location.pathname === "";
+
+            if (isHomePage) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Opzionale: pulisce l'URL dall'ancora #top
+                history.pushState(null, null, window.location.pathname);
             }
         });
     }
@@ -428,6 +434,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
