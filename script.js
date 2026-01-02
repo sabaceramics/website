@@ -321,7 +321,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// --- NUOVA LOGICA SLIDER DINAMICO (SOLO PER HOME) ---
+// --- LOGICA SLIDER DINAMICO (SOLO PER HOME) ---
 
 function initDynamicSlider() {
     const track = document.getElementById('js-slider-track');
@@ -338,21 +338,17 @@ function initDynamicSlider() {
         const img = document.createElement('img');
         img.src = `images/pres${currentId}.jpg`;
         
-        // Se l'immagine viene caricata con successo
         img.onload = function() {
             track.appendChild(this);
             loadedCount++;
             currentId++;
-            loadNextImage(); // Prova a caricare la successiva (pres2, pres3...)
+            loadNextImage(); 
         };
 
-        // Se l'immagine NON esiste (es. cerco pres9 ma ho solo 8 foto)
         img.onerror = function() {
-            // Se fallisce il .jpg, facciamo un ultimo tentativo col .JPG maiuscolo
             if (this.src.endsWith('.jpg')) {
                 this.src = `images/pres${currentId}.JPG`;
             } else {
-                // Se fallisce anche il .JPG, abbiamo finito le foto nella cartella
                 finalizeSlider();
             }
         };
@@ -360,26 +356,48 @@ function initDynamicSlider() {
 
     function finalizeSlider() {
         if (loadedCount > 0) {
-            // Clona il contenuto per l'effetto infinito
             track.innerHTML += track.innerHTML;
             startAutoScroll();
         }
     }
 
-    // --- LOGICA DRAG (Invariata) ---
-    container.addEventListener('mousedown', (e) => {
+    // --- LOGICA DRAG & TOUCH UNIFICATA ---
+    
+    const start = (e) => {
         isDown = true;
-        startX = e.pageX - container.offsetLeft;
+        // Gestisce sia mouse (pageX) che touch (touches[0].pageX)
+        const pageX = e.pageX || e.touches[0].pageX;
+        startX = pageX - container.offsetLeft;
         scrollLeft = container.scrollLeft;
-    });
-    window.addEventListener('mouseup', () => isDown = false);
-    container.addEventListener('mousemove', (e) => {
+    };
+
+    const end = () => {
+        isDown = false;
+    };
+
+    const move = (e) => {
         if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - container.offsetLeft;
+        
+        // Determina la posizione X corrente
+        const pageX = e.pageX || e.touches[0].pageX;
+        const x = pageX - container.offsetLeft;
         const walk = (x - startX) * 2;
         container.scrollLeft = scrollLeft - walk;
-    });
+
+        // Impedisce lo scroll della pagina solo se stiamo muovendo lo slider orizzontalmente
+        if (e.cancelable) e.preventDefault();
+    };
+
+    // Eventi Mouse
+    container.addEventListener('mousedown', start);
+    window.addEventListener('mouseup', end);
+    container.addEventListener('mousemove', move);
+
+    // Eventi Touch (per Mobile)
+    container.addEventListener('touchstart', start, { passive: true });
+    window.addEventListener('touchend', end);
+    container.addEventListener('touchmove', move, { passive: false }); 
+    // Nota: passive: false è necessario per permettere e.preventDefault() nel movimento
 
     function startAutoScroll() {
         function step() {
@@ -394,8 +412,9 @@ function initDynamicSlider() {
         requestAnimationFrame(step);
     }
 
-    loadNextImage(); // Avvia la catena di caricamento
+    loadNextImage();
 }
+
 
 
 
