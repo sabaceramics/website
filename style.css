@@ -168,7 +168,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .thumb.active { border: 2px solid #3e1b08; }
 
 .product-info-text { flex: 1.5; position: sticky; top: 100px; }
-#js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 700; font-size: 1.5rem; color: #3e1b08; letter-spacing: 1px; }
+#js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 800 !important; font-size: 2rem; color: #3e1b08; letter-spacing: 1px; }
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
 /* Buttons & Forms */
@@ -302,6 +302,7 @@ input[type="text"], input[type="email"], textarea {
     /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
+
 
 
 
