@@ -101,7 +101,7 @@ nav a:hover, nav a.active {
     padding: 10px 22px;
     text-transform: uppercase; 
     font-size: 0.90rem;
-    font-weight: 500;
+    font-weight: 5570;
     letter-spacing: 1.5px;
     cursor: pointer; 
     transition: 0.4s ease; 
@@ -437,6 +437,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
