@@ -208,7 +208,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .contact-btn:hover { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.05); }
 
 /* Lightbox */
-
 .lightbox { 
     display: none;
     position: fixed;
@@ -223,20 +222,24 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .lightbox.active { display: flex; }
 
+/* Contenitore che limita la grandezza su Desktop */
 .lightbox-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 75%; 
-    height: 80%;
+    width: auto; /* Si adatta alla foto */
+    height: auto;
+    max-width: 850px; /* LIMITE FISSO DESKTOP: la foto non sarà mai più larga di così */
+    max-height: 85vh; /* Non supera l'altezza dello schermo */
 }
 
 .lightbox-content { 
     max-width: 100%;
-    max-height: 80vh; 
+    max-height: 85vh;
     object-fit: contain; 
     display: block;
+    border: 1px solid #3e1b08; /* Opzionale: un filo di bordo per staccare dal nero */
 }
 
 .lb-arrow, .close-lightbox { 
@@ -249,9 +252,10 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: absolute; 
 }
 
+/* X vicina alla foto */
 .close-lightbox { 
-    top: -50px;
-    right: 0;
+    top: -45px; 
+    right: -10px;
     font-size: 45px;
     line-height: 1;
 }
@@ -259,12 +263,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .lb-arrow {
     top: 50%; 
     transform: translateY(-50%);
-    font-size: 3rem;
+    font-size: 3.5rem;
     padding: 20px;
 }
 
-.lb-prev { left: -70px; }
-.lb-next { right: -70px; }
+.lb-prev { left: -80px; }
+.lb-next { right: -80px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #472710 !important; 
@@ -362,25 +366,31 @@ input[type="text"], input[type="email"], textarea {
     }
 
    .lightbox-wrapper {
-        width: 95%;
+        width: 85%;
         height: auto;
     }
    
     .lightbox-content {
         max-height: 70vh;
     }
+
+   .lb-arrow { 
+        font-size: 1.8rem;
+        padding: 10px;
+    }
    
     .lb-prev {
-       left: 10px;
+       left: -35px;
     }
    
     .lb-next {
-       right: 10px;
+       right: -35px;
     }
    
-    .close-lightbox {
-       right: 10px;
-       top: -50px;
+    .close-lightbox { 
+        top: -45px; 
+        right: 0; 
+        font-size: 35px;
     }
 
     /* Contatti */
@@ -389,6 +399,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
