@@ -176,9 +176,33 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .contact-btn:hover { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.05); }
 
 /* Lightbox */
-.lightbox { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-.lightbox-content { max-width: 90%; max-height: 90%; object-fit: contain; }
-.close-lightbox { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; cursor: pointer; }
+.lightbox { 
+    display: none;
+   position: fixed;
+   z-index: 99999;
+   left: 0; top: 0; 
+    width: 100%;
+   height: 100%;
+   background-color: rgba(0,0,0,0.9); 
+    justify-content: center;
+   align-items: center; 
+}
+.lightbox.active { display: flex; }
+.lightbox-content { max-width: 90%;
+                   max-height: 90%;
+                   object-fit: contain; }
+.close-lightbox { position: absolute;
+                 top: 20px; right: 35px;
+                 color: #f1f1f1;
+                 font-size: 40px;
+                 cursor: pointer; }
+.lb-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: white; font-size: 3rem;
+    cursor: pointer; padding: 20px; z-index: 100000;
+}
+.lb-prev { left: 10px; }
+.lb-next { right: 10px; }
 
 /* =========================================
    7. FOOTER & CONTATTI
@@ -230,4 +254,5 @@ input[type="text"], input[type="email"], textarea {
     .contact-form-row { flex-direction: column; }
 
 }
+
 
