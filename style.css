@@ -35,8 +35,15 @@ nav {
 
 }
 
-nav a { text-decoration: none; color: #1a1a1a; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.80rem; font-weight: 500; transition: 0.4s ease; }
-nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
+nav a { 
+    text-decoration: none; 
+    color: #1a1a1a; 
+    text-transform: uppercase; 
+    letter-spacing: 1.5px; 
+    font-size: 0.80rem; /* Aumentato da 0.85rem */
+    font-weight: 500; 
+    transition: 0.4s ease; 
+}
 
 /* --- 3. HERO --- */
 
@@ -212,22 +219,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     font-size: 1.1rem;
     color: #3e1b08;
 }
-
-
-
-/* 7. Navigazione più grande */
-
-nav a { 
-    text-decoration: none; 
-    color: #1a1a1a; 
-    text-transform: uppercase; 
-    letter-spacing: 1.5px; 
-    font-size: 1.1rem; /* Aumentato da 0.85rem */
-    font-weight: 600; 
-    transition: 0.4s ease; 
-}
-
-
 
 /* 6. Slider Automatico e Manuale */
 
@@ -417,6 +408,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
