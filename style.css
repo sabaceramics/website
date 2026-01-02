@@ -79,7 +79,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .product-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); /* Forza 4 colonne su schermi grandi */
-    gap: 20px; 
+    gap: 40px; 
 }
 
 .product-card { background: white; padding: 10px; border: 1px solid #e0ddd5; transition: transform 0.3s ease; overflow: hidden; display: block; text-decoration: none; }
@@ -408,6 +408,7 @@ textarea {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
 
