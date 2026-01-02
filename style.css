@@ -4,7 +4,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 html { scroll-behavior: smooth; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { 
+    margin: 0; padding: 0; box-sizing: border-box; 
+    /* RIMUOVE L'EVIDENZIAZIONE AZZURRA SU MOBILE (PUNTO 5) */
+    -webkit-tap-highlight-color: transparent; 
+}
 
 body { 
     font-family: 'Montserrat', sans-serif; 
@@ -33,7 +37,7 @@ img { display: block; max-width: 100%; }
     text-transform: uppercase;
 }
 
-/* Usato per le intro nel catalogo e testi speciali */
+/* Usato per testi speciali */
 .intro-serif {
     font-family: 'Playfair Display', serif;
     font-style: normal;
@@ -62,13 +66,13 @@ nav {
 nav a { 
     text-transform: uppercase; letter-spacing: 1.5px; 
     font-size: 0.95rem; font-weight: 600; color: #1a1a1a;
+    cursor: pointer;
 }
 nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 /* =========================================
    4. HOME PAGE
    ========================================= */
-/* Hero Section */
 .hero { padding: 40px 10%; max-width: 1200px; margin: 0 auto; }
 .hero-img { width: 100%; max-height: 450px; object-fit: cover; border: 1px solid #e0ddd5; margin-bottom: 35px; }
 
@@ -79,7 +83,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 .hero-description p { margin-bottom: 1.4em; text-align: center; }
 
-/* About Us Section (Fascia Colorata) */
+/* About Us Section */
 .about-section-bg {
     background-color: #ceb8aa;
     width: 100%; padding: 80px 0; margin: 60px 0;
@@ -109,9 +113,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 /* =========================================
    5. CATALOGO
    ========================================= */
+/* MODIFICA (PUNTO 6): Ridotta la dimensione del font dell'intro */
 .catalog-intro {
     text-align: center; max-width: 800px; margin: 20px auto 40px auto;
-    font-size: 1.25rem; padding: 0 15px; font-weight: 500;
+    font-size: 1rem; /* Ridotto da 1.25rem a 1rem per matchare Contact */
+    line-height: 1.6;
+    padding: 0 15px; font-weight: 400; /* Ridotto leggermente il peso */
 }
 .catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap; }
 
@@ -127,7 +134,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .product-card:hover { transform: scale(1.05); }
 .product-card img { width: 100%; height: 250px; object-fit: cover; }
 
-/* Paginazione */
 .pagination-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .page-btn {
     background-color: white; border: 1px solid #3e1b08; color: #3e1b08;
@@ -147,12 +153,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     border: 1px solid #e0ddd5; background: #fff; cursor: zoom-in; 
     display: flex; align-items: center; justify-content: center; overflow: hidden; 
 }
-#js-main-photo { max-width: 100%; max-height: 100%; object-fit: contain; }
+#js-main-photo { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-in; }
 
 .slider-arrow { 
     position: absolute; top: 50%; transform: translateY(-50%); 
     background: rgba(255,255,255,0.7); border: none; padding: 15px 10px; 
-    cursor: pointer; font-size: 20px; transition: 0.3s; 
+    cursor: pointer; font-size: 20px; transition: 0.3s; z-index: 10;
 }
 .slider-arrow:hover { background: #3e1b08; color: white; }
 .prev { left: 0; } .next { right: 0; }
@@ -165,7 +171,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 #js-product-title { font-family: 'Montserrat', sans-serif !important; text-transform: none; font-weight: 700; font-size: 1.5rem; }
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
-/* Buttons & Forms */
 .contact-btn { 
     display: inline-block; background-color: #f9f7f2; color: #3e1b08; border: 1px solid #3e1b08; 
     padding: 15px 35px; text-transform: uppercase; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; 
@@ -173,13 +178,35 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 .contact-btn:hover { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.05); }
 
-/* Lightbox */
-.lightbox { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-.lightbox-content { max-width: 90%; max-height: 90%; object-fit: contain; }
-.close-lightbox { position: absolute; top: 20px; right: 35px; color: #f1f1f1; font-size: 40px; cursor: pointer; }
+/* =========================================
+   7. LIGHTBOX (PUNTO 1)
+   ========================================= */
+.lightbox { 
+    display: none; /* Nascosto di default */
+    position: fixed; 
+    z-index: 99999; 
+    left: 0; top: 0; 
+    width: 100%; height: 100%; 
+    background-color: rgba(0,0,0,0.95); /* Sfondo scuro */
+    justify-content: center; 
+    align-items: center; 
+}
+.lightbox-content { 
+    max-width: 90%; 
+    max-height: 90vh; 
+    object-fit: contain; 
+}
+.close-lightbox { 
+    position: absolute; 
+    top: 20px; right: 35px; 
+    color: #f1f1f1; 
+    font-size: 40px; 
+    cursor: pointer; 
+    z-index: 100000;
+}
 
 /* =========================================
-   7. FOOTER & CONTATTI
+   8. FOOTER & CONTATTI
    ========================================= */
 #contacts { padding: 60px 5%; text-align: center; background-color: #e9e1d3; margin-top: 50px; }
 .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
@@ -187,7 +214,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .social-links a:hover img { transform: scale(1.3); }
 .copyright { font-size: 0.75rem; color: #8e7e72; margin-top: 20px; }
 
-/* Input Forms */
 .contact-form-row { display: flex; gap: 15px; width: 100%; }
 .contact-form-row input { flex: 1; min-width: 0; }
 input[type="text"], input[type="email"], textarea {
@@ -196,14 +222,28 @@ input[type="text"], input[type="email"], textarea {
 }
 
 /* =========================================
-   8. MEDIA QUERIES (MOBILE)
+   9. MEDIA QUERIES (MOBILE - PUNTO 4)
    ========================================= */
 @media (max-width: 768px) {
     /* Header */
     .logo { height: 130px; }
     .header { padding: 20px 5% 15px 5%; }
-    nav { flex-wrap: nowrap !important; gap: 8px; width: 100%; padding: 10px 0; }
-    nav a { font-size: 0.78rem !important; letter-spacing: 0; white-space: nowrap; }
+    
+    /* MODIFICA NAVIGAZIONE MOBILE */
+    nav { 
+        display: flex !important;
+        flex-wrap: wrap !important; /* Permette di andare a capo se non c'è spazio */
+        justify-content: center;
+        gap: 15px; /* Spazio aumentato tra le voci */
+        width: 100%; 
+        padding: 10px 0; 
+    }
+    nav a { 
+        font-size: 0.8rem !important; /* Leggermente più piccolo */
+        letter-spacing: 0.5px; 
+        white-space: nowrap;
+        padding: 5px; /* Aumenta l'area cliccabile */
+    }
 
     /* Home */
     .hero { padding: 15px 5%; }
@@ -223,7 +263,5 @@ input[type="text"], input[type="email"], textarea {
     .product-container { flex-direction: column; padding: 15px 5%; gap: 20px; }
     .slider-wrapper { height: 320px; }
     .product-info-text { position: static; width: 100%; text-align: center; }
-
-    /* Contatti */
     .contact-form-row { flex-direction: column; }
 }
