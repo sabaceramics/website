@@ -331,58 +331,60 @@ function initDynamicSlider() {
     let isDown = false;
     let startX;
     let scrollLeft;
+    let currentId = 1;
+    let loadedCount = 0;
 
-    // Specifica quante foto hai (es. 10). 
-    // Assicurati che su GitHub siano pres1.jpg, pres2.jpg... (tutto minuscolo!)
-    const totalImages = 10; 
+    function loadNextImage() {
+        const img = document.createElement('img');
+        img.src = `images/pres${currentId}.jpg`;
+        
+        // Se l'immagine viene caricata con successo
+        img.onload = function() {
+            track.appendChild(this);
+            loadedCount++;
+            currentId++;
+            loadNextImage(); // Prova a caricare la successiva (pres2, pres3...)
+        };
 
-    function loadGallery() {
-        for (let i = 1; i <= totalImages; i++) {
-            const img = document.createElement('img');
-            // Usiamo il percorso relativo che funziona perfettamente su GitHub
-            img.src = `images/pres${i}.jpg`;
-            img.alt = `Saba Ceramics Gallery ${i}`;
-            
-            // Gestione errore: se la foto 7 non esiste, non bloccare tutto
-            img.onerror = function() { this.remove(); }; 
-            
-            track.appendChild(img);
-        }
-
-        // Aspetta un attimo che le immagini carichino per clonarle
-        setTimeout(() => {
-            if (track.children.length > 0) {
-                track.innerHTML += track.innerHTML; 
-                startAutoScroll();
+        // Se l'immagine NON esiste (es. cerco pres9 ma ho solo 8 foto)
+        img.onerror = function() {
+            // Se fallisce il .jpg, facciamo un ultimo tentativo col .JPG maiuscolo
+            if (this.src.endsWith('.jpg')) {
+                this.src = `images/pres${currentId}.JPG`;
+            } else {
+                // Se fallisce anche il .JPG, abbiamo finito le foto nella cartella
+                finalizeSlider();
             }
-        }, 500);
+        };
     }
 
-    // --- LOGICA DRAG (Migliorata per GitHub/Mobile) ---
+    function finalizeSlider() {
+        if (loadedCount > 0) {
+            // Clona il contenuto per l'effetto infinito
+            track.innerHTML += track.innerHTML;
+            startAutoScroll();
+        }
+    }
+
+    // --- LOGICA DRAG (Invariata) ---
     container.addEventListener('mousedown', (e) => {
         isDown = true;
-        container.classList.add('active');
         startX = e.pageX - container.offsetLeft;
         scrollLeft = container.scrollLeft;
     });
-
-    window.addEventListener('mouseup', () => {
-        isDown = false;
-        container.classList.remove('active');
-    });
-
+    window.addEventListener('mouseup', () => isDown = false);
     container.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX) * 2; 
+        const walk = (x - startX) * 2;
         container.scrollLeft = scrollLeft - walk;
     });
 
     function startAutoScroll() {
         function step() {
             if (!isDown) {
-                container.scrollLeft += 1; 
+                container.scrollLeft += 1;
                 if (container.scrollLeft >= track.scrollWidth / 2) {
                     container.scrollLeft = 0;
                 }
@@ -392,8 +394,9 @@ function initDynamicSlider() {
         requestAnimationFrame(step);
     }
 
-    loadGallery();
+    loadNextImage(); // Avvia la catena di caricamento
 }
+
 
 
 
