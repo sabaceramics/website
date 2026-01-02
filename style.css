@@ -235,7 +235,7 @@ nav a {
     width: 100%;
     overflow: hidden; /* Nascondiamo la barra per il drag fluido */
     background: #f9f7f2;
-    padding: 20px 0;
+    padding: 30px 0;
     cursor: grab; /* Indica che è trascinabile */
     user-select: none; /* Impedisce selezioni fastidiose durante il drag */
 }
@@ -254,7 +254,7 @@ nav a {
 }
 
 .slider-track img {
-    height: 300px;
+    height: 600px;
     width: auto;
     border: 1px solid #e0ddd5;
     pointer-events: none; /* FONDAMENTALE per permettere il drag su GitHub senza blocchi */
@@ -318,5 +318,6 @@ nav a {
     .product-info-text { position: static; width: 100%; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
 
