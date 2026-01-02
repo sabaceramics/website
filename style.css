@@ -266,6 +266,26 @@ nav a {
     100% { transform: translateX(-50%); }
 }
 
+/* --- FIX ALLINEAMENTO CONTATTI DESKTOP --- */
+.contact-form-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.contact-form-row input {
+    flex: 1;      /* Forza i due box a dividersi lo spazio 50/50 */
+    min-width: 0; /* Impedisce ai box di ignorare il limite del contenitore */
+}
+
+/* Applica il box-sizing corretto a tutti gli input */
+input[type="text"], 
+input[type="email"], 
+textarea {
+    box-sizing: border-box !important;
+    width: 100%;
+}
+
 /* --- OTTIMIZZAZIONE MOBILE --- */
 
 @media (max-width: 768px) {
@@ -324,16 +344,22 @@ nav a {
         user-select: none;         
     }
 
-    /* --- CONTATTI (Contact.html) --- */
-    /* Forza Nome e Cognome uno sotto l'altro */
+/* --- CONTATTI (Contact.html) --- */
     .contact-form-row { 
         display: flex;
-        flex-direction: column; 
+        flex-direction: column; /* Incolonna su mobile */
         gap: 15px;
+        width: 100%;
     }
 
-    .contact-form-row .form-group {
-        width: 100% !important; 
+    /* Rimuove ogni possibile restrizione di larghezza precedente */
+    .contact-form-row input,
+    input[type="text"], 
+    input[type="email"], 
+    textarea {
+        width: 100% !important;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     /* Reset universale per gli input: evita che sbordino a destra */
@@ -380,4 +406,5 @@ nav a {
     .product-info-text { position: static; width: 100%; text-align: center; }
     .product-media { max-width: 100%; min-width: 100%; }
 }
+
 
