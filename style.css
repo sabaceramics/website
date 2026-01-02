@@ -114,11 +114,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 /* =========================================
    5. CATALOGO
    ========================================= */
-.catalog-intro {
-    text-align: center; max-width: 800px; margin: 20px auto 40px auto;
-    font-size: 1.25rem; padding: 0 15px; font-weight: 500;
+.catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap;
 }
-.catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap; }
 
 .filter-btn { 
     background-color: #f9f7f2; color: #3e1b08; border: none; padding: 10px 22px;
@@ -233,3 +230,4 @@ input[type="text"], input[type="email"], textarea {
     .contact-form-row { flex-direction: column; }
 
 }
+
