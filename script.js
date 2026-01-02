@@ -363,11 +363,15 @@ function initDynamicSlider() {
 
     // --- LOGICA DRAG & TOUCH UNIFICATA ---
     
+    let startY; // Aggiungiamo questa variabile all'inizio dello script insieme alle altre
+
     const start = (e) => {
         isDown = true;
-        // Gestisce sia mouse (pageX) che touch (touches[0].pageX)
         const pageX = e.pageX || e.touches[0].pageX;
+        const pageY = e.pageY || e.touches[0].pageY; // Registriamo anche la Y iniziale
+        
         startX = pageX - container.offsetLeft;
+        startY = pageY; // Serve per capire la direzione del movimento
         scrollLeft = container.scrollLeft;
     };
 
@@ -378,14 +382,24 @@ function initDynamicSlider() {
     const move = (e) => {
         if (!isDown) return;
         
-        // Determina la posizione X corrente
         const pageX = e.pageX || e.touches[0].pageX;
+        const pageY = e.pageY || e.touches[0].pageY;
+        
         const x = pageX - container.offsetLeft;
         const walk = (x - startX) * 2;
-        container.scrollLeft = scrollLeft - walk;
 
-        // Impedisce lo scroll della pagina solo se stiamo muovendo lo slider orizzontalmente
-        if (e.cancelable) e.preventDefault();
+        // Calcoliamo quanto ci siamo mossi in orizzontale e in verticale
+        const diffX = Math.abs(pageX - startX);
+        const diffY = Math.abs(pageY - startY);
+
+        // Se il movimento è più orizzontale che verticale, muoviamo lo slider
+        if (diffX > diffY) {
+            if (e.cancelable) e.preventDefault(); // Blocca lo scroll pagina SOLO se scorriamo lateralmente
+            container.scrollLeft = scrollLeft - walk;
+        } else {
+            // Se l'utente sta andando su/giù, interrompiamo il drag dello slider
+            isDown = false; 
+        }
     };
 
     // Eventi Mouse
@@ -414,6 +428,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
