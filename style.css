@@ -107,10 +107,11 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .about-section-bg .section-title { margin-top: 0; margin-bottom: 50px; }
 
 .about-highlight {
-    font-family: 'Playfair Display', serif; /* Oppure 'Cormorant Garamond' */
-    font-size: 1.3rem; /* Leggermente più grande per farla risaltare */
-    font-style: italic; /* Opzionale, per dare un tocco più elegante */
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 500;
     color: #3e1b08;
+    font-style: normal;
 }
 
 .about-description {
@@ -556,3 +557,4 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
