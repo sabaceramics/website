@@ -152,9 +152,9 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
     gap: 30px; 
-    max-width: 1600px; 
+    max-width: 1350px; 
     margin: 0 auto; 
-    padding: 0 40px; 
+    padding: 0 20px; 
 }
 
 .product-card {
@@ -163,12 +163,13 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     border: 1px solid #e0ddd5;
     transition: transform 0.3s ease;
     display: block;
-    width: 100%; 
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 .product-card img { 
     width: 100%; 
-    height: 310px !important; 
+    height: 280px !important; 
     object-fit: cover; 
     display: block;
 }
@@ -549,4 +550,5 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
