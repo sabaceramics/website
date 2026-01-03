@@ -229,29 +229,30 @@ function renderProductDetail(data) {
 
 const updateGallery = (index, imgs) => {
     const mainImg = document.getElementById('js-main-photo');
-    const lbImg = document.getElementById('js-lightbox-img');
-    currentIdx = index;
-
-    const applyInstantFade = (el) => {
-        if (!el) return;
-        
-        // Non scendiamo a 0 o 0.4, restiamo molto alti (0.8)
-        // per mantenere la luminosità costante.
-        el.style.opacity = '0.8'; 
-        
-        setTimeout(() => {
-            el.src = imgs[currentIdx];
-            
-            // Appena la nuova immagine è caricata (20ms), torna a 1.
-            setTimeout(() => {
-                el.style.opacity = '1';
-            }, 20);
-        }, 30); // Cambio quasi istantaneo
-    };
-
-    applyInstantFade(mainImg);
-    applyInstantFade(lbImg);
+    const bgImg = document.getElementById('js-main-photo-bg');
     
+    // Aggiorniamo l'indice globale
+    currentIdx = index;
+    const nextPhotoUrl = imgs[currentIdx];
+
+    if (mainImg && bgImg) {
+        // 1. Mettiamo la nuova foto (avanti o indietro non importa) nello strato sotto
+        bgImg.src = nextPhotoUrl;
+        
+        // 2. Facciamo sparire la foto vecchia che sta sopra
+        mainImg.style.opacity = '0';
+        
+        // 3. Aspettiamo che la sfumatura finisca (es. 200ms)
+        setTimeout(() => {
+            // 4. Cambiamo la foto sopra così è pronta per il prossimo scambio
+            mainImg.src = nextPhotoUrl;
+            
+            // 5. La riportiamo a opacità 1 (operazione invisibile perché sotto c'è la stessa foto)
+            mainImg.style.opacity = '1';
+        }, 200); 
+    }
+
+    // Aggiorna il bordo delle miniature
     document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
 };
 
@@ -488,6 +489,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
