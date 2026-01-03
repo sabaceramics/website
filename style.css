@@ -280,9 +280,10 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%; 
-    max-width: 850px; 
+    width: 90vw;
+    max-width: 1200px; 
     height: 85vh; 
+    margin: 0 auto;
 }
 
 .cross-fade-container-lb {
@@ -407,11 +408,13 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     top: 50%; 
     transform: translateY(-50%);
     font-size: 3.5rem;
-    padding: 20px;
+    padding: 10px;
+    background: rgba(0,0,0,0.2) !important;
+    border-radius: 5px;
 }
 
-.lb-prev { left: -50px; }
-.lb-next { right: -50px; }
+.lb-prev { left: 10px; }
+.lb-next { right: 10px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #472710 !important; 
@@ -566,6 +569,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
