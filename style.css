@@ -100,7 +100,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: flex; align-items: center; gap: 30px; 
     background: white; padding: 30px; margin-bottom: 30px; 
     border: 1px solid #e0ddd5; border-radius: 4px;
-    max-width: 850px; width: 90%;   
+    max-width: 850px; width: 90%; scroll-margin-top: 200px;  
 }
 .about-thumb { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
@@ -413,7 +413,7 @@ input[type="text"], input[type="email"], textarea {
     .hero-img { height: 400px; max-height: 50vh; object-fit: cover; margin-top: 25px; margin-bottom: 25px; }
     .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
     .hero-description p { text-align: left; }
-    .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
+    .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; scroll-margin-top: 100px}
     .about-thumb { width: 100px !important; height: 100px !important; }
     
     /* Slider Mobile Home */
@@ -504,6 +504,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
