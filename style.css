@@ -108,8 +108,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .about-highlight {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.3rem;
-    font-weight: 500;
+    font-size: 1.5rem; 
+    font-weight: 600; 
     text-align: center;
     color: #3e1b08;
 }
@@ -557,5 +557,6 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
