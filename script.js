@@ -237,30 +237,25 @@ function renderProductDetail(data) {
     // Funzione interna per applicare la "danza" dei due strati
         
     const applyFade = (mainId, bgId) => {
-        const mainImg = document.getElementById(mainId);
-        const bgImg = document.getElementById(bgId);
-        if (mainImg && bgImg) {
-            
-            // 1. Il sotto cambia subito
-            
-            bgImg.src = nextPhotoUrl;
-            
-            // 2. Il sopra sfuma
-            
+    const mainImg = document.getElementById(mainId);
+    const bgImg = document.getElementById(bgId);
+    
+    if (mainImg && bgImg) {
+        // 1. Cambia lo sfondo immediatamente
+        bgImg.src = nextPhotoUrl;
+        
+        // 2. Fai sparire l'immagine sopra subito dopo (ritardo minimo di 10ms)
+        setTimeout(() => {
             mainImg.style.opacity = '0';
-            
-            setTimeout(() => 
-                {
-                // 3. Il sopra cambia src mentre è trasparente
-                    
-                mainImg.src = nextPhotoUrl;
-                    
-                // 4. Il sopra torna visibile
-                    
-                mainImg.style.opacity = '1';
-            }, 200);
-        }
-    };
+        }, 10); 
+        
+        // 3. Torna visibile dopo soli 80ms (sincronizzato col CSS)
+        setTimeout(() => {
+            mainImg.src = nextPhotoUrl;
+            mainImg.style.opacity = '1';
+        }, 80);
+    }
+};
 
     applyFade('js-main-photo', 'js-main-photo-bg');
     applyFade('js-lightbox-img', 'js-lightbox-img-bg');
@@ -512,6 +507,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
