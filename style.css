@@ -244,37 +244,46 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 #js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 800 !important; font-size: 2rem; color: #3e1b08; letter-spacing: 1px; }
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
-/* Aggiunta per il contenitore delle due immagini sovrapposte */
+
 /* --- CROSS-FADE SCHEDA PRODOTTO --- */
-.cross-fade-container {
-    position: relative;
+
+.cross-fade-container, 
+.cross-fade-container-lb {
+    position: relative !important;
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
     overflow: hidden;
 }
 
-#js-main-photo-bg {
-    position: absolute; /* Fondamentale per sovrapporre */
-    top: 0; left: 0; width: 100%; height: 100%;
+/* Regola ferrea per tutte le immagini dei cross-fade */
+.cross-fade-container img,
+.cross-fade-container-lb img {
+    position: absolute !important; 
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important; 
+    width: auto !important;
+    height: auto !important;
+    max-width: 100% !important; 
+    max-height: 100% !important;
     object-fit: contain;
+}
+
+/* Gestione Z-index e Transizioni */
+#js-main-photo-bg, #js-lightbox-img-bg {
     z-index: 1;
-    transition: none;
+    transition: none !important;
 }
 
-#js-main-photo {
-    position: relative; /* Sta sopra al bg */
+#js-main-photo, #js-lightbox-img {
     z-index: 2;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: opacity 0.15s ease-in-out;
+    transition: opacity 0.25s ease-in-out !important; 
 }
 
-/* 1. Contenitore Oscurante */
+/* --- 2. STRUTTURA LIGHTBOX --- */
 .lightbox { 
     display: none;
     position: fixed;
@@ -289,72 +298,31 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .lightbox.active { display: flex; }
 
-/* 2. Wrapper principale (Definisce lo spazio dell'immagine) */
 .lightbox-wrapper {
     position: relative;
-    width: 85%; /* Lascia spazio ai lati per le frecce esterne */
+    width: 80%; /* Spazio generoso per l'immagine */
     max-width: 1100px; 
     height: 80vh; 
     margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
-/* 3. Contenitore Cross-Fade */
-.cross-fade-container-lb {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* 4. Immagini (Sovrapposte perfettamente) */
-#js-lightbox-img, 
-#js-lightbox-img-bg { 
-    position: absolute; 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; 
-    display: block;
-}
-
-#js-lightbox-img-bg {
-    z-index: 1;
-    transition: none; /* Immagine sotto fissa */
-}
-
-#js-lightbox-img {
-    z-index: 2;
-    transition: opacity 0.25s ease-in-out; /* Effetto sfumato sopra */
-}
-
-/* 5. Comandi (Frecce e X) */
+/* --- 3. COMANDI ESTERNI (Frecce e X) --- */
 .lb-arrow, .close-lightbox { 
     background: transparent !important; 
     border: none; 
     color: #e9e0d2; 
     cursor: pointer; 
     transition: all 0.3s ease; 
-    z-index: 100000;
+    z-index: 100001;
     position: absolute; 
 }
 
-/* Posizionamento X esterna in alto a destra */
 .close-lightbox { 
     top: -50px; 
     right: -40px;
     font-size: 50px;
 }
 
-/* Posizionamento frecce esterne al wrapper */
 .lb-arrow {
     top: 50%; 
     transform: translateY(-50%);
@@ -362,16 +330,11 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     padding: 20px;
 }
 
-.lb-prev { left: -80px; } /* Sposta fuori a sinistra */
-.lb-next { right: -80px; } /* Sposta fuori a destra */
+.lb-prev { left: -100px; } 
+.lb-next { right: -100px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #fff !important;
-    transform: translateY(-50%) scale(1.1);
-}
-
-.close-lightbox:hover {
-    transform: scale(1.1);
 }
 
 /* 6. Adattamento Mobile */
@@ -551,6 +514,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
