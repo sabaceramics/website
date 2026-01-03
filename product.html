@@ -25,9 +25,9 @@
      <div class="product-media">
       <div class="slider-wrapper" id="js-slider-wrapper">
        <button class="slider-arrow prev" id="js-prev-btn">&#10094;</button>        
-        <div class="cross-fade-container" style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center;">
-          <img id="js-main-photo-bg" src="" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">  
-          <img id="js-main-photo" src="" alt="Product Image" style="position: relative; z-index: 2; width: 100%; object-fit: contain;">
+        <div class="cross-fade-container">
+          <img id="js-main-photo-bg" src="" alt="">  
+          <img id="js-main-photo" src="" alt="Product Image">
         </div>
        <button class="slider-arrow next" id="js-next-btn">&#10095;</button>
       </div>
@@ -47,16 +47,14 @@
 <div id="js-lightbox" class="lightbox">
     <div class="lightbox-wrapper">
         <span class="close-lightbox" id="js-close-lightbox">&times;</span>
-        <button class="lb-arrow lb-prev" id="js-lb-prev">&#10094;</button>
-        
-        <div class="cross-fade-container-lb" style="position: relative; display: flex; justify-content: center; align-items: center;">
-            <img id="js-lightbox-img-bg" src="" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">
-            <img class="lightbox-content" id="js-lightbox-img" alt="" style="position: relative; z-index: 2; transition: opacity 0.2s ease-in-out;">
-        </div>
-        
-        <button class="lb-arrow lb-next" id="js-lb-next">&#10095;</button>
-    </div>
-</div>
+          <button class="lb-arrow lb-prev" id="js-lb-prev">&#10094;</button>
+            <div class="cross-fade-container-lb">
+              <img id="js-lightbox-img-bg" src="" alt="">
+              <img id="js-lightbox-img" class="lightbox-content" src="" alt="">
+            </div>   
+          <button class="lb-arrow lb-next" id="js-lb-next">&#10095;</button>
+      </div>
+  </div>
 
 <footer id="contacts">
   <h2 class="section-title">Get in Touch</h2>
@@ -74,6 +72,7 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
