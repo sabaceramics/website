@@ -497,20 +497,21 @@ input[type="text"], input[type="email"], textarea {
     }
 
     .slider-wrapper { 
-        height: auto !important; 
-        min-height: 300px; 
-        width: 100% !important; 
-        border: none; 
-        background: transparent; 
-    } 
+       height: 400px !important; 
+       width: 100% !important; 
+       border: none; 
+       background: transparent; 
+       display: flex;
+       align-items: center;
+       justify-content: center;
+   }
 
-    #js-main-photo { 
-        display: block;
-        width: 100% !important; 
-        height: auto !important; 
-        max-height: 450px; 
-        object-fit: contain; 
-    }
+    #js-main-photo, #js-main-photo-bg { 
+       display: block;
+       width: 100% !important; 
+       height: 100% !important; 
+       object-fit: contain; 
+   }
 
     .thumbnail-container {
         padding: 0 10px; 
@@ -563,4 +564,5 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
