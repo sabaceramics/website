@@ -298,7 +298,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .lightbox-wrapper {
     position: relative;
-    width: 80%; /* Box spazioso per la foto */
+    width: 90%;
+    max-width: 1200px
     height: 85vh; 
     display: flex;
     justify-content: center;
@@ -318,9 +319,10 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 /* X vicina all'angolo alto-destro dell'immagine */
 .close-lightbox { 
-    top: -30px; 
-    right: -10px; 
-    font-size: 45px; 
+    top: 0; 
+    right: 0; 
+    font-size: 50px; 
+    padding: 10px;
 }
 
 /* Frecce vicine ai fianchi dell'immagine */
@@ -330,10 +332,13 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     font-size: 3.5rem;
     padding: 10px;
 }
-.lb-prev { left: -50px; } 
-.lb-next { right: -50px; }
+.lb-prev { left: 2%; } 
+.lb-next { right: 2%; }
 
-.lb-arrow:hover, .close-lightbox:hover { color: #fff !important; }
+.lb-arrow:hover, .close-lightbox:hover { 
+    color: #fff !important; 
+    transform: translateY(-50%) scale(1.1); 
+}
 
 /* 6. Adattamento Mobile */
 @media (max-width: 768px) {
@@ -511,13 +516,3 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
-
-
-
-
-
-
-
-
-
-
