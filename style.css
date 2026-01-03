@@ -96,11 +96,23 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 .about-section-bg .section-title { margin-top: 0; margin-bottom: 50px; }
 
+.about-description {
+    max-width: 900px; 
+    margin: 0 auto 50px auto; 
+    padding: 0 20px; 
+    line-height: 1.7; 
+    text-align: center; 
+}
+
+.about-description p {
+    margin-bottom: 20px;
+}
+
 .about-box { 
     display: flex; align-items: center; gap: 30px; 
     background: white; padding: 30px; margin-bottom: 30px; 
     border: 1px solid #e0ddd5; border-radius: 4px;
-    max-width: 850px; width: 90%; 
+    max-width: 950px; width: 90%; 
 }
 .about-thumb { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
@@ -507,6 +519,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
