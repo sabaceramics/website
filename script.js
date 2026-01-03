@@ -252,7 +252,7 @@ function renderProductDetail(data) {
         // 3. Il trucco: aspettiamo un battito di ciglia (50ms) 
         // per forzare il browser a registrare che l'immagine è invisibile
         setTimeout(() => {
-            mainImg.style.transition = 'opacity 0.3s ease-in-out';
+            mainImg.style.transition = 'opacity 0.1s ease-in-out';
             mainImg.style.opacity = '1';
         }, 50);
     }
@@ -508,6 +508,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
