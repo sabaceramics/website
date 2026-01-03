@@ -235,30 +235,28 @@ function renderProductDetail(data) {
     const nextPhotoUrl = imgs[currentIdx];
 
     const applyFade = (mainId, bgId) => {
-        const mainImg = document.getElementById(mainId);
-        const bgImg = document.getElementById(bgId);
+    const mainImg = document.getElementById(mainId);
+    const bgImg = document.getElementById(bgId);
 
-        if (mainImg && bgImg) {
-            // 1. Metti l'immagine ATTUALE (quella che l'utente vede ora) nello sfondo
-            // Questo crea il "cuscinetto" per non far vedere il nero
-            bgImg.src = mainImg.src;
+    if (mainImg && bgImg) {
+        // 1. Copia l'immagine attuale sullo sfondo (livello 10)
+        // Questo la blocca lì ferma come base
+        bgImg.src = mainImg.src;
+        bgImg.style.opacity = '1';
 
-            // 2. Rendi l'immagine sopra trasparente istantaneamente
-            mainImg.style.transition = 'none'; 
-            mainImg.style.opacity = '0';
+        // 2. Spegni la transizione e metti la nuova immagine a zero (livello 20)
+        mainImg.style.transition = 'none';
+        mainImg.style.opacity = '0';
+        mainImg.src = nextPhotoUrl;
 
-            // 3. Cambia la sorgente dell'immagine sopra con la NUOVA foto
-            mainImg.src = nextPhotoUrl;
-
-            // 4. Quando la nuova immagine è caricata, la facciamo riapparire sfumando
-            mainImg.onload = () => {
-                mainImg.style.transition = 'opacity 0.25s ease-in-out';
-                mainImg.style.opacity = '1';
-                // Puliamo l'evento onload per evitare loop
-                mainImg.onload = null;
-            };
-        }
-    };
+        // 3. Il trucco: aspettiamo un battito di ciglia (50ms) 
+        // per forzare il browser a registrare che l'immagine è invisibile
+        setTimeout(() => {
+            mainImg.style.transition = 'opacity 0.3s ease-in-out';
+            mainImg.style.opacity = '1';
+        }, 50);
+    }
+};
 
     applyFade('js-main-photo', 'js-main-photo-bg');
     applyFade('js-lightbox-img', 'js-lightbox-img-bg');
@@ -510,6 +508,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
