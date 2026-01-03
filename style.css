@@ -247,32 +247,30 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 /* --- CROSS-FADE SCHEDA PRODOTTO --- */
 
+/* --- 1. LOGICA CROSS-FADE (Sovrapposizione Totale) --- */
 .cross-fade-container, 
 .cross-fade-container-lb {
     position: relative !important;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    display: block !important; /* Evita l'affiancamento del flex */
+    overflow: visible; 
 }
 
-/* Regola ferrea per tutte le immagini dei cross-fade */
+/* Tutte le immagini dei due motori di cross-fade */
 .cross-fade-container img,
 .cross-fade-container-lb img {
-    position: absolute !important; 
+    position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -50%) !important; 
+    transform: translate(-50%, -50%) !important;
     width: auto !important;
     height: auto !important;
-    max-width: 100% !important; 
+    max-width: 100% !important;
     max-height: 100% !important;
     object-fit: contain;
 }
 
-/* Gestione Z-index e Transizioni */
 #js-main-photo-bg, #js-lightbox-img-bg {
     z-index: 1;
     transition: none !important;
@@ -280,7 +278,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 #js-main-photo, #js-lightbox-img {
     z-index: 2;
-    transition: opacity 0.25s ease-in-out !important; 
+    transition: opacity 0.25s ease-in-out !important;
 }
 
 /* --- 2. STRUTTURA LIGHTBOX --- */
@@ -291,22 +289,22 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     left: 0; top: 0; 
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.92); 
+    background-color: rgba(0,0,0,0.95); 
     justify-content: center;
     align-items: center; 
 }
-
 .lightbox.active { display: flex; }
 
 .lightbox-wrapper {
     position: relative;
-    width: 80%; /* Spazio generoso per l'immagine */
-    max-width: 1100px; 
-    height: 80vh; 
-    margin: 0 auto;
+    width: 80%; /* Box spazioso per la foto */
+    height: 85vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* --- 3. COMANDI ESTERNI (Frecce e X) --- */
+/* --- 3. COMANDI (Vicine all'immagine) --- */
 .lb-arrow, .close-lightbox { 
     background: transparent !important; 
     border: none; 
@@ -317,25 +315,24 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: absolute; 
 }
 
+/* X vicina all'angolo alto-destro dell'immagine */
 .close-lightbox { 
     top: -30px; 
-    right: -10px;
-    font-size: 40px;
+    right: -10px; 
+    font-size: 45px; 
 }
 
+/* Frecce vicine ai fianchi dell'immagine */
 .lb-arrow {
     top: 50%; 
     transform: translateY(-50%);
     font-size: 3.5rem;
     padding: 10px;
 }
-
 .lb-prev { left: -50px; } 
 .lb-next { right: -50px; }
 
-.lb-arrow:hover, .close-lightbox:hover { 
-    color: #fff !important;
-}
+.lb-arrow:hover, .close-lightbox:hover { color: #fff !important; }
 
 /* 6. Adattamento Mobile */
 @media (max-width: 768px) {
@@ -514,6 +511,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
