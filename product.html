@@ -22,15 +22,17 @@
 
 <main>
   <div class="product-container" id="product-detail-content">
-      
-      <div class="product-media">
-          <div class="slider-wrapper" id="js-slider-wrapper">
-              <button class="slider-arrow prev" id="js-prev-btn">&#10094;</button>
-              <img id="js-main-photo" src="" alt="Product Image">
-              <button class="slider-arrow next" id="js-next-btn">&#10095;</button>
-          </div>
-          <div class="thumbnail-container" id="js-thumb-container"></div>
+     <div class="product-media">
+      <div class="slider-wrapper" id="js-slider-wrapper">
+       <button class="slider-arrow prev" id="js-prev-btn">&#10094;</button>        
+        <div class="cross-fade-container" style="position: relative; width: 100%; display: flex; justify-content: center; align-items: center;">
+          <img id="js-main-photo-bg" src="" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">  
+          <img id="js-main-photo" src="" alt="Product Image" style="position: relative; z-index: 2; width: 100%; object-fit: contain;">
+        </div>
+       <button class="slider-arrow next" id="js-next-btn">&#10095;</button>
       </div>
+     <div class="thumbnail-container" id="js-thumb-container"></div>
+ </div>
 
       <div class="product-info-text">
           <h1 class="section-title no-upper" style="text-align:left; margin-top:0; width: auto;" id="js-product-title">Loading...</h1>
@@ -67,4 +69,5 @@
 <script src="script.js"></script>
 </body>
 </html>
+
 
