@@ -318,20 +318,20 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 .close-lightbox { 
-    top: -50px; 
-    right: -40px;
-    font-size: 50px;
+    top: -30px; 
+    right: -10px;
+    font-size: 40px;
 }
 
 .lb-arrow {
     top: 50%; 
     transform: translateY(-50%);
-    font-size: 4rem;
-    padding: 20px;
+    font-size: 3.5rem;
+    padding: 10px;
 }
 
-.lb-prev { left: -100px; } 
-.lb-next { right: -100px; }
+.lb-prev { left: -50px; } 
+.lb-next { right: -50px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #fff !important;
@@ -514,6 +514,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
