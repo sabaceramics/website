@@ -207,10 +207,13 @@ function renderProductDetail(data) {
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
+    // CARICAMENTO INIZIALE DOPPIO (Sopra e Sotto)
     const mainPhoto = document.getElementById('js-main-photo');
+    const bgPhoto = document.getElementById('js-main-photo-bg');
     if (mainPhoto && images.length > 0) {
         mainPhoto.src = images[0];
         mainPhoto.alt = item.TITOLO;
+        if (bgPhoto) bgPhoto.src = images[0]; // Fondamentale per il primo cambio
     }
 
     const thumbContainer = document.getElementById('js-thumb-container');
@@ -227,34 +230,31 @@ function renderProductDetail(data) {
 
     let currentIdx = 0;
 
-const updateGallery = (index, imgs) => {
-    const mainImg = document.getElementById('js-main-photo');
-    const bgImg = document.getElementById('js-main-photo-bg');
-    
-    // Aggiorniamo l'indice globale
-    currentIdx = index;
-    const nextPhotoUrl = imgs[currentIdx];
+    const updateGallery = (index, imgs) => {
+        const mainImg = document.getElementById('js-main-photo');
+        const bgImg = document.getElementById('js-main-photo-bg');
+        
+        currentIdx = index;
+        const nextPhotoUrl = imgs[currentIdx];
 
-    if (mainImg && bgImg) {
-        // 1. Mettiamo la nuova foto (avanti o indietro non importa) nello strato sotto
-        bgImg.src = nextPhotoUrl;
-        
-        // 2. Facciamo sparire la foto vecchia che sta sopra
-        mainImg.style.opacity = '0';
-        
-        // 3. Aspettiamo che la sfumatura finisca (es. 200ms)
-        setTimeout(() => {
-            // 4. Cambiamo la foto sopra così è pronta per il prossimo scambio
-            mainImg.src = nextPhotoUrl;
+        if (mainImg && bgImg) {
+            // 1. La foto sotto cambia SUBITO (è coperta da quella sopra)
+            bgImg.src = nextPhotoUrl;
             
-            // 5. La riportiamo a opacità 1 (operazione invisibile perché sotto c'è la stessa foto)
-            mainImg.style.opacity = '1';
-        }, 200); 
-    }
+            // 2. Quella sopra sparisce (mostrando quella sotto già pronta)
+            mainImg.style.opacity = '0';
+            
+            setTimeout(() => {
+                // 3. Mentre è invisibile, cambiamo la src anche sopra
+                mainImg.src = nextPhotoUrl;
+                
+                // 4. Torna visibile (sovrapponendosi perfettamente a quella sotto)
+                mainImg.style.opacity = '1';
+            }, 200); 
+        }
 
-    // Aggiorna il bordo delle miniature
-    document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
-};
+        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+    };
 
     const changeSlide = (dir) => {
         currentIdx = (currentIdx + dir + images.length) % images.length;
@@ -489,6 +489,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
