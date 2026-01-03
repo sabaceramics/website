@@ -345,9 +345,11 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%; 
-    max-width: 850px; 
-    height: 85vh; /* Altezza fissa per evitare salti tra foto diverse */
+    width: min-content; 
+    min-width: 300px; /* Evita che si restringa troppo con foto micro */
+    max-width: 90%; 
+    height: 85vh; 
+    margin: 0 auto;
 }
 
 /* Nuovo contenitore per il cross-fade */
@@ -395,8 +397,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 .close-lightbox { 
-    top: -45px; 
-    right: -10px;
+    top: -40px; 
+    right: -20px;
     font-size: 45px;
     line-height: 1;
 }
@@ -408,8 +410,8 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     padding: 20px;
 }
 
-.lb-prev { left: -80px; }
-.lb-next { right: -80px; }
+.lb-prev { left: -50px; }
+.lb-next { right: -50px; }
 
 .lb-arrow:hover, .close-lightbox:hover { 
     color: #472710 !important; 
@@ -564,5 +566,6 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
