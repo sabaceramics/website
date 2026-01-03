@@ -106,7 +106,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
 .about-info p i { font-size: 0.95rem; color: #1a1a1a; }
 
-#about { scroll-margin-top: 0px; }
+#about { scroll-margin-top: 80px; }
 
 /* Auto Slider */
 .auto-slider {
@@ -417,7 +417,7 @@ input[type="text"], input[type="email"], textarea {
     .hero-description p { text-align: left; }
     .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
     .about-thumb { width: 100px !important; height: 100px !important; }
-     #about { scroll-margin-top: 0px }
+     #about { scroll-margin-top: 40px }
     
     /* Slider Mobile Home */
     .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
@@ -507,6 +507,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
