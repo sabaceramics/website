@@ -316,9 +316,13 @@ function renderProductDetail(data) {
     if (lbPrev) lbPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
     if (lbNext) lbNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
-    if (lightboxOverlay) {
+   if (lightboxOverlay) {
         lightboxOverlay.onclick = (e) => {
-            if (e.target.id === 'js-lightbox') closeLightbox();
+            if (e.target.id === 'js-lightbox' || 
+                e.target.classList.contains('lightbox-wrapper') ||
+                e.target.classList.contains('cross-fade-container-lb')) {
+                closeLightbox();
+            }
         };
     }
 
@@ -508,6 +512,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
