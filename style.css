@@ -142,11 +142,17 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 .filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
 
+/* 1. Forza il contenitore nel catalogo a ignorare il limite dei 1200px */
+.hero:has(.product-grid) {
+    max-width: 1600px !important; 
+    padding: 40px 2% !important; /* Riduce il padding laterale dal 10% al 2% */
+}
+
 .product-grid { 
     display: grid; 
     grid-template-columns: repeat(4, 1fr); 
-    gap: 40px; 
-    max-width: 1550px; 
+    gap: 30px; 
+    max-width: 1600px; 
     margin: 0 auto; 
     padding: 0 40px; 
 }
@@ -162,10 +168,11 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .product-card img { 
     width: 100%; 
-    height: 420px; 
+    height: 310px !important; 
     object-fit: cover; 
     display: block;
 }
+
 .product-card:hover { 
     transform: scale(1.03);
 }
@@ -542,3 +549,4 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
