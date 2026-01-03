@@ -231,30 +231,43 @@ function renderProductDetail(data) {
     let currentIdx = 0;
 
     const updateGallery = (index, imgs) => {
-        const mainImg = document.getElementById('js-main-photo');
-        const bgImg = document.getElementById('js-main-photo-bg');
-        
-        currentIdx = index;
-        const nextPhotoUrl = imgs[currentIdx];
+    currentIdx = index;
+    const nextPhotoUrl = imgs[currentIdx];
 
+    // Funzione interna per applicare la "danza" dei due strati
+        
+    const applyFade = (mainId, bgId) => {
+        const mainImg = document.getElementById(mainId);
+        const bgImg = document.getElementById(bgId);
         if (mainImg && bgImg) {
-            // 1. La foto sotto cambia SUBITO (è coperta da quella sopra)
+            
+            // 1. Il sotto cambia subito
+            
             bgImg.src = nextPhotoUrl;
             
-            // 2. Quella sopra sparisce (mostrando quella sotto già pronta)
+            // 2. Il sopra sfuma
+            
             mainImg.style.opacity = '0';
             
-            setTimeout(() => {
-                // 3. Mentre è invisibile, cambiamo la src anche sopra
+            setTimeout(() => 
+                {
+                // 3. Il sopra cambia src mentre è trasparente
+                    
                 mainImg.src = nextPhotoUrl;
-                
-                // 4. Torna visibile (sovrapponendosi perfettamente a quella sotto)
+                    
+                // 4. Il sopra torna visibile
+                    
                 mainImg.style.opacity = '1';
-            }, 200); 
+            }, 200);
         }
-
-        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
     };
+
+    applyFade('js-main-photo', 'js-main-photo-bg');
+    applyFade('js-lightbox-img', 'js-lightbox-img-bg');
+
+    // Aggiorna le miniature
+    document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+};
 
     const changeSlide = (dir) => {
         currentIdx = (currentIdx + dir + images.length) % images.length;
@@ -264,11 +277,21 @@ function renderProductDetail(data) {
     const openLightbox = () => {
         const lb = document.getElementById('js-lightbox');
         const lbImg = document.getElementById('js-lightbox-img');
+        const lbBgImg = document.getElementById('js-lightbox-img-bg'); // AGGIUNTO
+    
         if (lb && lbImg) {
             lb.style.display = "flex";
             lbImg.src = images[currentIdx];
-        }
-    };
+        
+        // Sincronizziamo subito l'immagine di sfondo del lightbox
+            if (lbBgImg) {
+                lbBgImg.src = images[currentIdx];
+            }
+        
+        // Reset opacità per sicurezza, così la foto è subito visibile
+            lbImg.style.opacity = '1';
+    }
+};
 
     const closeLightbox = () => {
         const lb = document.getElementById('js-lightbox');
@@ -489,6 +512,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
