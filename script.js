@@ -234,28 +234,31 @@ function renderProductDetail(data) {
     currentIdx = index;
     const nextPhotoUrl = imgs[currentIdx];
 
-    // Funzione interna per applicare la "danza" dei due strati
-        
     const applyFade = (mainId, bgId) => {
-    const mainImg = document.getElementById(mainId);
-    const bgImg = document.getElementById(bgId);
-    
-    if (mainImg && bgImg) {
-        // 1. Cambia lo sfondo immediatamente
-        bgImg.src = nextPhotoUrl;
-        
-        // 2. Fai sparire l'immagine sopra subito dopo (ritardo minimo di 10ms)
-        setTimeout(() => {
+        const mainImg = document.getElementById(mainId);
+        const bgImg = document.getElementById(bgId);
+
+        if (mainImg && bgImg) {
+            // 1. Metti l'immagine ATTUALE (quella che l'utente vede ora) nello sfondo
+            // Questo crea il "cuscinetto" per non far vedere il nero
+            bgImg.src = mainImg.src;
+
+            // 2. Rendi l'immagine sopra trasparente istantaneamente
+            mainImg.style.transition = 'none'; 
             mainImg.style.opacity = '0';
-        }, 10); 
-        
-        // 3. Torna visibile dopo soli 80ms (sincronizzato col CSS)
-        setTimeout(() => {
+
+            // 3. Cambia la sorgente dell'immagine sopra con la NUOVA foto
             mainImg.src = nextPhotoUrl;
-            mainImg.style.opacity = '1';
-        }, 80);
-    }
-};
+
+            // 4. Quando la nuova immagine è caricata, la facciamo riapparire sfumando
+            mainImg.onload = () => {
+                mainImg.style.transition = 'opacity 0.25s ease-in-out';
+                mainImg.style.opacity = '1';
+                // Puliamo l'evento onload per evitare loop
+                mainImg.onload = null;
+            };
+        }
+    };
 
     applyFade('js-main-photo', 'js-main-photo-bg');
     applyFade('js-lightbox-img', 'js-lightbox-img-bg');
@@ -507,6 +510,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
