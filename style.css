@@ -62,7 +62,7 @@ nav {
     border-top: 1px solid #1a1a1a; 
     border-bottom: 1px solid #1a1a1a; 
     padding: 15px 0; 
-    width: 90%; max-width: 1200px; margin: 0 auto; 
+    width: 95%; max-width: 1400px; margin: 0 auto; 
     display: flex; justify-content: center; gap: 30px;
     background-color: #f9f7f2; 
     position: sticky; top: 0; z-index: 1000; 
@@ -550,5 +550,6 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
