@@ -467,9 +467,22 @@ input[type="text"], input[type="email"], textarea {
     .auto-slider { touch-action: pan-y !important; overflow-x: hidden; }
 
     /* Catalogo */
-    .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 5px; }
-    .product-card img { height: 160px; }
+    .product-grid { 
+       grid-template-columns: repeat(2, 1fr) !important; 
+       gap: 15px !important; 
+       padding: 0 15px !important; 
+       max-width: 100% !important;
+   }
+   
+    .product-card {
+       padding: 8px !important; 
+   }
 
+   .product-card img { 
+    height: 180px !important; 
+    object-fit: cover; 
+   }
+   
     /* Pagina Prodotto Mobile */
     .product-container { 
         flex-direction: column; 
@@ -550,6 +563,4 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
-
-
 
