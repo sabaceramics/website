@@ -327,14 +327,22 @@ function renderProductDetail(data) {
     }
 
     document.onkeydown = function(e) {
-        const lb = document.getElementById('js-lightbox');
-        if (lb && lb.style.display === "flex") {
-            if (e.key === "ArrowLeft") changeSlide(-1);
-            if (e.key === "ArrowRight") changeSlide(1);
-            if (e.key === "Escape") closeLightbox();
+        // Se premo freccia sinistra -> cambia foto indietro
+        if (e.key === "ArrowLeft") {
+            changeSlide(-1);
+        } 
+        // Se premo freccia destra -> cambia foto avanti
+        else if (e.key === "ArrowRight") {
+            changeSlide(1);
+        } 
+        // Se premo ESC e il lightbox è aperto -> chiudi lightbox
+        else if (e.key === "Escape") {
+            const lb = document.getElementById('js-lightbox');
+            if (lb && lb.style.display === "flex") {
+                closeLightbox();
+            }
         }
     };
-}
 
 init();
 
@@ -512,6 +520,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
