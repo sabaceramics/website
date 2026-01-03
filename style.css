@@ -204,6 +204,17 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     transition: opacity 0.2s ease-in-out;
 }
 
+/* Aggiunta per il contenitore delle due immagini sovrapposte */
+.cross-fade-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+   
 /* L'immagine sotto deve cambiare istantaneamente */
 #js-main-photo-bg {
     transition: none;
@@ -425,25 +436,5 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
