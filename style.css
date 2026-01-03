@@ -258,24 +258,49 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .lightbox.active { display: flex; }
 
-/* Contenitore che limita la grandezza su Desktop */
+/* Wrapper principale */
 .lightbox-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: auto; /* Si adatta alla foto */
-    height: auto;
-    max-width: 850px; /* LIMITE FISSO DESKTOP: la foto non sarà mai più larga di così */
-    max-height: 85vh; /* Non supera l'altezza dello schermo */
+    width: 90%; 
+    max-width: 850px; 
+    height: 85vh; /* Altezza fissa per evitare salti tra foto diverse */
 }
 
-.lightbox-content { 
+/* Nuovo contenitore per il cross-fade */
+.cross-fade-container-lb {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Regole comuni per le due immagini del lightbox */
+.lightbox-content, #js-lightbox-img-bg { 
+    position: absolute; /* Sovrapposizione perfetta */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-width: 100%;
-    max-height: 85vh;
-    object-fit: contain; 
+    max-height: 100%;
+    object-fit: contain; /* Mantiene le proporzioni originali */
     display: block;
-    border: 1px solid #3e1b08; /* Opzionale: un filo di bordo per staccare dal nero */
+}
+
+/* Solo l'immagine sopra sfuma */
+#js-lightbox-img {
+    z-index: 2;
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* L'immagine sotto copre il cambio */
+#js-lightbox-img-bg {
+    z-index: 1;
+    transition: none;
 }
 
 .lb-arrow, .close-lightbox { 
@@ -288,7 +313,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: absolute; 
 }
 
-/* X vicina alla foto */
 .close-lightbox { 
     top: -45px; 
     right: -10px;
@@ -403,31 +427,39 @@ input[type="text"], input[type="email"], textarea {
     }
 
    .lightbox-wrapper {
-        width: 85%;
-        height: auto;
+        width: 95%; /* Leggermente più largo per usare bene lo schermo */
+        height: 70vh; /* Altezza fissa anche qui per stabilità durante il fade */
+        max-width: none;
+    }
+
+    .cross-fade-container-lb {
+        width: 100%;
+        height: 100%;
     }
    
-    .lightbox-content {
+    .lightbox-content, #js-lightbox-img-bg {
         max-height: 70vh;
+        width: auto;
+        max-width: 100%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
    .lb-arrow { 
-        font-size: 1.8rem;
-        padding: 10px;
+        font-size: 2.2rem; /* Leggermente più grandi per il touch */
+        padding: 5px;
     }
    
-    .lb-prev {
-       left: -35px;
-    }
-   
-    .lb-next {
-       right: -35px;
-    }
+    /* Frecce più vicine ai bordi per non coprire troppo la foto */
+    .lb-prev { left: 5px; }
+    .lb-next { right: 5px; }
    
     .close-lightbox { 
-        top: -45px; 
-        right: 0; 
-        font-size: 35px;
+        top: -50px; 
+        right: 10px; 
+        font-size: 40px;
     }
 
     /* Contatti */
@@ -436,5 +468,6 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
