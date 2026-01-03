@@ -346,16 +346,14 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: absolute; 
 }
 
-/* X vicina all'angolo alto-destro dell'immagine */
-
+/* X vicina all'angolo alto-destro */
 .close-lightbox { 
-    top: -30px; 
-    right: -10px; 
+    top: -40px;    /* Era -30px, la alziamo un pelo per staccarla */
+    right: 0;      /* Era -10px, ora è allineata al bordo del contenitore */
     font-size: 45px; 
 }
 
-/* Frecce vicine ai fianchi dell'immagine */
-
+/* Frecce: Avvicinate modificando left/right */
 .lb-arrow {
     top: 50%; 
     transform: translateY(-50%);
@@ -363,8 +361,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     padding: 10px;
 }
 
-.lb-prev { left: -50px; } 
-.lb-next { right: -50px; }
+/* Prima erano -50px (fuori dal box). 
+   Mettendo 0 o 10px le portiamo DENTRO o sul bordo del box immaginario della foto.
+*/
+.lb-prev { left: 10px; }  
+.lb-next { right: 10px; }
+
 .lb-arrow:hover, .close-lightbox:hover { color: #fff !important; }
 
 /* 6. Adattamento Mobile */
@@ -557,6 +559,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
