@@ -343,6 +343,7 @@ function renderProductDetail(data) {
             }
         }
     };
+}
 
 init();
 
@@ -520,6 +521,7 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
 
 
