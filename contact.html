@@ -20,21 +20,23 @@
     <h2 class="section-title no-upper">Get In Touch</h2>
     
     <div style="text-align: left; margin: 20px auto 40px auto; max-width: 600px; padding: 0 20px; line-height: 1.6;">
-      Write to us for any information or inquiries.<br>
+      Write to us for any information or inquiries!<br>
       We will get back to you as soon as possible.
-    </div> <form action="https://formspree.io/f/xrebqzaq" method="POST"
-          style="max-width: 600px; margin: 30px auto 0 auto; display: flex; flex-direction: column; gap: 15px;">
-      <div class="contact-form-row" style="display: flex; gap: 15px;"> <input type="text" name="name" placeholder="Name" required 
+    </div>
+      <form action="https://formspree.io/f/xrebqzaq" method="POST"
+      style="max-width: 600px; margin: 30px auto 0 auto; display: flex; flex-direction: column; gap: 15px;">
+          <div class="contact-form-row" style="display: flex; gap: 15px;"> 
+              <input type="text" name="name" placeholder="Name" autocomplete="given-name" required 
                style="flex: 1; padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;">
-        <input type="text" name="surname" placeholder="Surname" required 
+              <input type="text" name="surname" placeholder="Surname" autocomplete="family-name" required 
                style="flex: 1; padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;">
-      </div>
-      <input type="email" name="email" placeholder="Email" required
-             style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;">
-      <textarea name="message" placeholder="Your message" rows="6" required
-                style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;"></textarea>
-      <button type="submit" class="contact-btn">Send Message</button>
-    </form>
+          </div>
+              <input type="email" name="email" placeholder="Email" autocomplete="email" required
+              style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;">
+              <textarea name="message" placeholder="Your message" rows="6" required
+              style="padding: 10px; border: 1px solid #e0ddd5; font-family: inherit;"></textarea>
+              <button type="submit" class="contact-btn">Send Message</button>
+        </form>
   </div>
 </main> <footer id="contacts">
   <div class="social-links">
@@ -50,6 +52,7 @@
 </body>
 
 </html>
+
 
 
 
