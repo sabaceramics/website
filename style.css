@@ -1,771 +1,424 @@
 /* =========================================
-
    1. IMPORT FONTS & RESET
-
    ========================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
-
-
 html { scroll-behavior: smooth; }
-
 * {
-
    margin: 0;
-
    padding: 0;
-
    box-sizing: border-box; 
-
   -webkit-tap-highlight-color: transparent;
-
 }
-
-
 
 body { 
-
     font-family: 'Montserrat', sans-serif; 
-
     line-height: 1.6; 
-
     color: #1a1a1a; 
-
     background-color: #f9f7f2; 
-
     width: 100%;
-
     overflow-x: hidden;
-
 }
 
-
-
 a { text-decoration: none; color: inherit; transition: 0.3s; }
-
 ul { list-style: none; }
-
 img { display: block; max-width: 100%; }
 
-
-
 /* =========================================
-
    2. TYPOGRAPHY & TITOLI
-
    ========================================= */
 
 .section-title {
-
     font-family: 'Cormorant Garamond', serif; 
-
     text-align: center; 
-
     letter-spacing: 2px; 
-
     margin: 40px 0 25px 0; 
-
     font-weight: 700; 
-
     font-size: 2rem; 
-
     color: #3e1b08; 
-
     text-transform: uppercase;
-
 }
-
-
 
 .no-upper { 
-
     text-transform: none !important; 
-
 }
-
-
 
 /* Usato per le intro nel catalogo e testi speciali */
 
 .intro-serif {
-
     font-family: 'Playfair Display', serif;
-
     font-style: normal;
-
     font-size: 1.1rem;
-
     color: #3e1b08;
-
     text-align: center;
-
     padding: 0 10px;
-
 }
 
-
-
 /* =========================================
-
    3. HEADER & NAVIGAZIONE
-
    ========================================= */
 
 .header { padding: 60px 5% 30px 5%; display: flex; flex-direction: column; align-items: center; }
-
 .logo { height: 320px; width: auto; margin-bottom: 25px; }
 
-
-
 nav { 
-
     border-top: 1px solid #1a1a1a; 
-
     border-bottom: 1px solid #1a1a1a; 
-
     padding: 15px 0; 
-
     width: 95%; max-width: 1400px; margin: 0 auto; 
-
     display: flex; justify-content: center; gap: 30px;
-
     background-color: #f9f7f2; 
-
     position: sticky; top: 0; z-index: 1000; 
-
 }
 
-
-
 nav a { 
-
     text-transform: uppercase; letter-spacing: 1.5px; 
-
     font-size: 0.95rem; font-weight: 600; color: #1a1a1a;
-
 }
 
 nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
-
-
 /* =========================================
-
    4. HOME PAGE
-
    ========================================= */
 
 /* Hero Section */
 
 .hero { padding: 40px 10%; max-width: 1200px; margin: 0 auto; }
-
 .hero-img { width: 100%; max-height: 550px; object-fit: cover; border: 1px solid #e0ddd5; margin-bottom: 35px; }
-
-
-
 .hero-text h1 {
-
     font-family: 'Cormorant Garamond', serif;
-
     font-weight: 600; font-size: 3rem; line-height: 1.2;
-
     text-align: center; color: #3e1b08; margin-bottom: 30px;
-
 }
 
 .hero-description p { margin-bottom: 1.4em; text-align: center; }
 
-
-
 /* About Us Section */
 
 .about-section-bg {
-
     background-color: #d9ccc4;
-
     width: 100%; padding: 30px 0; margin: 40px 0;
-
     display: flex; flex-direction: column; align-items: center;
 
 }
 
 .about-section-bg .section-title { margin-top: 0; margin-bottom: 50px; }
 
-
+.about-highlight {
+    font-family: 'Playfair Display', serif; /* Oppure 'Cormorant Garamond' */
+    font-size: 1.3rem; /* Leggermente più grande per farla risaltare */
+    font-style: italic; /* Opzionale, per dare un tocco più elegante */
+    color: #3e1b08;
+}
 
 .about-description {
-
     max-width: 900px; 
-
     margin: 0 auto 50px auto; 
-
     padding: 0 20px; 
-
     line-height: 1.7; 
-
     text-align: center; 
-
 }
-
-
 
 .about-description p {
-
     margin-bottom: 20px;
-
 }
 
-
-
 .about-box { 
-
     display: flex; align-items: center; gap: 30px; 
-
     background: white; padding: 30px; margin-bottom: 30px; 
-
     border: 1px solid #e0ddd5; border-radius: 4px;
-
     max-width: 950px; width: 90%; 
-
 }
 
 .about-thumb { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-
 .about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
-
 .about-info p i { font-size: 0.95rem; color: #1a1a1a; }
-
-
-
 #about { scroll-margin-top: 80px; }
-
-
 
 /* Auto Slider */
 
 .auto-slider {
-
     width: 100%; overflow: hidden; background: #f9f7f2; padding: 30px 0;
-
     cursor: grab; user-select: none;
-
 }
 
 .auto-slider:active { cursor: grabbing; }
-
 .slider-track { display: flex; gap: 15px; width: max-content; }
-
 .slider-track img { height: 600px; width: auto; border: 1px solid #e0ddd5; pointer-events: none; -webkit-user-drag: none; }
 
-
-
 /* =========================================
-
    5. CATALOGO
-
    ========================================= */
 
 .catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap;
 
 }
 
-
-
 .filter-btn { 
-
     background-color: #f9f7f2; color: #3e1b08; border: none; padding: 10px 22px;
-
     text-transform: uppercase; font-size: 0.90rem; font-weight: 600; letter-spacing: 1.5px;
-
     cursor: pointer; transition: 0.4s ease; 
-
 }
 
 .filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
 
-
-
 /* 1. Forza il contenitore nel catalogo a ignorare il limite dei 1200px */
 
 .hero:has(.product-grid) {
-
     max-width: 1600px !important; 
-
     padding: 40px 2% !important; /* Riduce il padding laterale dal 10% al 2% */
-
 }
-
-
 
 .product-grid { 
-
     display: grid; 
-
     grid-template-columns: repeat(4, 1fr); 
-
     gap: 30px; 
-
     max-width: 1350px; 
-
     margin: 0 auto; 
-
     padding: 0 20px; 
-
 }
-
-
 
 .product-card {
-
     background: white;
-
     padding: 10px;
-
     border: 1px solid #e0ddd5;
-
     transition: transform 0.3s ease;
-
     display: block;
-
     width: 100%;
-
     box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-
 }
-
-
 
 .product-card img { 
-
     width: 100%; 
-
     height: 280px !important; 
-
     object-fit: cover; 
-
     display: block;
-
 }
-
-
 
 .product-card:hover { 
-
     transform: scale(1.03);
-
 }
-
-
 
 /* Paginazione */
 
 .pagination-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
-
 .page-btn {
-
     background-color: white; border: 1px solid #3e1b08; color: #3e1b08;
-
     padding: 10px 20px; cursor: pointer; font-weight: 600; text-transform: uppercase; transition: 0.3s;
-
 }
 
 .page-btn:hover { background-color: #3e1b08; color: white; }
-
 .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-
-
 /* =========================================
-
    6. PAGINA PRODOTTO
-
    ========================================= */
 
 .product-container { display: flex; gap: 40px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; align-items: flex-start; }
-
 .product-media { flex: 1; min-width: 300px; max-width: 550px; display: flex; flex-direction: column; gap: 15px; }
 
-
-
 .slider-wrapper { 
-
     position: relative; width: 100%; height: 500px; 
-
     border: 1px solid #e0ddd5; background: #fff; cursor: zoom-in; 
-
     display: flex; align-items: center; justify-content: center; overflow: hidden; 
-
 }
 
 #js-main-photo { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-
-
 .slider-arrow { 
-
     position: absolute; top: 50%; transform: translateY(-50%); 
-
     background: rgba(255,255,255,0.7); border: none; padding: 15px 10px; 
-
     cursor: pointer; font-size: 20px; transition: 0.3s; 
-
 }
 
 .slider-arrow:hover { 
-
     position: absolute; 
-
     top: 50%; 
-
     transform: translateY(-50%); 
-
     background: transparent !important; /* Sempre trasparente */
-
     border: none; 
-
     padding: 15px 10px; 
-
     cursor: pointer; 
-
     font-size: 24px; 
-
     font-weight: bold;
-
     color: #e9e0d2; /* Colore di default */
-
     transition: color 0.3s ease; 
-
     z-index: 15;
-
 }
-
-
 
 .slider-arrow { 
-
     position: absolute; top: 50%; transform: translateY(-50%); 
-
     background: transparent !important; border: none; padding: 15px 10px; 
-
     cursor: pointer; font-size: 24px; transition: 0.3s; 
-
     color: #e9e0d2;
-
     z-index: 10;
-
 }
-
-
 
 .slider-arrow:hover { 
-
     background: transparent !important; 
-
     color: #472710;
-
 }
-
-
 
 .prev { left: 0; }
-
 .next { right: 0; }
-
-
-
 .thumbnail-container { display: flex; gap: 8px; overflow-x: auto; padding: 5px 0; }
-
 .thumb { width: 65px; height: 65px; object-fit: cover; border: 1px solid #e0ddd5; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
-
 .thumb.active { border: 2px solid #3e1b08; }
-
-
-
 .product-info-text { flex: 1.5; position: sticky; top: 100px; }
-
 #js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 800 !important; font-size: 2rem; color: #3e1b08; letter-spacing: 1px; }
-
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
-
-
-
-
 /* --- CROSS-FADE SCHEDA PRODOTTO --- */
-
-
 
 /* --- 1. LOGICA CROSS-FADE (Sovrapposizione Totale) --- */
 
 .cross-fade-container, 
-
 .cross-fade-container-lb {
-
     position: relative;
-
     width: 100%;
-
     height: 100%;
-
     display: block; 
-
     overflow: visible; 
-
 }
-
-
 
 /* Regola UNIFICATA per centrare sempre e comunque */
 
 .cross-fade-container img,
-
 .cross-fade-container-lb img {
-
     position: absolute;
-
     top: 50%;
-
     left: 50%;
-
     transform: translate(-50%, -50%);
-
     width: auto;
-
     height: auto;
-
     max-width: 100%;
-
     max-height: 100%;
-
     object-fit: contain;
-
     margin: 0; 
-
 }
-
-
 
 #js-main-photo-bg, #js-lightbox-img-bg {
-
     z-index: 1;
-
     transition: none;
-
     opacity: 1;
-
 }
-
-
 
 #js-main-photo, #js-lightbox-img {
-
     z-index: 2;
-
 }
-
-
 
 /* --- 2. STRUTTURA LIGHTBOX --- */
 
 .lightbox { 
-
     display: none;
-
     position: fixed;
-
     z-index: 99999;
-
     left: 0; top: 0; 
-
     width: 100%;
-
     height: 100%;
-
     background-color: rgba(0,0,0,0.95); 
-
     justify-content: center;
-
     align-items: center; 
-
 }
 
 .lightbox.active { display: flex; }
-
-
-
 .lightbox-wrapper {
-
     position: relative;
-
     width: 80%; /* Box spazioso per la foto */
-
     height: 85vh; 
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
 }
-
-
 
 /* --- 3. COMANDI (Vicine all'immagine) --- */
 
 .lb-arrow, .close-lightbox { 
-
     background: transparent !important; 
-
     border: none; 
-
     color: #e9e0d2; 
-
     cursor: pointer; 
-
     transition: all 0.3s ease; 
-
     z-index: 100001;
-
     position: absolute; 
-
 }
-
-
 
 /* X vicina all'angolo alto-destro dell'immagine */
 
 .close-lightbox { 
-
     top: -30px; 
-
     right: -10px; 
-
     font-size: 45px; 
-
 }
-
-
 
 /* Frecce vicine ai fianchi dell'immagine */
 
 .lb-arrow {
-
     top: 50%; 
-
     transform: translateY(-50%);
-
     font-size: 3.5rem;
-
     padding: 10px;
-
 }
 
 .lb-prev { left: -50px; } 
-
 .lb-next { right: -50px; }
-
-
-
 .lb-arrow:hover, .close-lightbox:hover { color: #fff !important; }
-
-
 
 /* 6. Adattamento Mobile */
 
 @media (max-width: 768px) {
-
     .lightbox-wrapper {
-
         width: 90%;
-
         height: 60vh;
-
     }
-
-    
 
     .lb-arrow {
-
         font-size: 3rem;
-
     }
-
-    
 
     .lb-prev { left: -40px; }
-
     .lb-next { right: -40px; }
-
-    
-
     .close-lightbox {
-
         right: 0;
-
         top: -60px;
-
     }
-
 }
-
-
 
 /* Buttons & Forms */
 
 .contact-btn { 
 
     display: inline-block; background-color: #f9f7f2; color: #3e1b08; border: 1px solid #3e1b08; 
-
     padding: 15px 35px; text-transform: uppercase; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; 
-
     transition: 0.4s ease; 
-
 }
 
 .contact-btn:hover { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.05); }
 
-
-
 /* =========================================
-
    7. FOOTER & CONTATTI
-
    ========================================= */
 
 #contacts { padding: 60px 5%; text-align: center; background-color: #e9e1d3; margin-top: 50px; }
-
 .social-links { display: flex; justify-content: center; gap: 25px; margin-top: 25px; }
-
 .social-links img { width: 30px; transition: 0.4s; }
-
 .social-links a:hover img { transform: scale(1.3); }
-
 .copyright { font-size: 0.75rem; color: #8e7e72; margin-top: 20px; }
-
 
 
 /* Input Forms */
 
 .contact-form-row { display: flex; gap: 15px; width: 100%; }
-
 .contact-form-row input { flex: 1; min-width: 0; }
-
 input[type="text"], input[type="email"], textarea {
-
     box-sizing: border-box !important; width: 100%; padding: 10px; 
-
     border: 1px solid #e0ddd5; font-family: inherit;
-
 }
 
-
-
 /* =========================================
-
    8. MEDIA QUERIES (MOBILE)
-
    ========================================= */
 
 @media (max-width: 768px) {
@@ -773,253 +426,133 @@ input[type="text"], input[type="email"], textarea {
     /* Header & Navigazione */
 
     .logo { height: 170px; }
-
     .header { padding: 20px 5% 5px 5%; }
-
-    
 
     nav { 
 
         flex-wrap: wrap !important;
-
         gap: 12px 15px; 
-
         width: 100%; 
-
         padding: 10px 5%; 
-
         justify-content: center;
-
     }
 
     nav a { 
-
         font-size: 0.72rem !important; 
-
         letter-spacing: 0.5px; 
-
         white-space: nowrap; 
-
     }
-
-
 
     /* Home */
 
     .hero { padding: 15px 5%; }
-
     .hero-img { height: 400px; max-height: 50vh; object-fit: cover; margin-top: 25px; margin-bottom: 25px; }
-
     .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
-
     .hero-description p { text-align: left; }
-
     .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
-
     .about-thumb { width: 100px !important; height: 100px !important; }
-
      #about { scroll-margin-top: 40px }
-
-    
 
     /* Slider Mobile Home */
 
     .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
-
     .auto-slider { touch-action: pan-y !important; overflow-x: hidden; }
-
-
 
     /* Catalogo */
 
     .product-grid { 
-
        grid-template-columns: repeat(2, 1fr) !important; 
-
        gap: 15px !important; 
-
        padding: 0 15px !important; 
-
        max-width: 100% !important;
-
    }
-
-   
 
     .product-card {
-
        padding: 8px !important; 
-
    }
-
-
 
    .product-card img { 
-
     height: 180px !important; 
-
     object-fit: cover; 
-
    }
-
-   
 
     /* Pagina Prodotto Mobile */
 
     .product-container { 
-
         flex-direction: column; 
-
         padding: 10px 0; 
-
         gap: 15px; 
-
     }
-
-
 
     .product-media {
-
         width: 100% !important;
-
         max-width: 100% !important;
-
         min-width: 0 !important;
-
     }
-
-
 
     .slider-wrapper { 
-
        height: 400px !important; 
-
        width: 100% !important; 
-
        border: none; 
-
        background: transparent; 
-
        display: flex;
-
        align-items: center;
-
        justify-content: center;
-
    }
-
-
 
     .thumbnail-container {
-
         padding: 0 10px; 
-
     }
-
-
 
     .product-info-text { 
-
         padding: 0 20px; 
-
         text-align: left;
-
     }
-
-
 
    .lightbox-wrapper {
-
         width: 95%; /* Leggermente più largo per usare bene lo schermo */
-
         height: 70vh; /* Altezza fissa anche qui per stabilità durante il fade */
-
         max-width: none;
-
     }
-
-
 
     .cross-fade-container-lb {
-
         width: 100%;
-
         height: 100%;
-
     }
-
-   
 
     .lightbox-content, #js-lightbox-img-bg {
-
         max-height: 70vh;
-
         width: auto;
-
         max-width: 100%;
-
         position: absolute;
-
         top: 50%;
-
         left: 50%;
-
         transform: translate(-50%, -50%);
-
     }
 
-
-
-   #js-main-photo, #js-main-photo-bg, 
-
-.lightbox-content, #js-lightbox-img-bg { 
-
+   #js-main-photo, #js-main-photo-bg,.lightbox-content, #js-lightbox-img-bg { 
     position: absolute !important;
-
     display: block;
-
    }
 
-   
-
    .lb-arrow { 
-
         font-size: 2.2rem; /* Leggermente più grandi per il touch */
-
         padding: 5px;
-
     }
-
-   
 
     /* Frecce più vicine ai bordi per non coprire troppo la foto */
 
     .lb-prev { left: 5px; }
-
     .lb-next { right: 5px; }
-
-   
-
     .close-lightbox { 
-
         top: -50px; 
-
         right: 10px; 
-
         font-size: 40px;
-
     }
-
-
 
     /* Contatti */
 
-   
-
     .contact-form-row {
-
        flex-direction: column;
-
     }
-
 }
