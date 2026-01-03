@@ -253,11 +253,11 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: relative !important;
     width: 100%;
     height: 100%;
-    display: block !important; /* Evita l'affiancamento del flex */
+    display: block !important; 
     overflow: visible; 
 }
 
-/* Tutte le immagini dei due motori di cross-fade */
+/* Regola UNIFICATA per centrare sempre e comunque */
 .cross-fade-container img,
 .cross-fade-container-lb img {
     position: absolute !important;
@@ -269,16 +269,18 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     max-width: 100% !important;
     max-height: 100% !important;
     object-fit: contain;
+    margin: 0 !important; /* Rimuove margini che spostano l'immagine */
 }
 
 #js-main-photo-bg, #js-lightbox-img-bg {
-    z-index: 1;
+    z-index: 1 !important;
     transition: none !important;
+    opacity: 1 !important;
 }
 
 #js-main-photo, #js-lightbox-img {
-    z-index: 2;
-    transition: opacity 0.25s ease-in-out !important;
+    z-index: 2 !important;
+    /* transition: opacity 0.25s ease-in-out !important; <- Meglio gestirla da JS per controllo totale */
 }
 
 /* --- 2. STRUTTURA LIGHTBOX --- */
@@ -453,13 +455,6 @@ input[type="text"], input[type="email"], textarea {
        justify-content: center;
    }
 
-    #js-main-photo, #js-main-photo-bg { 
-       display: block;
-       width: 100% !important; 
-       height: 100% !important; 
-       object-fit: contain; 
-   }
-
     .thumbnail-container {
         padding: 0 10px; 
     }
@@ -490,6 +485,12 @@ input[type="text"], input[type="email"], textarea {
         transform: translate(-50%, -50%);
     }
 
+   #js-main-photo, #js-main-photo-bg, 
+.lightbox-content, #js-lightbox-img-bg { 
+    position: absolute !important;
+    display: block;
+   }
+   
    .lb-arrow { 
         font-size: 2.2rem; /* Leggermente più grandi per il touch */
         padding: 5px;
@@ -511,6 +512,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
