@@ -183,10 +183,17 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 /* "Respiro" tra i paragrafi confermato */
-.firing-info p {
-    margin-bottom: 25px;
-    font-size: 1.05rem; /* Leggermente più grande per riempire bene lo spazio */
-    line-height: 1.8;
+.firing-info h3 {
+    /* Stile copiato da .hero-text h1 */
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    color: #3e1b08;
+    margin-bottom: 30px;
+    
+    /* MODIFICA: Dimensione ridotta come richiesto */
+    font-size: 2.2rem; /* Era 3rem nella hero, qui lo facciamo più piccolo */
 }
 
 /* Immagine laterale (Raku/Saggar Process) */
@@ -199,13 +206,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     flex-shrink: 0; /* Impedisce all'immagine di schiacciarsi */
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Un po' di ombra per stile */
 }
-
-/* Gestione Mobile per il box descrizione */
-@media (max-width: 900px) {
-    .firing-box {
-        flex-direction: column-reverse; /* Immagine sopra o sotto il testo su mobile */
-        text-align: center;
-    }
     
     .firing-img {
         width: 250px;
@@ -229,13 +229,17 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: relative;
     overflow: hidden;
     
-    /* MODIFICA DRASTICA: Dimensioni fisse e contenute */
-    width: 260px;  /* Più stretto */
-    height: 460px; /* Altezza bloccata, non diventa una colonna infinita */
+    /* MODIFICA: 1.5 volte più larghi di prima (260px * 1.5 = 390px) */
+    width: 390px; 
     
-    border-radius: 20px; /* Bordi più arrotondati stile telefono */
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2); /* Effetto galleggiamento */
+    /* L'altezza deve aumentare per mantenere la proporzione del video verticale 
+       altrimenti si vede tagliato. 660px è il giusto compromesso */
+    height: 660px; 
+    
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     background: #000;
+    margin: 0 auto; /* Centrati se vanno a capo */
 }
 
 /* Rimuovi il vecchio padding-bottom se c'era, ora usiamo height fissa */
@@ -574,6 +578,19 @@ input[type="text"], input[type="email"], textarea {
     .about-thumb { width: 100px !important; height: 100px !important; }
      #about { scroll-margin-top: 40px }
 
+   /* Firings */
+
+    .firing-box {
+        flex-direction: column-reverse; /* Immagine sopra o sotto il testo su mobile */
+        text-align: center;
+    }
+
+    .video-short-container {
+        width: 100%; /* Su cellulare occupa tutto lo spazio disponibile */
+        height: 80vh; /* Altezza adattabile */
+    }
+
+
     /* Slider Mobile Home */
 
     .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
@@ -677,6 +694,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
