@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firing Techniques | Saba Ceramics</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+
+<header class="header">
+  <a href="index.html"><img src="images/logo.png" alt="Saba Ceramics Logo" class="logo"></a>
+</header>
+
+<nav class="sticky-nav">
+  <a href="index.html" id="home">Home</a>
+  <a href="index.html#about" id="about-nav">About Us</a>
+  <a href="firings.html" class="active">Firings</a>
+  <a href="catalog.html" id="catalog">Catalog</a>
+  <a href="#contacts">Contacts</a>
+</nav>
+
+<main>
+  <section class="hero">
+    <img src="images/hero.jpg" alt="Firing Process" class="hero-img">
+    
+    <div class="hero-text">
+      <h1 class="section-title">Our Firing Techniques</h1>
+      <div class="intro-serif" style="max-width: 800px; margin: 0 auto 40px auto;">
+        <p>Fire is the final maker of our ceramics. We don't just cook the clay; we let the flames paint it. Here is how we work with the elements.</p>
+      </div>
+
+      <div class="catalog-filters">
+        <button class="filter-btn active" onclick="switchFiring('raku')">Raku</button>
+        <button class="filter-btn" onclick="switchFiring('saggar')">Saggar</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="raku-section" class="firing-content active">
+    <div class="about-box firing-box">
+      <div class="firing-info">
+        <h3>American Raku</h3>
+        <p>Raku is all about the shock of the moment. We pull the piece red-hot from the kiln at roughly 950°C and place it immediately into combustible material like sawdust or paper. The sudden change in temperature and the thick smoke create unique effects. The unglazed clay turns black from the carbon, while the glazes crackle or turn metallic depending on the oxygen reduction. It is a quick, intense process where we have to act fast and accept the unpredictable nature of fire.</p>
+      </div>
+      <img src="images/raku-process.jpg" alt="Raku Firing Process" class="about-thumb firing-img">
+    </div>
+
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/TUO_ID_VIDEO_RAKU" title="Raku Firing Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section id="saggar-section" class="firing-content" style="display: none;">
+    <div class="about-box firing-box">
+      <div class="firing-info">
+        <h3>Saggar Firing</h3>
+        <p>Saggar firing is a method of containment. We place the pot inside a larger container (the saggar) or wrap it in foil before putting it in the kiln. Inside this closed space, we add organic materials like dried banana skins, copper wire, seaweed, or salt. As the kiln heats up, these materials burn and fume, trapping the vapors around the pot. Since the clay is porous, it absorbs these fumes, creating soft clouds of color—pinks, greys, and oranges—that look like landscapes painted by smoke.</p>
+      </div>
+      <img src="images/saggar-process.jpg" alt="Saggar Firing Process" class="about-thumb firing-img">
+    </div>
+
+    <div class="video-container">
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/TUO_ID_VIDEO_SAGGAR" title="Saggar Firing Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contacts">
+    <h2 class="section-title" style="text-transform: capitalize;">Get in Touch</h2>
+    <div class="social-links">
+      <a href="https://wa.me/393294020926" target="_blank"><img src="images/whatsapp.png" alt="WhatsApp"></a>
+      <a href="https://ig.me/m/saba.ceramics" target="_blank"><img src="images/instagram.png" alt="Instagram"></a>
+      <a href="https://www.facebook.com/profile.php?id=61570442885429" target="_blank"><img src="images/facebook.png" alt="Facebook"></a>
+      <a href="https://in.pinterest.com/sabaceramics/" target="_blank"><img src="images/pinterest.png" alt="Pinterest"></a>
+      <a href="contact.html"><img src="images/email.png" alt="Email"></a>
+    </div>
+    <p class="copyright">© <span id="year"></span> SABA Ceramics. All rights reserved.</p>
+</footer>
+
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+  
+  // Script semplice per lo switch (Tab)
+  function switchFiring(type) {
+    // Gestione visualizzazione sezioni
+    const rakuSec = document.getElementById('raku-section');
+    const saggarSec = document.getElementById('saggar-section');
+    
+    if (type === 'raku') {
+      rakuSec.style.display = 'block';
+      saggarSec.style.display = 'none';
+    } else {
+      rakuSec.style.display = 'none';
+      saggarSec.style.display = 'block';
+    }
+
+    // Gestione stato attivo bottoni
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.innerText.toLowerCase().includes(type)) {
+        btn.classList.add('active');
+      }
+    });
+  }
+</script>
+<script src="script.js"></script>
+
+</body>
+</html>
