@@ -184,7 +184,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .firing-img {
     width: 441px; 
     height: 644px; 
-    border-radius: 4px; /* Meno rotondo per le tecniche, o 50% se preferisci cerchio */
+    border-radius: 50%; /* Meno rotondo per le tecniche, o 50% se preferisci cerchio */
 }
 
 /* Contenitore Responsive per YouTube */
@@ -635,6 +635,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
