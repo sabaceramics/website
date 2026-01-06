@@ -177,69 +177,63 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     gap: 60px; /* Più spazio tra testo e immagine */
 }
 
-.firing-info {
-    flex: 1; 
-    /* Il testo ora prenderà tutto lo spazio disponibile */
-}
-
-/* "Respiro" tra i paragrafi confermato */
 .firing-info h3 {
-    /* Stile copiato da .hero-text h1 */
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
     line-height: 1.2;
-    text-align: center;
     color: #3e1b08;
-    margin-bottom: 30px;
-    
-    /* MODIFICA: Dimensione ridotta come richiesto */
-    font-size: 2.2rem; /* Era 3rem nella hero, qui lo facciamo più piccolo */
+    margin-bottom: 20px;
+    text-align: left; 
+    font-size: 1.7rem; 
+}
+
+.firing-info p {
+    /* MODIFICA: Aumentata la spaziatura tra i paragrafi */
+    margin-bottom: 30px; 
+    line-height: 1.8;
+    color: #333;
+}
+
+.firing-info p:last-of-type {
+    margin-bottom: 40px;
 }
 
 /* Immagine laterale (Raku/Saggar Process) */
 .firing-img {
     /* RIDOTTO: La rendiamo un po' più piccola per lasciare spazio al testo */
-    width: 350px; 
-    height: 350px; /* La facciamo quadrata/tonda perfetta */
+    width: 250px; 
+    height: 250px; /* La facciamo quadrata/tonda perfetta */
     border-radius: 50%; 
     object-fit: cover;
     flex-shrink: 0; /* Impedisce all'immagine di schiacciarsi */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Un po' di ombra per stile */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 30px;/* Un po' di ombra per stile */
 }
     
-    .firing-img {
-        width: 250px;
-        height: 250px;
-        margin-bottom: 30px;
-    }
-}
 
 /*VIDEO SHORTS (Più piccoli e meno "colonne")*/
 
 .shorts-wrapper {
     display: flex;
+    flex-direction: row; 
     justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 30px; 
     width: 100%;
-    margin: 0 auto;
+    max-width: 1200px; /* Assicura che ci sia spazio per due video da 390px */
+    margin: 40px auto;
 }
 
 .video-short-container {
     position: relative;
     overflow: hidden;
-    
-    /* MODIFICA: 1.5 volte più larghi di prima (260px * 1.5 = 390px) */
     width: 390px; 
-    
-    /* L'altezza deve aumentare per mantenere la proporzione del video verticale 
-       altrimenti si vede tagliato. 660px è il giusto compromesso */
     height: 660px; 
-    
     border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
     background: #000;
-    margin: 0 auto; /* Centrati se vanno a capo */
+    /* Rimuoviamo margini laterali che potrebbero spingere il video sotto */
+    margin: 0; 
 }
 
 /* Rimuovi il vecchio padding-bottom se c'era, ora usiamo height fissa */
@@ -585,6 +579,11 @@ input[type="text"], input[type="email"], textarea {
         text-align: center;
     }
 
+   .shorts-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .video-short-container {
         width: 100%; /* Su cellulare occupa tutto lo spazio disponibile */
         height: 80vh; /* Altezza adattabile */
@@ -694,6 +693,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
