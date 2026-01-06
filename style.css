@@ -171,7 +171,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 .firing-info {
-    flex: 1;
+    flex: 1; margin-bottom: 1.4em
 }
 
 .firing-info h3 {
@@ -635,6 +635,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
