@@ -519,23 +519,6 @@ input[type="text"], input[type="email"], textarea {
 }
 
 
-
-/* Mobile adjustments per firings */
-@media (max-width: 768px) {
-    .firing-box {
-        flex-direction: column-reverse;
-        text-align: center;
-        padding: 20px;
-    }
-    .firing-img {
-        width: 100%;
-        height: auto;
-        max-height: 300px;
-        margin-bottom: 20px;
-    }
-}
-
-
 /* =========================================
    9. MEDIA QUERIES (MOBILE)
    ========================================= */
@@ -574,9 +557,21 @@ input[type="text"], input[type="email"], textarea {
 
    /* Firings */
 
+    .firing-img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        margin-bottom: 20px;
+    }
+   
+   .firing-info h3 {
+        text-align: left; 
+    }
+
     .firing-box {
-        flex-direction: column-reverse; /* Immagine sopra o sotto il testo su mobile */
-        text-align: center;
+        display: flex;
+        flex-direction: column-reverse;
+        text-align: left;
     }
 
    .shorts-wrapper {
@@ -693,6 +688,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
