@@ -154,6 +154,15 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
    5. PAGINA FIRINGS
    ========================================= */
 
+/* Questa classe agisce solo sull'immagine della pagina Firings */
+.firing-hero-img {
+    width: 100%;
+    /* Impostiamo un'altezza fissa o una percentuale della viewport (es. 40vh) */
+    height: 400px; 
+    object-fit: cover; /* Ritaglia l'immagine mantenendone le proporzioni */
+    object-position: center; /* Centra l'immagine */
+}
+
 .firing-content {
     animation: fadeIn 0.5s ease-in-out;
     padding-bottom: 50px;
@@ -164,14 +173,14 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Adatta il box esistente per la pagina firings */
 .firing-box {
     margin: 0 auto 40px auto;
     justify-content: space-between;
 }
 
 .firing-info {
-    flex: 1; margin-bottom: 1.4em
+    flex: 1; 
+    margin-bottom: 1.4em;
 }
 
 .firing-info h3 {
@@ -181,25 +190,53 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     margin-bottom: 15px;
 }
 
+/* MODIFICA: Spaziatura tra i paragrafi (Il "respiro" richiesto) */
+.firing-info p {
+    margin-bottom: 25px; /* Aumentato lo spazio sotto ogni paragrafo */
+    text-align: justify; /* Opzionale: giustifica il testo per eleganza */
+}
+/* Rimuove il margine dall'ultimo paragrafo per pulizia */
+.firing-info p:last-child {
+    margin-bottom: 0;
+}
+
 .firing-img {
     width: 441px; 
     height: 644px; 
-    border-radius: 50%; /* Meno rotondo per le tecniche, o 50% se preferisci cerchio */
+    border-radius: 50%; 
+    object-fit: cover; /* Assicura che la foto riempia il cerchio/ovale */
 }
 
-/* Contenitore Responsive per YouTube */
-.video-container {
+/* =========================================
+   MODIFICA: Video Shorts (Verticali)
+   ========================================= */
+
+/* Wrapper per mettere i video affiancati */
+.shorts-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Spazio tra i due video */
+    flex-wrap: wrap; /* Manda a capo su mobile */
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Contenitore del singolo Short */
+.video-short-container {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    /* Rapporto 9:16 per gli Shorts (Verticale) */
+    padding-bottom: 177.77%; 
     height: 0;
     overflow: hidden;
-    max-width: 950px;
-    margin: 0 auto;
+    width: 320px; /* Larghezza fissa per renderli "più piccoli" e simili a un telefono */
+    max-width: 90vw; /* Per schermi piccolissimi */
     border: 1px solid #e0ddd5;
     background: #000;
+    border-radius: 12px; /* Un tocco estetico arrotondato tipico degli shorts */
+    margin: 0 auto; /* Centra se sono in colonna */
 }
 
-.video-container iframe {
+.video-short-container iframe {
     position: absolute;
     top: 0;
     left: 0;
@@ -556,7 +593,7 @@ input[type="text"], input[type="email"], textarea {
    }
 
     /* Pagina Prodotto Mobile */
-
+   
     .product-container { 
         flex-direction: column; 
         padding: 10px 0; 
@@ -635,6 +672,7 @@ input[type="text"], input[type="email"], textarea {
        flex-direction: column;
     }
 }
+
 
 
 
