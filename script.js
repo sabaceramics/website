@@ -207,18 +207,17 @@ function renderProductDetail(data) {
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
-    // --- NUOVO CODICE PER IL BOTTONE ETSY ---
-    // Cerchiamo il bottone che ha la classe "contact-btn"
+    // --- NUOVO CODICE PER IL BOTTONE ETSY (STRATEGIA TITOLO) ---
     const ctaBtn = document.querySelector('.contact-btn');
     if (ctaBtn) {
-        // Prendiamo lo SKU dal CSV
-        const skuToSearch = item.SKU ? item.SKU.trim() : "";
+        // Usiamo il TITOLO INTERO per cercare su Etsy
+        const titleToSearch = item.TITOLO ? item.TITOLO.trim() : "";
         
-        if (skuToSearch) {
-            // Costruiamo il link che cerca quel preciso SKU nel tuo negozio
-            ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${skuToSearch}`;
+        if (titleToSearch) {
+            // encodeURIComponent gestisce spazi e caratteri speciali
+            ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${encodeURIComponent(titleToSearch)}`;
             ctaBtn.textContent = "VIEW ON ETSY SHOP";
-            // Lasciamo target="_blank" così apre una nuova scheda
+            ctaBtn.target = "_blank"; // Apre nuova scheda
         }
     }
     // ------------------------------------------
