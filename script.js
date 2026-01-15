@@ -11,15 +11,20 @@ async function init() {
         const response = await fetch(CSV_FILE);
         if (!response.ok) throw new Error("File CSV non trovato");
         const csvText = await response.text();
+        
         Papa.parse(csvText, {
             header: true, 
             skipEmptyLines: true, 
-            delimiter: ",", 
+            delimiter: ";", // <--- AGGIORNATO: Usa il punto e virgola come nel tuo file
             quoteChar: '"',
             transformHeader: function(h) {
+                // Pulisce le intestazioni e le rende maiuscole (es. "Title" -> "TITLE")
                 return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
             },
             complete: function(results) {
+                // Debug: Controlla se legge le colonne giuste
+                console.log("CSV Caricato. Colonne trovate:", results.meta.fields);
+
                 // Routing semplice in base alla pagina
                 if (window.location.pathname.includes('product.html')) {
                     renderProductDetail(results.data);
@@ -41,15 +46,16 @@ async function init() {
 
 // Funzione di supporto per creare lo slug SEO
 function createSlug(text) {
+    if (!text) return "";
     return text
         .toString()
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
-        .replace(/\s+/g, '-')      
+        .replace(/\s+/g, '-')       
         .replace(/[^\w-]+/g, '')  
-        .replace(/--+/g, '-');    
+        .replace(/--+/g, '-');     
 }
 
 // Rendering catalogo
@@ -68,28 +74,30 @@ function renderCatalog() {
 
     // 2. Renderizziamo le card
     paginatedItems.forEach((item) => {
-        if (!item.TITOLO || !item.IMMAGINE1 || !item.SKU) return;
+        // AGGIORNATO: Controllo sui nomi in INGLESE (TITLE, IMAGE1)
+        if (!item.TITLE || !item.IMAGE1 || !item.SKU) return;
         
-        const titleSlug = createSlug(item.TITOLO).substring(0, 50);
+        const titleSlug = createSlug(item.TITLE).substring(0, 50);
         const sku = item.SKU.trim();
         
         const card = document.createElement('a');
         card.href = `product.html?sku=${sku}&name=${titleSlug}`;
         card.className = 'product-card'; 
         
-        card.innerHTML = `<img src="${item.IMMAGINE1.trim()}" alt="${item.TITOLO}">`;
+        // AGGIORNATO: item.IMAGE1 invece di item.IMMAGINE1
+        card.innerHTML = `<img src="${item.IMAGE1.trim()}" alt="${item.TITLE}">`;
         grid.appendChild(card);
     });
 
     // 3. Renderizziamo i controlli Paginazione
     renderPaginationControls(paginationContainer);
     
-    // 4. Scroll in alto fino ai filtri senza coprire l'header
+    // 4. Scroll in alto
     const filterSection = document.querySelector('.catalog-filters:last-of-type');
     if (filterSection) {
         const headerOffset = document.querySelector('.sticky-nav').offsetHeight || 0;
         const elementPosition = filterSection.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset - 10; // 10px margine
+        const offsetPosition = elementPosition + window.scrollY - headerOffset - 10; 
         window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
     }
 }
@@ -97,7 +105,7 @@ function renderCatalog() {
 function renderPaginationControls(container) {
     const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
     
-    if (totalPages <= 1) return; // Se c'è una sola pagina, nascondiamo i bottoni
+    if (totalPages <= 1) return; 
 
     const prevBtn = document.createElement('button');
     prevBtn.innerText = "< PREV";
@@ -128,7 +136,6 @@ function renderPaginationControls(container) {
 // Gestore Filtri Catalogo
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('filter-btn')) {
-        // Aggiorna stile bottoni
         document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         e.target.classList.add('active');
         
@@ -139,13 +146,13 @@ document.addEventListener('click', function(e) {
             currentFilteredData = allProductsData;
         } else {
             currentFilteredData = allProductsData.filter(item => {
-                const searchText = (item.TITOLO + " " + (item.DESCRIZIONE || "")).toLowerCase();
+                // AGGIORNATO: Cerca su TITLE e DESCRIPTION (nomi inglesi)
+                const searchText = (item.TITLE + " " + (item.DESCRIPTION || "")).toLowerCase();
                 const root = cat.endsWith('s') ? cat.slice(0, -1) : cat;
                 return searchText.includes(root);
-});
+            });
         }
 
-        // Resetta a pagina 1 quando si cambia filtro
         currentPage = 1;
         renderCatalog();
     }
@@ -153,7 +160,6 @@ document.addEventListener('click', function(e) {
 
 
 // --- FUNZIONE DI SUPPORTO PER SWIPE MOBILE (SOLO SOTTO 768px) ---
-
 function enableMobileSwipe(element, callback) {
     let touchStartX = 0;
     let touchEndX = 0;
@@ -168,9 +174,9 @@ function enableMobileSwipe(element, callback) {
         if (window.innerWidth <= 768) {
             touchEndX = e.changedTouches[0].screenX;
             const diff = touchStartX - touchEndX;
-            if (Math.abs(diff) > 50) { // Sensibilità dello swipe
-                if (diff > 0) callback(1);  // Swipe sinistra -> avanti
-                else callback(-1);          // Swipe destra -> indietro
+            if (Math.abs(diff) > 50) { 
+                if (diff > 0) callback(1);  
+                else callback(-1);          
             }
         }
     }, { passive: true });
@@ -182,59 +188,62 @@ function renderProductDetail(data) {
     const params = new URLSearchParams(window.location.search);
     const skuFromUrl = params.get('sku'); 
     if (!skuFromUrl) return;
+    
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
     if (!item || !document.getElementById('js-product-title')) return;
 
-    let desc = item.DESCRIZIONE || ""; 
+    // AGGIORNATO: Usa DESCRIPTION e TITLE in inglese
+    let desc = item.DESCRIPTION || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-    const cleanTitle = `${item.TITOLO} | Saba Ceramics`;
+    const cleanTitle = `${item.TITLE} | Saba Ceramics`;
     const shortDesc = cleanDesc.substring(0, 160);
 
     document.title = cleanTitle;
     document.querySelector('meta[name="description"]')?.setAttribute("content", shortDesc);
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", cleanTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", shortDesc);
-    if (item.IMMAGINE1) {
-        document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMMAGINE1.trim());
+    
+    // AGGIORNATO: IMAGE1 invece di IMMAGINE1
+    if (item.IMAGE1) {
+        document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMAGE1.trim());
     }
 
     let images = [];
+    // AGGIORNATO: Ciclo su IMAGE1..IMAGE10
     for (let i = 1; i <= 10; i++) {
-        const url = item[`IMMAGINE${i}`];
+        const url = item[`IMAGE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
     }
 
-    document.getElementById('js-product-title').textContent = item.TITOLO;
+    document.getElementById('js-product-title').textContent = item.TITLE;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
-    // --- VERSIONE TITOLO INTERO "SANIFICATO" ---
-    // Prende TUTTO il titolo, ma trasforma la punteggiatura in spazi sicuri
+    // --- LOGICA BOTTONE ETSY (USA URL DIRETTO) ---
     const ctaBtn = document.querySelector('.contact-btn');
-    if (ctaBtn && item.TITOLO) {
-        // 1. Partiamo dal titolo completo
-        let cleanSearch = item.TITOLO.trim();
-        // 2. SOSTITUZIONE CHIRURGICA:
-        // Qualsiasi punto (.), virgola (,), trattino (-), underscore (_), slash (/)
-        // viene trasformato in un semplice spazio vuoto.
-        cleanSearch = cleanSearch.replace(/[.,\-_/|()"'&]/g, " ");
-        // 3. Ripuliamo i doppi spazi
-        cleanSearch = cleanSearch.replace(/\s+/g, " ");
-        // NOTA: Qui NON usiamo .slice(). Passiamo tutto il titolo intero.
-        ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${encodeURIComponent(cleanSearch)}`;
-        ctaBtn.textContent = "VIEW ON ETSY SHOP";
-        ctaBtn.target = "_blank"; 
-        // Controllo
-        console.log("Cerca su Etsy (Titolo Intero Pulito):", cleanSearch);
+    if (ctaBtn) {
+        // Cerca la colonna URL (nel tuo file è "URL")
+        const directLink = (item.URL || "").trim();
+        
+        if (directLink) {
+            ctaBtn.href = directLink;
+            ctaBtn.textContent = "VIEW ON ETSY SHOP";
+            ctaBtn.target = "_blank";
+            console.log("Link diretto trovato:", directLink);
+        } else {
+            // Fallback se manca il link: rimanda al negozio generale
+            ctaBtn.href = "https://www.etsy.com/shop/SabaCeramicArt";
+            ctaBtn.textContent = "VISIT ETSY SHOP";
+        }
     }
     // ------------------------------------------
     
-    // CARICAMENTO INIZIALE DOPPIO (Sopra e Sotto)
+    // CARICAMENTO FOTO
     const mainPhoto = document.getElementById('js-main-photo');
     const bgPhoto = document.getElementById('js-main-photo-bg');
     if (mainPhoto && images.length > 0) {
         mainPhoto.src = images[0];
-        mainPhoto.alt = item.TITOLO;
-        if (bgPhoto) bgPhoto.src = images[0]; // Fondamentale per il primo cambio
+        mainPhoto.alt = item.TITLE;
+        if (bgPhoto) bgPhoto.src = images[0]; 
     }
 
     const thumbContainer = document.getElementById('js-thumb-container');
@@ -252,39 +261,33 @@ function renderProductDetail(data) {
     let currentIdx = 0;
 
     const updateGallery = (index, imgs) => {
-    currentIdx = index;
-    const nextPhotoUrl = imgs[currentIdx];
+        currentIdx = index;
+        const nextPhotoUrl = imgs[currentIdx];
 
-    const applyFade = (mainId, bgId) => {
-    const mainImg = document.getElementById(mainId);
-    const bgImg = document.getElementById(bgId);
+        const applyFade = (mainId, bgId) => {
+            const mainImg = document.getElementById(mainId);
+            const bgImg = document.getElementById(bgId);
 
-    if (mainImg && bgImg) {
-        // 1. Copia l'immagine attuale sullo sfondo (livello 10)
-        // Questo la blocca lì ferma come base
-        bgImg.src = mainImg.src;
-        bgImg.style.opacity = '1';
+            if (mainImg && bgImg) {
+                bgImg.src = mainImg.src;
+                bgImg.style.opacity = '1';
 
-        // 2. Spegni la transizione e metti la nuova immagine a zero (livello 20)
-        mainImg.style.transition = 'none';
-        mainImg.style.opacity = '0';
-        mainImg.src = nextPhotoUrl;
+                mainImg.style.transition = 'none';
+                mainImg.style.opacity = '0';
+                mainImg.src = nextPhotoUrl;
 
-        // 3. Il trucco: aspettiamo un battito di ciglia (50ms) 
-        // per forzare il browser a registrare che l'immagine è invisibile
-        setTimeout(() => {
-            mainImg.style.transition = 'opacity 0.1s ease-in-out';
-            mainImg.style.opacity = '1';
-        }, 50);
-    }
-};
+                setTimeout(() => {
+                    mainImg.style.transition = 'opacity 0.1s ease-in-out';
+                    mainImg.style.opacity = '1';
+                }, 50);
+            }
+        };
 
-    applyFade('js-main-photo', 'js-main-photo-bg');
-    applyFade('js-lightbox-img', 'js-lightbox-img-bg');
+        applyFade('js-main-photo', 'js-main-photo-bg');
+        applyFade('js-lightbox-img', 'js-lightbox-img-bg');
 
-    // Aggiorna le miniature
-    document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
-};
+        document.querySelectorAll('.thumb').forEach((t, i) => t.classList.toggle('active', i === currentIdx));
+    };
 
     const changeSlide = (dir) => {
         currentIdx = (currentIdx + dir + images.length) % images.length;
@@ -294,21 +297,15 @@ function renderProductDetail(data) {
     const openLightbox = () => {
         const lb = document.getElementById('js-lightbox');
         const lbImg = document.getElementById('js-lightbox-img');
-        const lbBgImg = document.getElementById('js-lightbox-img-bg'); // AGGIUNTO
-    
+        const lbBgImg = document.getElementById('js-lightbox-img-bg'); 
+       
         if (lb && lbImg) {
             lb.style.display = "flex";
             lbImg.src = images[currentIdx];
-        
-        // Sincronizziamo subito l'immagine di sfondo del lightbox
-            if (lbBgImg) {
-                lbBgImg.src = images[currentIdx];
-            }
-        
-        // Reset opacità per sicurezza, così la foto è subito visibile
+            if (lbBgImg) lbBgImg.src = images[currentIdx];
             lbImg.style.opacity = '1';
-    }
-};
+        }
+    };
 
     const closeLightbox = () => {
         const lb = document.getElementById('js-lightbox');
@@ -337,7 +334,7 @@ function renderProductDetail(data) {
     if (lbPrev) lbPrev.onclick = (e) => { e.stopPropagation(); changeSlide(-1); };
     if (lbNext) lbNext.onclick = (e) => { e.stopPropagation(); changeSlide(1); };
     if (closeLbBtn) closeLbBtn.onclick = closeLightbox;
-   if (lightboxOverlay) {
+    if (lightboxOverlay) {
         lightboxOverlay.onclick = (e) => {
             if (e.target.id === 'js-lightbox' || 
                 e.target.classList.contains('lightbox-wrapper') ||
@@ -348,31 +345,17 @@ function renderProductDetail(data) {
     }
 
     document.onkeydown = function(e) {
-        // Se premo freccia sinistra -> cambia foto indietro
-        if (e.key === "ArrowLeft") {
-            changeSlide(-1);
-        } 
-        // Se premo freccia destra -> cambia foto avanti
-        else if (e.key === "ArrowRight") {
-            changeSlide(1);
-        } 
-        // Se premo ESC e il lightbox è aperto -> chiudi lightbox
-        else if (e.key === "Escape") {
-            const lb = document.getElementById('js-lightbox');
-            if (lb && lb.style.display === "flex") {
-                closeLightbox();
-            }
-        }
+        if (e.key === "ArrowLeft") changeSlide(-1);
+        else if (e.key === "ArrowRight") changeSlide(1);
+        else if (e.key === "Escape") closeLightbox();
     };
 }
 
 init();
 
-
-// --- GESTIONE SCROLL FLUIDO PER IL MENU ---
+// --- GESTIONE MENU & SLIDER (INVARIATA) ---
+// (Il resto del codice per il menu e lo slider home rimane uguale)
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 1. Logica per il tasto CATALOG (id="catalog")
     const catalogBtn = document.getElementById('catalog');
     if (catalogBtn) {
         catalogBtn.addEventListener('click', function(e) {
@@ -383,24 +366,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Logica per il tasto HOME (id="home")
     const homeBtn = document.getElementById('home');
     if (homeBtn) {
         homeBtn.addEventListener('click', function(e) {
             const isHomePage = window.location.pathname.endsWith('/') || 
                                window.location.pathname.includes('index.html') ||
                                window.location.pathname === "";
-
             if (isHomePage) {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                // Opzionale: pulisce l'URL dall'ancora #top
                 history.pushState(null, null, window.location.pathname);
             }
         });
     }
 
-    // 3. Logica per il tasto ABOUT US (id="about-nav")
     const aboutBtn = document.getElementById('about-nav');
     if (aboutBtn) {
         aboutBtn.addEventListener('click', function(e) {
@@ -415,12 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
 document.addEventListener('keydown', function(e) {
-    // Funziona solo se siamo in catalog.html
     if (window.location.pathname.includes('catalog.html')) {
         const totalPages = Math.ceil(currentFilteredData.length / ITEMS_PER_PAGE);
-        
         if (e.key === "ArrowRight") {
             if (currentPage < totalPages) {
                 currentPage++;
@@ -435,8 +411,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// --- LOGICA SLIDER DINAMICO (SOLO PER HOME) ---
-
+// --- SLIDER HOME ---
 function initDynamicSlider() {
     const track = document.getElementById('js-slider-track');
     const container = document.getElementById('js-slider-container');
@@ -445,20 +420,19 @@ function initDynamicSlider() {
     let isDown = false;
     let startX;
     let scrollLeft;
+    let startY;
     let currentId = 1;
     let loadedCount = 0;
 
     function loadNextImage() {
         const img = document.createElement('img');
         img.src = `images/pres${currentId}.jpg`;
-        
         img.onload = function() {
             track.appendChild(this);
             loadedCount++;
             currentId++;
             loadNextImage(); 
         };
-
         img.onerror = function() {
             if (this.src.endsWith('.jpg')) {
                 this.src = `images/pres${currentId}.JPG`;
@@ -475,57 +449,40 @@ function initDynamicSlider() {
         }
     }
 
-    // --- LOGICA DRAG & TOUCH UNIFICATA ---
-    
-    let startY; // Aggiungiamo questa variabile all'inizio dello script insieme alle altre
-
     const start = (e) => {
         isDown = true;
         const pageX = e.pageX || e.touches[0].pageX;
-        const pageY = e.pageY || e.touches[0].pageY; // Registriamo anche la Y iniziale
-        
+        const pageY = e.pageY || e.touches[0].pageY;
         startX = pageX - container.offsetLeft;
-        startY = pageY; // Serve per capire la direzione del movimento
+        startY = pageY;
         scrollLeft = container.scrollLeft;
     };
 
-    const end = () => {
-        isDown = false;
-    };
+    const end = () => { isDown = false; };
 
     const move = (e) => {
         if (!isDown) return;
-        
         const pageX = e.pageX || e.touches[0].pageX;
         const pageY = e.pageY || e.touches[0].pageY;
-        
         const x = pageX - container.offsetLeft;
         const walk = (x - startX) * 2;
-
-        // Calcoliamo quanto ci siamo mossi in orizzontale e in verticale
         const diffX = Math.abs(pageX - startX);
         const diffY = Math.abs(pageY - startY);
 
-        // Se il movimento è più orizzontale che verticale, muoviamo lo slider
         if (diffX > diffY) {
-            if (e.cancelable) e.preventDefault(); // Blocca lo scroll pagina SOLO se scorriamo lateralmente
+            if (e.cancelable) e.preventDefault();
             container.scrollLeft = scrollLeft - walk;
         } else {
-            // Se l'utente sta andando su/giù, interrompiamo il drag dello slider
             isDown = false; 
         }
     };
 
-    // Eventi Mouse
     container.addEventListener('mousedown', start);
     window.addEventListener('mouseup', end);
     container.addEventListener('mousemove', move);
-
-    // Eventi Touch (per Mobile)
     container.addEventListener('touchstart', start, { passive: true });
     window.addEventListener('touchend', end);
     container.addEventListener('touchmove', move, { passive: false }); 
-    // Nota: passive: false è necessario per permettere e.preventDefault() nel movimento
 
     function startAutoScroll() {
         function step() {
@@ -539,8 +496,5 @@ function initDynamicSlider() {
         }
         requestAnimationFrame(step);
     }
-
     loadNextImage();
 }
-
-
