@@ -207,20 +207,24 @@ function renderProductDetail(data) {
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
-    // --- CODICE CORRETTO (Pulisce il titolo per Etsy) ---
+    // --- VERSIONE TITOLO INTERO "SANIFICATO" ---
+    // Prende TUTTO il titolo, ma trasforma la punteggiatura in spazi sicuri
     const ctaBtn = document.querySelector('.contact-btn');
-    
     if (ctaBtn && item.TITOLO) {
-        // 1. Prendiamo il titolo e togliamo virgolette e virgole che rompono la ricerca
-        let cleanSearch = item.TITOLO.trim().replace(/["']/g, "").replace(/,/g, " ");
-        
-        // 2. Prendiamo solo le prime 10 parole (così è più preciso e sicuro)
-        cleanSearch = cleanSearch.split(' ').slice(0, 10).join(' ');
-
-        // 3. Creiamo il link
+        // 1. Partiamo dal titolo completo
+        let cleanSearch = item.TITOLO.trim();
+        // 2. SOSTITUZIONE CHIRURGICA:
+        // Qualsiasi punto (.), virgola (,), trattino (-), underscore (_), slash (/)
+        // viene trasformato in un semplice spazio vuoto.
+        cleanSearch = cleanSearch.replace(/[.,\-_/|()"'&]/g, " ");
+        // 3. Ripuliamo i doppi spazi
+        cleanSearch = cleanSearch.replace(/\s+/g, " ");
+        // NOTA: Qui NON usiamo .slice(). Passiamo tutto il titolo intero.
         ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${encodeURIComponent(cleanSearch)}`;
         ctaBtn.textContent = "VIEW ON ETSY SHOP";
-        ctaBtn.target = "_blank"; // Apre nuova scheda
+        ctaBtn.target = "_blank"; 
+        // Controllo
+        console.log("Cerca su Etsy (Titolo Intero Pulito):", cleanSearch);
     }
     // ------------------------------------------
     
@@ -538,4 +542,5 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
 
