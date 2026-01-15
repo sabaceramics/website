@@ -207,21 +207,23 @@ function renderProductDetail(data) {
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
-    // --- NUOVO CODICE PER IL BOTTONE ETSY (STRATEGIA TITOLO) ---
+    // --- CODICE CORRETTO (Pulisce il titolo per Etsy) ---
     const ctaBtn = document.querySelector('.contact-btn');
-    if (ctaBtn) {
-        // Usiamo il TITOLO INTERO per cercare su Etsy
-        const titleToSearch = item.TITOLO ? item.TITOLO.trim() : "";
+    
+    if (ctaBtn && item.TITOLO) {
+        // 1. Prendiamo il titolo e togliamo virgolette e virgole che rompono la ricerca
+        let cleanSearch = item.TITOLO.trim().replace(/["']/g, "").replace(/,/g, " ");
         
-        if (titleToSearch) {
-            // encodeURIComponent gestisce spazi e caratteri speciali
-            ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${encodeURIComponent(titleToSearch)}`;
-            ctaBtn.textContent = "VIEW ON ETSY SHOP";
-            ctaBtn.target = "_blank"; // Apre nuova scheda
-        }
+        // 2. Prendiamo solo le prime 10 parole (così è più preciso e sicuro)
+        cleanSearch = cleanSearch.split(' ').slice(0, 10).join(' ');
+
+        // 3. Creiamo il link
+        ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${encodeURIComponent(cleanSearch)}`;
+        ctaBtn.textContent = "VIEW ON ETSY SHOP";
+        ctaBtn.target = "_blank"; // Apre nuova scheda
     }
     // ------------------------------------------
-
+    
     // CARICAMENTO INIZIALE DOPPIO (Sopra e Sotto)
     const mainPhoto = document.getElementById('js-main-photo');
     const bgPhoto = document.getElementById('js-main-photo-bg');
@@ -536,3 +538,4 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
+
