@@ -207,6 +207,22 @@ function renderProductDetail(data) {
     document.getElementById('js-product-title').textContent = item.TITOLO;
     document.getElementById('js-product-desc').innerText = cleanDesc; 
 
+    // --- NUOVO CODICE PER IL BOTTONE ETSY ---
+    // Cerchiamo il bottone che ha la classe "contact-btn"
+    const ctaBtn = document.querySelector('.contact-btn');
+    if (ctaBtn) {
+        // Prendiamo lo SKU dal CSV
+        const skuToSearch = item.SKU ? item.SKU.trim() : "";
+        
+        if (skuToSearch) {
+            // Costruiamo il link che cerca quel preciso SKU nel tuo negozio
+            ctaBtn.href = `https://www.etsy.com/shop/SabaCeramicArt?search_query=${skuToSearch}`;
+            ctaBtn.textContent = "VIEW ON ETSY SHOP";
+            // Lasciamo target="_blank" così apre una nuova scheda
+        }
+    }
+    // ------------------------------------------
+
     // CARICAMENTO INIZIALE DOPPIO (Sopra e Sotto)
     const mainPhoto = document.getElementById('js-main-photo');
     const bgPhoto = document.getElementById('js-main-photo-bg');
@@ -521,18 +537,3 @@ function initDynamicSlider() {
 
     loadNextImage();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
