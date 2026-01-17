@@ -9,6 +9,17 @@ let currentPage = 1;
 const ITEMS_PER_PAGE = 24;    // Numero di prodotti per pagina
 
 async function init() {
+    
+    // --- MODIFICA: PULIZIA URL FACEBOOK/INSTAGRAM ---
+    // Se l'URL contiene parametri di tracciamento (fbclid), li rimuoviamo visivamente
+    if (window.location.search.includes('fbclid')) {
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('fbclid'); // Cancella il codice sporco
+        // Aggiorna la barra degli indirizzi senza ricaricare la pagina
+        window.history.replaceState(null, '', cleanUrl.toString());
+    }
+    // ------------------------------------------------
+
     try {
         // MODIFICA 1: Cache Busting (Aggiunto '?t=' + orario per forzare sempre dati freschi)
         const response = await fetch(DATA_URL + '?t=' + new Date().getTime());
