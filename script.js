@@ -1,47 +1,60 @@
-const CSV_FILE = 'EtsyListingsDownload.csv';
+// --- NUOVO CONFIGURAZIONE: LINK AL FILE JSON DI GITHUB ---
+// Questo link punta alla versione sempre aggiornata dei tuoi dati
+const DATA_URL = "https://gist.githubusercontent.com/sabaceramics/ce64a2dbe9ad6ff86f6d5f03681c2cc6/raw/prodotti_etsy.json";
 
 // --- CONFIGURAZIONE CATALOGO ---
-let allProductsData = [];    // Contiene tutti i dati del CSV
-let currentFilteredData = []; // Contiene i dati dopo aver applicato il filtro
+let allProductsData = [];     // Contiene tutti i dati scaricati
+let currentFilteredData = []; // Contiene i dati filtrati
 let currentPage = 1;
-const ITEMS_PER_PAGE = 24;   // Numero di prodotti per pagina
+const ITEMS_PER_PAGE = 24;    // Numero di prodotti per pagina
 
 async function init() {
     try {
-        const response = await fetch(CSV_FILE);
-        if (!response.ok) throw new Error("File CSV non trovato");
-        const csvText = await response.text();
+        // 1. Scarica i dati dal nuovo link JSON
+        const response = await fetch(DATA_URL);
+        if (!response.ok) throw new Error("Errore nel caricamento dei dati JSON");
         
-        Papa.parse(csvText, {
-            header: true, 
-            skipEmptyLines: true, 
-            delimiter: ";", // <--- AGGIORNATO: Usa il punto e virgola come nel tuo file
-            quoteChar: '"',
-            transformHeader: function(h) {
-                // Pulisce le intestazioni e le rende maiuscole (es. "Title" -> "TITLE")
-                return h.replace(/^\ufeff/, '').replace(/"/g, '').trim().toUpperCase();
-            },
-            complete: function(results) {
-                // Debug: Controlla se legge le colonne giuste
-                console.log("CSV Caricato. Colonne trovate:", results.meta.fields);
+        const rawJson = await response.json();
 
-                // Routing semplice in base alla pagina
-                if (window.location.pathname.includes('product.html')) {
-                    renderProductDetail(results.data);
-                } else if (window.location.pathname.includes('catalog.html')) {
-                    // Siamo nel catalogo: salviamo i dati e inizializziamo
-                    allProductsData = results.data;
-                    currentFilteredData = allProductsData; // All'inizio vediamo tutto
-                    renderCatalog();
-                } 
-                
-                // AGGIUNTA: Inizializza lo slider se siamo in Home
-                if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/')) {
-                    initDynamicSlider();
-                }
+        // 2. ADATTAMENTO DATI (Il trucco magico)
+        // Trasformiamo il nuovo JSON nel formato "vecchio stile" che il tuo sito si aspetta
+        // (cioè chiavi maiuscole: TITLE, IMAGE1, URL, ecc.)
+        const adaptedData = rawJson.map(item => {
+            const newItem = {
+                TITLE: item.title,
+                DESCRIPTION: item.description,
+                SKU: item.sku,
+                URL: item.url // Questo è il link che userà il bottone
+            };
+
+            // Mappa l'array di immagini in colonne IMAGE1, IMAGE2...
+            if (item.images && Array.isArray(item.images)) {
+                item.images.forEach((imgUrl, index) => {
+                    // Crea IMAGE1, IMAGE2, IMAGE3...
+                    newItem[`IMAGE${index + 1}`] = imgUrl;
+                });
             }
+            return newItem;
         });
-    } catch (e) { console.error("Errore:", e); }
+
+        console.log("Dati Etsy caricati con successo via JSON:", adaptedData);
+
+        // 3. Routing (Logica originale mantenuta intatta)
+        if (window.location.pathname.includes('product.html')) {
+            renderProductDetail(adaptedData);
+        } else if (window.location.pathname.includes('catalog.html')) {
+            // Siamo nel catalogo: salviamo i dati e inizializziamo
+            allProductsData = adaptedData;
+            currentFilteredData = allProductsData; 
+            renderCatalog();
+        } 
+        
+        // Inizializza lo slider se siamo in Home
+        if (window.location.pathname.includes('index.html') || window.location.pathname.endsWith('/') || window.location.pathname === "") {
+            initDynamicSlider();
+        }
+
+    } catch (e) { console.error("Errore critico:", e); }
 }
 
 // Funzione di supporto per creare lo slug SEO
@@ -53,9 +66,9 @@ function createSlug(text) {
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
-        .replace(/\s+/g, '-')       
-        .replace(/[^\w-]+/g, '')  
-        .replace(/--+/g, '-');     
+        .replace(/\s+/g, '-')        
+        .replace(/[^\w-]+/g, '')   
+        .replace(/--+/g, '-');      
 }
 
 // Rendering catalogo
