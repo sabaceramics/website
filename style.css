@@ -6,10 +6,10 @@
 
 html { scroll-behavior: smooth; }
 * {
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box; 
-  -webkit-tap-highlight-color: transparent;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent;
 }
 
 body { 
@@ -43,8 +43,6 @@ img { display: block; max-width: 100%; }
 .no-upper { 
     text-transform: none !important; 
 }
-
-/* Usato per le intro nel catalogo e testi speciali */
 
 .intro-serif {
     font-family: 'Playfair Display', serif;
@@ -83,8 +81,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
    4. HOME PAGE
    ========================================= */
 
-/* Hero Section */
-
 .hero { padding: 40px 10%; max-width: 1200px; margin: 0 auto; }
 .hero-img { width: 100%; max-height: 550px; object-fit: cover; border: 1px solid #e0ddd5; margin-bottom: 35px; }
 .hero-text h1 {
@@ -95,13 +91,10 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .hero-description p { margin-bottom: 1.4em; text-align: center; }
 
-/* About Us Section */
-
 .about-section-bg {
     background-color: #d9ccc4;
     width: 100%; padding: 30px 0; margin: 40px 0;
     display: flex; flex-direction: column; align-items: center;
-
 }
 
 .about-section-bg .section-title { margin-top: 0; margin-bottom: 50px; }
@@ -122,9 +115,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     text-align: center; 
 }
 
-.about-description p {
-    margin-bottom: 20px;
-}
+.about-description p { margin-bottom: 20px; }
 
 .about-box { 
     display: flex; align-items: center; gap: 30px; 
@@ -137,8 +128,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .about-info h3 { font-family: 'Montserrat', sans-serif; text-transform: uppercase; margin-bottom: 8px; font-size: 1.1rem; color: #3e1b08; font-weight: 600; }
 .about-info p i { font-size: 0.95rem; color: #1a1a1a; }
 #about { scroll-margin-top: 80px; }
-
-/* Auto Slider */
 
 .auto-slider {
     width: 100%; overflow: hidden; background: #f9f7f2; padding: 30px 0;
@@ -154,27 +143,20 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
    5. PAGINA FIRINGS
    ========================================= */
 
-/*HERO SPECIFICA (Ancora più piccola)*/
-
 .firing-hero-img {
     width: 100%;
-    /* RIDOTTO: Da 400px a 250px per essere meno invasiva */
     height: 250px; 
     object-fit: cover;
     object-position: center;
 }
 
-/*BOX DESCRIZIONE (Espansione Orizzontale)*/
-
-/* Allarghiamo il contenitore principale */
 .firing-box {
     display: flex;
-    /* MODIFICA: Aumentato max-width per allargare il box verso i lati */
     max-width: 1400px; 
-    width: 95%; /* Occupa quasi tutto lo schermo orizzontalmente */
-    margin: 0 auto 50px auto; /* Più spazio sotto */
-    align-items: center; /* Centra verticalmente testo e immagine */
-    gap: 60px; /* Più spazio tra testo e immagine */
+    width: 95%; 
+    margin: 0 auto 50px auto; 
+    align-items: center; 
+    gap: 60px; 
 }
 
 .firing-info h3 {
@@ -188,31 +170,23 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 }
 
 .firing-info p {
-    /* MODIFICA: Aumentata la spaziatura tra i paragrafi */
     margin-bottom: 30px; 
     line-height: 1.8;
     color: #333;
 }
 
-.firing-info p:last-of-type {
-    margin-bottom: 40px;
-}
+.firing-info p:last-of-type { margin-bottom: 40px; }
 
-/* Immagine laterale (Raku/Saggar Process) */
 .firing-img {
-    /* RIDOTTO: La rendiamo un po' più piccola per lasciare spazio al testo */
     width: 250px; 
-    height: 250px; /* La facciamo quadrata/tonda perfetta */
+    height: 250px; 
     border-radius: 50%; 
     object-fit: cover;
-    flex-shrink: 0; /* Impedisce all'immagine di schiacciarsi */
+    flex-shrink: 0; 
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    margin-bottom: 30px;/* Un po' di ombra per stile */
+    margin-bottom: 30px;
 }
     
-
-/*VIDEO SHORTS (Più piccoli e meno "colonne")*/
-
 .shorts-wrapper {
     display: flex;
     flex-direction: row; 
@@ -220,7 +194,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     align-items: flex-start;
     gap: 30px; 
     width: 100%;
-    max-width: 1200px; /* Assicura che ci sia spazio per due video da 390px */
+    max-width: 1200px; 
     margin: 40px auto;
 }
 
@@ -232,18 +206,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     border-radius: 20px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.15);
     background: #000;
-    /* Rimuoviamo margini laterali che potrebbero spingere il video sotto */
     margin: 0; 
 }
 
-/* Rimuovi il vecchio padding-bottom se c'era, ora usiamo height fissa */
-
 .video-short-container iframe {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     object-fit: cover;
 }
 
@@ -251,9 +219,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
    6. PAGINA CATALOGO
    ========================================= */
 
-.catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap;
-
-}
+.catalog-filters { display: flex; justify-content: center; gap: 25px; margin-bottom: 35px; flex-wrap: wrap; }
 
 .filter-btn { 
     background-color: #f9f7f2; color: #3e1b08; border: none; padding: 10px 22px;
@@ -263,11 +229,9 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 
 .filter-btn:hover, .filter-btn.active { background-color: #3e1b08; color: #f9f7f2; transform: scale(1.1); }
 
-/* 1. Forza il contenitore nel catalogo a ignorare il limite dei 1200px */
-
 .hero:has(.product-grid) {
     max-width: 1600px !important; 
-    padding: 40px 2% !important; /* Riduce il padding laterale dal 10% al 2% */
+    padding: 40px 2% !important;
 }
 
 .product-grid { 
@@ -296,11 +260,7 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: block;
 }
 
-.product-card:hover { 
-    transform: scale(1.03);
-}
-
-/* Paginazione */
+.product-card:hover { transform: scale(1.03); }
 
 .pagination-container { display: flex; justify-content: center; gap: 15px; margin-top: 40px; }
 .page-btn {
@@ -324,28 +284,30 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     display: flex; align-items: center; justify-content: center; overflow: hidden; 
 }
 
-#js-main-photo { max-width: 100%; max-height: 100%; object-fit: contain; }
+/* --- NUOVA LOGICA FADE SINGOLO --- */
 
-.slider-arrow { 
-    position: absolute; top: 50%; transform: translateY(-50%); 
-    background: rgba(255,255,255,0.7); border: none; padding: 15px 10px; 
-    cursor: pointer; font-size: 20px; transition: 0.3s; 
+.cross-fade-container, 
+.cross-fade-container-lb {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.slider-arrow:hover { 
-    position: absolute; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    background: transparent !important; /* Sempre trasparente */
-    border: none; 
-    padding: 15px 10px; 
-    cursor: pointer; 
-    font-size: 24px; 
-    font-weight: bold;
-    color: #e9e0d2; /* Colore di default */
-    transition: color 0.3s ease; 
-    z-index: 15;
+/* Rimosso absolute e raddoppio, ora gestiamo l'opacità sull'unica immagine */
+#js-main-photo, #js-lightbox-img { 
+    max-width: 100%; 
+    max-height: 100%; 
+    object-fit: contain; 
+    transition: opacity 0.25s ease-in-out; /* Velocità del fade */
+    opacity: 1;
+    z-index: 2;
 }
+
+/* Nascondiamo i vecchi background se ancora presenti nell'HTML */
+#js-main-photo-bg, #js-lightbox-img-bg { display: none !important; }
 
 .slider-arrow { 
     position: absolute; top: 50%; transform: translateY(-50%); 
@@ -355,60 +317,20 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     z-index: 10;
 }
 
-.slider-arrow:hover { 
-    background: transparent !important; 
-    color: #472710;
-}
+.slider-arrow:hover { color: #472710; }
 
 .prev { left: 0; }
 .next { right: 0; }
+
 .thumbnail-container { display: flex; gap: 8px; overflow-x: auto; padding: 5px 0; }
 .thumb { width: 65px; height: 65px; object-fit: cover; border: 1px solid #e0ddd5; cursor: pointer; flex-shrink: 0; transition: 0.3s; }
 .thumb.active { border: 2px solid #3e1b08; }
+
 .product-info-text { flex: 1.5; position: sticky; top: 100px; }
 #js-product-title { font-family: 'Cormorant Garamond', serif !important; text-transform: none; font-weight: 800 !important; font-size: 2rem; color: #3e1b08; letter-spacing: 1px; }
 .product-description { white-space: pre-wrap; color: #4a4540; line-height: 1.6; margin-bottom: 40px; }
 
-/* --- CROSS-FADE SCHEDA PRODOTTO --- */
-
-/* --- 1. LOGICA CROSS-FADE (Sovrapposizione Totale) --- */
-
-.cross-fade-container, 
-.cross-fade-container-lb {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: block; 
-    overflow: visible; 
-}
-
-/* Regola UNIFICATA per centrare sempre e comunque */
-
-.cross-fade-container img,
-.cross-fade-container-lb img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    margin: 0; 
-}
-
-#js-main-photo-bg, #js-lightbox-img-bg {
-    z-index: 1;
-    transition: none;
-    opacity: 1;
-}
-
-#js-main-photo, #js-lightbox-img {
-    z-index: 2;
-}
-
-/* --- 2. STRUTTURA LIGHTBOX --- */
+/* --- LIGHTBOX --- */
 
 .lightbox { 
     display: none;
@@ -425,14 +347,12 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .lightbox.active { display: flex; }
 .lightbox-wrapper {
     position: relative;
-    width: 80%; /* Box spazioso per la foto */
+    width: 80%;
     height: 85vh; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-/* --- 3. COMANDI (Vicine all'immagine) --- */
 
 .lb-arrow, .close-lightbox { 
     background: transparent !important; 
@@ -444,53 +364,16 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
     position: absolute; 
 }
 
-/* X vicina all'angolo alto-destro */
-.close-lightbox { 
-    top: -40px;    /* Era -30px, la alziamo un pelo per staccarla */
-    right: 0;      /* Era -10px, ora è allineata al bordo del contenitore */
-    font-size: 45px; 
-}
-
-/* Frecce: Avvicinate modificando left/right */
-.lb-arrow {
-    top: 50%; 
-    transform: translateY(-50%);
-    font-size: 3.5rem;
-    padding: 10px;
-}
-
-/* Prima erano -50px (fuori dal box). 
-   Mettendo 0 o 10px le portiamo DENTRO o sul bordo del box immaginario della foto.
-*/
+.close-lightbox { top: -40px; right: 0; font-size: 45px; }
+.lb-arrow { top: 50%; transform: translateY(-50%); font-size: 3.5rem; padding: 10px; }
 .lb-prev { left: 10px; }  
 .lb-next { right: 10px; }
 
 .lb-arrow:hover, .close-lightbox:hover { color: #fff !important; }
 
-/* 6. Adattamento Mobile */
-
-@media (max-width: 768px) {
-    .lightbox-wrapper {
-        width: 90%;
-        height: 60vh;
-    }
-
-    .lb-arrow {
-        font-size: 3rem;
-    }
-
-    .lb-prev { left: -40px; }
-    .lb-next { right: -40px; }
-    .close-lightbox {
-        right: 0;
-        top: -60px;
-    }
-}
-
 /* Buttons & Forms */
 
 .contact-btn { 
-
     display: inline-block; background-color: #f9f7f2; color: #3e1b08; border: 1px solid #3e1b08; 
     padding: 15px 35px; text-transform: uppercase; font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; 
     transition: 0.4s ease; 
@@ -508,9 +391,6 @@ nav a:hover, nav a.active { color: #3e1b08; transform: scale(1.1); }
 .social-links a:hover img { transform: scale(1.3); }
 .copyright { font-size: 0.75rem; color: #8e7e72; margin-top: 20px; }
 
-
-/* Input Forms */
-
 .contact-form-row { display: flex; gap: 15px; width: 100%; }
 .contact-form-row input { flex: 1; min-width: 0; }
 input[type="text"], input[type="email"], textarea {
@@ -518,20 +398,15 @@ input[type="text"], input[type="email"], textarea {
     border: 1px solid #e0ddd5; font-family: inherit;
 }
 
-
 /* =========================================
    9. MEDIA QUERIES (MOBILE)
    ========================================= */
 
 @media (max-width: 768px) {
-
-    /* Header & Navigazione */
-
     .logo { height: 170px; }
     .header { padding: 20px 5% 5px 5%; }
 
     nav { 
-
         flex-wrap: wrap !important;
         gap: 12px 15px; 
         width: 100%; 
@@ -539,165 +414,41 @@ input[type="text"], input[type="email"], textarea {
         justify-content: center;
     }
 
-    nav a { 
-        font-size: 0.72rem !important; 
-        letter-spacing: 0.5px; 
-        white-space: nowrap; 
-    }
-
-    /* Home */
+    nav a { font-size: 0.72rem !important; letter-spacing: 0.5px; white-space: nowrap; }
 
     .hero { padding: 15px 5%; }
     .hero-img { height: 400px; max-height: 50vh; object-fit: cover; margin-top: 25px; margin-bottom: 25px; }
     .hero-text h1 { font-size: 1.8rem !important; padding: 0 10px; }
-    .hero-description p { text-align: left; }
     .about-box { flex-direction: column; text-align: center; padding: 20px; gap: 15px; }
     .about-thumb { width: 100px !important; height: 100px !important; }
-     #about { scroll-margin-top: 40px }
+    #about { scroll-margin-top: 40px }
 
-   /* Firings */
-
-    .firing-img {
-        width: 100%;
-        height: auto;
-        max-height: 300px;
-        margin-bottom: 20px;
-    }
-   
-   .firing-info h3 {
-        text-align: left; 
-    }
-
-    .firing-box {
-        display: flex;
-        flex-direction: column-reverse;
-        text-align: left;
-    }
-
-   .shorts-wrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .video-short-container {
-        width: 100%; /* Su cellulare occupa tutto lo spazio disponibile */
-        height: 80vh; /* Altezza adattabile */
-    }
-
-
-    /* Slider Mobile Home */
+    .firing-img { width: 100%; height: auto; max-height: 300px; margin-bottom: 20px; }
+    .firing-info h3 { text-align: left; }
+    .firing-box { flex-direction: column-reverse; text-align: left; }
+    .shorts-wrapper { flex-direction: column; align-items: center; }
+    .video-short-container { width: 100%; height: 80vh; }
 
     .slider-track img { height: 380px; pointer-events: auto; touch-action: pan-y; }
-    .auto-slider { touch-action: pan-y !important; overflow-x: hidden; }
-
-    /* Catalogo */
 
     .product-grid { 
        grid-template-columns: repeat(2, 1fr) !important; 
        gap: 15px !important; 
        padding: 0 15px !important; 
-       max-width: 100% !important;
-   }
-
-    .product-card {
-       padding: 8px !important; 
-   }
-
-   .product-card img { 
-    height: 180px !important; 
-    object-fit: cover; 
-   }
-
-    /* Pagina Prodotto Mobile */
-   
-    .product-container { 
-        flex-direction: column; 
-        padding: 10px 0; 
-        gap: 15px; 
     }
 
-    .product-media {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 0 !important;
-    }
+    .product-card img { height: 180px !important; }
 
-    .slider-wrapper { 
-       height: 400px !important; 
-       width: 100% !important; 
-       border: none; 
-       background: transparent; 
-       display: flex;
-       align-items: center;
-       justify-content: center;
-   }
+    .product-container { flex-direction: column; padding: 10px 0; gap: 15px; }
+    .product-media { width: 100% !important; max-width: 100% !important; }
+    .slider-wrapper { height: 400px !important; border: none; background: transparent; }
+    .product-info-text { padding: 0 20px; text-align: left; position: relative; top: 0; }
 
-    .thumbnail-container {
-        padding: 0 10px; 
-    }
-
-    .product-info-text { 
-        padding: 0 20px; 
-        text-align: left;
-    }
-
-   .lightbox-wrapper {
-        width: 95%; /* Leggermente più largo per usare bene lo schermo */
-        height: 70vh; /* Altezza fissa anche qui per stabilità durante il fade */
-        max-width: none;
-    }
-
-    .cross-fade-container-lb {
-        width: 100%;
-        height: 100%;
-    }
-
-    .lightbox-content, #js-lightbox-img-bg {
-        max-height: 70vh;
-        width: auto;
-        max-width: 100%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-   #js-main-photo, #js-main-photo-bg,.lightbox-content, #js-lightbox-img-bg { 
-    position: absolute !important;
-    display: block;
-   }
-
-   .lb-arrow { 
-        font-size: 2.2rem; /* Leggermente più grandi per il touch */
-        padding: 5px;
-    }
-
-    /* Frecce più vicine ai bordi per non coprire troppo la foto */
-
+    .lightbox-wrapper { width: 95%; height: 70vh; }
+    .lb-arrow { font-size: 2.2rem; padding: 5px; }
     .lb-prev { left: 5px; }
     .lb-next { right: 5px; }
-    .close-lightbox { 
-        top: -50px; 
-        right: 10px; 
-        font-size: 40px;
-    }
-
-    /* Contatti */
-
-    .contact-form-row {
-       flex-direction: column;
-    }
+    .close-lightbox { top: -50px; right: 10px; font-size: 40px; }
+    
+    .contact-form-row { flex-direction: column; }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
