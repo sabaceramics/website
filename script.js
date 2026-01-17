@@ -10,27 +10,25 @@ const ITEMS_PER_PAGE = 24;    // Numero di prodotti per pagina
 
 async function init() {
     try {
-        // 1. Scarica i dati dal nuovo link JSON
-        const response = await fetch(DATA_URL);
+        // MODIFICA 1: Cache Busting (Aggiunto '?t=' + orario per forzare sempre dati freschi)
+        const response = await fetch(DATA_URL + '?t=' + new Date().getTime());
+        
         if (!response.ok) throw new Error("Errore nel caricamento dei dati JSON");
         
         const rawJson = await response.json();
 
         // 2. ADATTAMENTO DATI (Il trucco magico)
-        // Trasformiamo il nuovo JSON nel formato "vecchio stile" che il tuo sito si aspetta
-        // (cioè chiavi maiuscole: TITLE, IMAGE1, URL, ecc.)
         const adaptedData = rawJson.map(item => {
             const newItem = {
                 TITLE: item.title,
                 DESCRIPTION: item.description,
                 SKU: item.sku,
-                URL: item.url // Questo è il link che userà il bottone
+                URL: item.url
             };
 
             // Mappa l'array di immagini in colonne IMAGE1, IMAGE2...
             if (item.images && Array.isArray(item.images)) {
                 item.images.forEach((imgUrl, index) => {
-                    // Crea IMAGE1, IMAGE2, IMAGE3...
                     newItem[`IMAGE${index + 1}`] = imgUrl;
                 });
             }
@@ -39,7 +37,7 @@ async function init() {
 
         console.log("Dati Etsy caricati con successo via JSON:", adaptedData);
 
-        // 3. Routing (Logica originale mantenuta intatta)
+        // 3. Routing
         if (window.location.pathname.includes('product.html')) {
             renderProductDetail(adaptedData);
         } else if (window.location.pathname.includes('catalog.html')) {
@@ -87,7 +85,6 @@ function renderCatalog() {
 
     // 2. Renderizziamo le card
     paginatedItems.forEach((item) => {
-        // AGGIORNATO: Controllo sui nomi in INGLESE (TITLE, IMAGE1)
         if (!item.TITLE || !item.IMAGE1 || !item.SKU) return;
         
         const titleSlug = createSlug(item.TITLE).substring(0, 50);
@@ -97,7 +94,6 @@ function renderCatalog() {
         card.href = `product.html?sku=${sku}&name=${titleSlug}`;
         card.className = 'product-card'; 
         
-        // AGGIORNATO: item.IMAGE1 invece di item.IMMAGINE1
         card.innerHTML = `<img src="${item.IMAGE1.trim()}" alt="${item.TITLE}">`;
         grid.appendChild(card);
     });
@@ -159,7 +155,6 @@ document.addEventListener('click', function(e) {
             currentFilteredData = allProductsData;
         } else {
             currentFilteredData = allProductsData.filter(item => {
-                // AGGIORNATO: Cerca su TITLE e DESCRIPTION (nomi inglesi)
                 const searchText = (item.TITLE + " " + (item.DESCRIPTION || "")).toLowerCase();
                 const root = cat.endsWith('s') ? cat.slice(0, -1) : cat;
                 return searchText.includes(root);
@@ -203,9 +198,22 @@ function renderProductDetail(data) {
     if (!skuFromUrl) return;
     
     const item = data.find(product => product.SKU && product.SKU.trim() === skuFromUrl);
-    if (!item || !document.getElementById('js-product-title')) return;
+    
+    // MODIFICA 2: Gestione "Prodotto non trovato" (in Inglese)
+    if (!item) {
+        document.getElementById('product-detail-content').innerHTML = `
+            <div style="text-align: center; padding: 80px 20px;">
+                <h2 style="margin-bottom: 20px; font-family: 'Cormorant Garamond', serif;">Item not found</h2>
+                <p>This piece might have been sold or removed from our collection.</p>
+                <a href="catalog.html" class="contact-btn" style="display:inline-block; margin-top:30px; text-decoration:none; color:black; border:1px solid black; padding: 10px 20px;">RETURN TO CATALOG</a>
+            </div>
+        `;
+        return; // Ferma tutto il resto per evitare errori
+    }
 
-    // AGGIORNATO: Usa DESCRIPTION e TITLE in inglese
+    if (!document.getElementById('js-product-title')) return;
+
+    // --- DA QUI IN POI TUTTO UGUALE ---
     let desc = item.DESCRIPTION || ""; 
     let cleanDesc = desc.replace(/&rsquo;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, '&');
     const cleanTitle = `${item.TITLE} | Saba Ceramics`;
@@ -216,13 +224,11 @@ function renderProductDetail(data) {
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", cleanTitle);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", shortDesc);
     
-    // AGGIORNATO: IMAGE1 invece di IMMAGINE1
     if (item.IMAGE1) {
         document.querySelector('meta[property="og:image"]')?.setAttribute("content", item.IMAGE1.trim());
     }
 
     let images = [];
-    // AGGIORNATO: Ciclo su IMAGE1..IMAGE10
     for (let i = 1; i <= 10; i++) {
         const url = item[`IMAGE${i}`];
         if (url && url.trim() !== "") images.push(url.trim());
@@ -234,21 +240,17 @@ function renderProductDetail(data) {
     // --- LOGICA BOTTONE ETSY (USA URL DIRETTO) ---
     const ctaBtn = document.querySelector('.contact-btn');
     if (ctaBtn) {
-        // Cerca la colonna URL (nel tuo file è "URL")
         const directLink = (item.URL || "").trim();
         
         if (directLink) {
             ctaBtn.href = directLink;
             ctaBtn.textContent = "VIEW ON ETSY SHOP";
             ctaBtn.target = "_blank";
-            console.log("Link diretto trovato:", directLink);
         } else {
-            // Fallback se manca il link: rimanda al negozio generale
             ctaBtn.href = "https://www.etsy.com/shop/SabaCeramicArt";
             ctaBtn.textContent = "VISIT ETSY SHOP";
         }
     }
-    // ------------------------------------------
     
     // CARICAMENTO FOTO
     const mainPhoto = document.getElementById('js-main-photo');
@@ -311,7 +313,7 @@ function renderProductDetail(data) {
         const lb = document.getElementById('js-lightbox');
         const lbImg = document.getElementById('js-lightbox-img');
         const lbBgImg = document.getElementById('js-lightbox-img-bg'); 
-       
+        
         if (lb && lbImg) {
             lb.style.display = "flex";
             lbImg.src = images[currentIdx];
@@ -367,7 +369,6 @@ function renderProductDetail(data) {
 init();
 
 // --- GESTIONE MENU & SLIDER (INVARIATA) ---
-// (Il resto del codice per il menu e lo slider home rimane uguale)
 document.addEventListener('DOMContentLoaded', () => {
     const catalogBtn = document.getElementById('catalog');
     if (catalogBtn) {
