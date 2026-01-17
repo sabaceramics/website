@@ -10,15 +10,36 @@ const ITEMS_PER_PAGE = 24;    // Numero di prodotti per pagina
 
 async function init() {
     
-    // --- MODIFICA: PULIZIA URL FACEBOOK/INSTAGRAM ---
-    // Se l'URL contiene parametri di tracciamento (fbclid), li rimuoviamo visivamente
-    if (window.location.search.includes('fbclid')) {
-        const cleanUrl = new URL(window.location.href);
-        cleanUrl.searchParams.delete('fbclid'); // Cancella il codice sporco
-        // Aggiorna la barra degli indirizzi senza ricaricare la pagina
-        window.history.replaceState(null, '', cleanUrl.toString());
+    // --- MODIFICA: PULIZIA URL AVANZATA (FB, INSTAGRAM, PINTEREST) ---
+    // Lista dei parametri "spazzatura" da rimuovere
+    const paramsToRemove = [
+        'fbclid',       // Facebook
+        'igshid',       // Instagram
+        'epik',         // Pinterest
+        'gclid',        // Google / Pinterest Ads
+        'utm_source',   // Marketing generico
+        'utm_medium',
+        'utm_campaign',
+        'utm_term',
+        'utm_content'
+    ];
+
+    const currentUrl = new URL(window.location.href);
+    let urlChanged = false;
+
+    // Controlliamo se nell'URL c'è uno dei parametri della lista nera
+    paramsToRemove.forEach(param => {
+        if (currentUrl.searchParams.has(param)) {
+            currentUrl.searchParams.delete(param); // Lo cancelliamo
+            urlChanged = true;
+        }
+    });
+
+    // Se abbiamo pulito qualcosa, aggiorniamo la barra degli indirizzi senza ricaricare
+    if (urlChanged) {
+        window.history.replaceState(null, '', currentUrl.toString());
     }
-    // ------------------------------------------------
+    // -----------------------------------------------------------------
 
     try {
         // MODIFICA 1: Cache Busting (Aggiunto '?t=' + orario per forzare sempre dati freschi)
