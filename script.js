@@ -1,8 +1,8 @@
-// --- CONFIGURAZIONE: LINK AL FILE JSON DI GITHUB ---
-const DATA_URL = "https://gist.githubusercontent.com/sabaceramics/ce64a2dbe9ad6ff86f6d5f03681c2cc6/raw/prodotti_etsy.json";
+// --- CONFIGURAZIONE: FILE DATI LOCALE (GENERATO DAL ROBOT GITHUB) ---
+const DATA_URL = "./prodotti_etsy.json";
 
 // --- CONFIGURAZIONE CATALOGO ---
-let allProductsData = [];     
+let allProductsData = [];      
 let currentFilteredData = []; 
 let currentPage = 1;
 const ITEMS_PER_PAGE = 24;    
@@ -26,8 +26,10 @@ async function init() {
     }
 
     try {
+        // Aggiungiamo il timestamp per evitare che il browser usi una versione vecchia della cache
         const response = await fetch(DATA_URL + '?t=' + new Date().getTime());
-        if (!response.ok) throw new Error("Errore nel caricamento dei dati JSON");
+        
+        if (!response.ok) throw new Error("Errore nel caricamento del file prodotti_etsy.json. Il robot ha finito il lavoro?");
         const rawJson = await response.json();
 
         // ADATTAMENTO DATI E CREAZIONE SLUG
@@ -40,6 +42,7 @@ async function init() {
                 SLUG: createSlug(item.title) // Creiamo l'ID testuale qui
             };
 
+            // Adattiamo l'array di immagini nel formato che il sito si aspetta (IMAGE1, IMAGE2...)
             if (item.images && Array.isArray(item.images)) {
                 item.images.forEach((imgUrl, index) => {
                     newItem[`IMAGE${index + 1}`] = imgUrl;
