@@ -1,0 +1,36 @@
+name: Update Etsy Products
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Gira ogni notte a mezzanotte
+  workflow_dispatch: # Ti permette di farlo partire a mano quando vuoi
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-directory: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch Etsy Data
+        env:
+          ETSY_API_KEY: ${{ secrets.ETSY_API_KEY }}
+          ETSY_SHOP_ID: ${{ secrets.ETSY_SHOP_ID }}
+        run: |
+          python .github/scripts/fetch_etsy.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add data.json
+          git commit -m "Update products from Etsy" || exit 0
+          git push
