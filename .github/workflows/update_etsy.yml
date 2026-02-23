@@ -2,7 +2,7 @@ name: Update Etsy Products
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Gira ogni notte a mezzanotte
+    - cron: '0 * * * *' # Gira al minuto 0 di ogni singola ora
   workflow_dispatch: # Ti permette di farlo partire a mano quando vuoi
 
 jobs:
@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
-          python-directory: '3.x'
+          python-version: '3.x' # Corretto: prima era "python-directory"
 
       - name: Install dependencies
         run: pip install requests
@@ -31,6 +31,6 @@ jobs:
         run: |
           git config --global user.email "action@github.com"
           git config --global user.name "GitHub Action"
-          git add data.json
+          git add prodotti_etsy.json # Corretto: ora salva il file giusto!
           git commit -m "Update products from Etsy" || exit 0
           git push
